@@ -11,6 +11,7 @@ function Cylinder(scene, id, base, top, height, slices, stacks) {
     this.slices = slices;
     this.stacks = stacks;
 
+
     this.initBuffers();
 };
 
@@ -18,61 +19,50 @@ Cylinder.prototype = Object.create(CGFobject.prototype);
 Cylinder.prototype.constructor = Cylinder;
 
 Cylinder.prototype.initBuffers = function() {
-
-    var alfa = 0;
-    var inc = 2 * Math.PI / this.slices;
-    var z = 0;
-    var DeltaS = 0;
-    var DeltaT = 1;
-
     this.vertices = [];
-    this.indices = [];
-    this.normals = [];
-    this.texCoords = [];
+   this.indices = [];
+   this.normals = [];
+   this.texCoords = [];
 
-    for (var j = 0; j < this.stacks; j++) {
+   var diff = (this.base - this.top) / this.stacks;
 
-        for (var i = 0; i < this.slices; i++) {
-            //Vertice 0
-            this.vertices.push(Math.cos(alfa), Math.sin(alfa), z);
-            //Vertice 1
-            this.vertices.push(Math.cos(alfa), Math.sin(alfa), z - 1);
+   var ang = 2 * Math.PI / this.slices;
+   var n = 0;
+   var tCoord = 1;
+   var sPatch = 1 / this.slices;
+   var tPatch = 1 / this.stacks;
 
-            alfa += inc;
-            //Normals
+   //Vertices & Normals
+   for (var ind = 0; ind <= this.stacks; ind++) {
 
-            this.normals.push(Math.cos(inc * i), Math.sin(inc * i), 0);
-            this.normals.push(Math.cos(inc * i), Math.sin(inc * i), 0);
-            this.texCoords.push(0, DeltaT);
-            this.texCoords.push(1, DeltaT);
-            DeltaT -= 1 / this.slices;
+       var sCoord = 0;
 
-        }
-        DeltaT = 1;
-        z--;
-    }
+       for (var m = 0; m < this.slices; m++) {
+           this.vertices.push(Math.cos(ang * m) * (this.base - diff * ind),
+               Math.sin(ang * m) * (this.base - diff * ind),
+               n);
+           this.texCoords.push(sCoord, tCoord);
+           this.normals.push(Math.cos(ang * m), Math.sin(ang * m), 0);
+           sCoord += sPatch;
+       }
+       tCoord -= tPatch;
+       n += this.height / this.stacks;
+   }
 
-    var stackNr = 1;
-    var limite = this.slices * this.stacks * 2;
+   //Indices
+   for (var j = 0; j < this.stacks; j++) {
+       for (var i = 0; i <= (this.slices); i += 1) {
+           this.indices.push((i + 1) % (this.slices) + (j + 0) * this.slices,
+               (i + 0) % (this.slices) + (j + 1) * this.slices,
+               (i + 0) % (this.slices) + (j + 0) * this.slices);
 
-    for (var i = 0; i < limite; i += 2) {
-        //Indices
+           this.indices.push((i + 0) % (this.slices) + (j + 1) * this.slices,
+               (i + 1) % (this.slices) + (j + 0) * this.slices,
+               (i + 1) % (this.slices) + (j + 1) * this.slices);
+       }
 
-        //0,1,2
-        if (i + 2 != this.slices * stackNr * 2)
-            this.indices.push(i, i + 1, i + 2);
-        else
-            this.indices.push(i, i + 1, i + 2 - this.slices * 2);
+   }
 
-        //1,3,2
-        if (i + 2 != this.slices * stackNr * 2)
-            this.indices.push(i + 1, i + 3, i + 2);
-        else {
-            this.indices.push(i + 1, i + 3 - this.slices * 2, i + 2 - this.slices * 2);
-            stackNr++;
-        }
-    }
-
-    this.primitiveType = this.scene.gl.TRIANGLES;
-    this.initGLBuffers();
+   this.primitiveType = this.scene.gl.TRIANGLES;
+   this.initGLBuffers();
 };
