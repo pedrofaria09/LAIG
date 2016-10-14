@@ -141,7 +141,7 @@
         </primitive>
 
         <primitive id="esferaCabeca">
-            <sphere radius="1" slices="10" stacks="10"/>
+            <sphere radius="0.9" slices="50" stacks="50"/>
         </primitive>
 
         <primitive id="quinta">
@@ -152,7 +152,7 @@
 
     <components>
 
-        // ROOT
+        <!-- ROOT -->
         <component id="root">
             <transformation>
                 <translate x="0" y="0" z="0"/>
@@ -170,11 +170,11 @@
                 <componentref id="ombroDireito"/>
                 <componentref id="bracoDireito"/>
                 <componentref id="bracoEsquerdo"/>
-                <componentref id="pernaMeio"/>
+                <componentref id="cabeca"/>
             </children>
         </component>
 
-        // CORPO
+        <!-- CORPO -->
         <component id="corpo">
             <transformation>
                 <transformationref id="centroQuadrante"/>
@@ -191,7 +191,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO
+        <!-- OMBRO ESQUERDO -->
         <component id="ombroEsquerdo">
             <transformation>
                 <translate x="0" y="0" z="0"/>
@@ -213,7 +213,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO DIREITO
+        <!-- OMBRO ESQUERDO DIREITO -->
         <component id="ombEsqEsq">
             <transformation>
                 <translate x="5.5" y="3.5" z="4.5"/>
@@ -231,7 +231,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO ESQUERDO
+        <!-- OMBRO ESQUERDO ESQUERDO -->
         <component id="ombEsqDir">
             <transformation>
                 <translate x="4.5" y="3.5" z="3.5"/>
@@ -249,7 +249,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO CIMA
+        <!-- OMBRO ESQUERDO CIMA -->
         <component id="ombEsqCima">
             <transformation>
                 <translate x="4.5" y="4.5" z="4.5"/>
@@ -267,7 +267,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO BAIXO
+        <!-- OMBRO ESQUERDO BAIXO -->
         <component id="ombEsqBaixo">
             <transformation>
                 <translate x="4.5" y="3.5" z="3.5"/>
@@ -285,7 +285,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO FRENTE
+        <!-- OMBRO ESQUERDO FRENTE -->
         <component id="ombEsqFrente">
             <transformation>
                 <translate x="4.5" y="3.5" z="4.5"/>
@@ -302,7 +302,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO TRAS
+        <!-- OMBRO ESQUERDO TRAS -->
         <component id="ombEsqTras">
             <transformation>
                 <translate x="5.5" y="3.5" z="3.5"/>
@@ -320,7 +320,7 @@
             </children>
         </component>
 
-        // OMBRO ESQUERDO
+        <!-- OMBRO ESQUERDO -->
         <component id="ombroDireito">
             <transformation>
                 <translate x="0" y="0" z="0"/>
@@ -342,7 +342,7 @@
             </children>
         </component>
 
-        // OMBRO DIREITO DIREITO
+        <!-- OMBRO DIREITO DIREITO -->
         <component id="ombDirEsq">
             <transformation>
                 <translate x="3.5" y="3.5" z="4.5"/>
@@ -360,7 +360,7 @@
             </children>
         </component>
 
-        // OMBRO DIREITO ESQUERDO
+        <!-- OMBRO DIREITO ESQUERDO -->
         <component id="ombDirDir">
             <transformation>
                 <translate x="2.5" y="3.5" z="3.5"/>
@@ -378,7 +378,7 @@
             </children>
         </component>
 
-        // OMBRO DIREITO CIMA
+        <!-- OMBRO DIREITO CIMA -->
         <component id="ombDirCima">
             <transformation>
                 <translate x="2.5" y="4.5" z="4.5"/>
@@ -396,7 +396,7 @@
             </children>
         </component>
 
-        // OMBRO DIREITO BAIXO
+        <!-- OMBRO DIREITO BAIXO -->
         <component id="ombDirBaixo">
             <transformation>
                 <translate x="2.5" y="3.5" z="3.5"/>
@@ -414,7 +414,7 @@
             </children>
         </component>
 
-        // OMBRO DIREITO FRENTE
+        <!-- OMBRO DIREITO FRENTE -->
         <component id="ombDirFrente">
             <transformation>
                 <translate x="2.5" y="3.5" z="4.5"/>
@@ -431,7 +431,7 @@
             </children>
         </component>
 
-        // OMBRO DIREITO TRAS
+        <!-- OMBRO DIREITO TRAS -->
         <component id="ombDirTras">
             <transformation>
                 <translate x="3.5" y="3.5" z="3.5"/>
@@ -449,7 +449,7 @@
             </children>
         </component>
 
-        // BRACO DIREITO
+        <!-- BRACO DIREITO -->
         <component id="bracoDireito">
             <transformation>
                 <translate x="2.7" y="4" z="4"/>
@@ -467,7 +467,7 @@
             </children>
         </component>
 
-        // BRACO ESQUERDO
+        <!-- BRACO ESQUERDO -->
         <component id="bracoEsquerdo">
             <transformation>
                 <translate x="5.3" y="4" z="4"/>
@@ -485,11 +485,10 @@
             </children>
         </component>
 
-        // PERNA
-        <component id="pernaMeio">
+        <!-- Cabeça -->
+        <component id="cabeca">
             <transformation>
-                <translate x="0" y="0" z="0"/>
-                <rotate axis="x" angle="0"/>
+                <translate x="4" y="4.7" z="4.25"/>
             </transformation>
 
             <materials>
@@ -499,7 +498,7 @@
             <texture id="gelson"/>
 
             <children>
-                <primitiveref id="cilindroBraco"/>
+                <primitiveref id="esferaCabeca"/>
             </children>
         </component>
 
