@@ -87,6 +87,13 @@
             <specular r="0" g="0" b="1" a="1"/>
             <shininess value="1"/>
         </material>
+        <material id="corCabeca">
+            <emission r="0.5" g="0.3" b="0.3" a="0.3"/>
+            <ambient r="0" g="0" b="1" a="1"/>
+            <diffuse r="0" g="0" b="1" a="1"/>
+            <specular r="0" g="0" b="1" a="1"/>
+            <shininess value="1"/>
+        </material>
 
     </materials>
 
@@ -113,19 +120,12 @@
 
     <primitives>
 
-        <!-- Deve existir um ou mais blocos "primitive" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-
         <primitive id="quadrado">
-            <!-- apenas pode existir UMA das seguintes tags: -->
-            <!--     rectangle, triangle, cylinder, sphere, torus -->
-            <!-- os parametros devem ser interpretados, genericamente como-->
-            <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
             <rectangle x1="0" y1="0" x2="1" y2="1"/>
         </primitive>
 
-        <primitive id="segunda">
-            <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0" y3="1" z3="0"/>
+        <primitive id="triangulo">
+            <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0.5" y3="1" z3="0"/>
         </primitive>
 
         <primitive id="cilindroCorpo">
@@ -134,10 +134,6 @@
 
         <primitive id="cilindroBraco">
             <cylinder base="0.4" top="0.4" height="2.5" slices="50" stacks="50"/>
-        </primitive>
-
-        <primitive id="perna">
-            <cylinder base="0.4" top="0" height="0.5" slices="50" stacks="50"/>
         </primitive>
 
         <primitive id="esferaCabeca">
@@ -171,6 +167,7 @@
                 <componentref id="bracoDireito"/>
                 <componentref id="bracoEsquerdo"/>
                 <componentref id="cabeca"/>
+                <componentref id="perna"/>
             </children>
         </component>
 
@@ -492,7 +489,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="corCabeca"/>
             </materials>
 
             <texture id="gelson"/>
@@ -502,5 +499,117 @@
             </children>
         </component>
 
+        <!-- Perna -->
+        <component id="perna">
+            <transformation>
+                <translate x="4" y="0.85" z="4.25"/>
+
+                <rotate axis="y" angle="-90"/>
+                <scale x="0.5" y="0.7" z="0.7"/>
+            </transformation>
+
+            <materials>
+                <material id="primeiro"/>
+            </materials>
+
+            <texture id="gelson"/>
+
+            <children>
+                <componentref id="pernaTriEsquerdo"/>
+                <componentref id="pernaTriDireito"/>
+                <componentref id="pernaRetFrente"/>
+                <componentref id="pernaRetBaixo"/>
+                <componentref id="pernaRetTrás"/>
+            </children>
+        </component>
+
+        <!-- pernaTriEsquerdo -->
+        <component id="pernaTriEsquerdo">
+            <transformation>
+                <translate x="-1" y="0" z="-0.5"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="primeiro"/>
+            </materials>
+
+            <texture id="gelson"/>
+
+            <children>
+                <primitiveref id="triangulo"/>
+            </children>
+        </component>
+        <!-- pernaTriDireito -->
+        <component id="pernaTriDireito">
+            <transformation>
+                <translate x="1" y="0" z="0.5"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+
+            <materials>
+                <material id="primeiro"/>
+            </materials>
+
+            <texture id="gelson"/>
+
+            <children>
+                <primitiveref id="triangulo"/>
+            </children>
+        </component>
+        <!-- pernaRetFrente -->
+        <component id="pernaRetFrente">
+            <transformation>
+                <translate x="-1" y="0" z="0.5"/>
+                <scale x="2" y="1.152" z="1"/>
+                <rotate axis="x" angle="-30.2"/>
+            </transformation>
+
+            <materials>
+                <material id="primeiro"/>
+            </materials>
+
+            <texture id="gelson"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        <!-- pernaRetBaixo -->
+        <component id="pernaRetBaixo">
+            <transformation>
+                <translate x="-1" y="0" z="-0.5"/>
+                <rotate axis="x" angle="90"/>
+                <scale x="2" y="1" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="primeiro"/>
+            </materials>
+
+            <texture id="gelson"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        <!-- pernaRetTrás -->
+        <component id="pernaRetTrás">
+            <transformation>
+                <translate x="-1" y="1" z="0"/>
+                <scale x="2" y="1.152" z="1"/>
+                <rotate axis="x" angle="-150.2"/>
+            </transformation>
+
+            <materials>
+                <material id="primeiro"/>
+            </materials>
+
+            <texture id="gelson"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
     </components>
 </dsx>
