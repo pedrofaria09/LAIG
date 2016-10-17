@@ -1,8 +1,8 @@
 function Component(id) {
     this.id = id;
 	this.transformations = null;
-	this.materials = null;
-	this.textures = null;
+	this.materials = [];
+	this.textures = [];
 	this.childrenComponents = null;
 	this.childrenPrimitives = null;
 }

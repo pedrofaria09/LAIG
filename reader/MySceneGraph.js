@@ -77,7 +77,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
                         break;
                 }
             }
-            this.viewsList[x] = new CGFcamera(elem[0].children[x].attributes[3].nodeValue, elem[0].children[x].attributes[1].nodeValue, elem[0].children[x].attributes[2].nodeValue, pos, target);
+            this.viewsList[x] = new CGFcamera(parseFloat(elem[0].children[x].attributes[3].nodeValue), parseFloat(elem[0].children[x].attributes[1].nodeValue), parseFloat(elem[0].children[x].attributes[2].nodeValue), pos, target);
         }
         isNotEqual = true;
     }
@@ -353,12 +353,15 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     nnodes = elem[0].children.length;
     temp = new Array();
     this.componentsList = new Array();
-    listMaterial = new Array();
+    
     //texture = new Array();
-    childrenComponents = new Array();
-    childrenPrimitives = new Array();
+    
     isNotEqual = true;
-    for (x = 0; x < nnodes; x++) {
+    for (var x = 0; x < nnodes; x++) {
+		childrenComponents = new Array();
+		childrenComponents = new Array();
+		childrenPrimitives = new Array();
+		listMaterial = new Array();
         for (a = 0; a < this.componentsList.length; a++) {
             if (this.componentsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
@@ -374,9 +377,9 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                 this.componentsList[x].setTransformations(transformationref);
             } else {
                 matrix = mat4.create();
-                for (i = 0; i < elem[0].children[x].children[0].children.length; i++) {
+                for (var i = 0; i < elem[0].children[x].children[0].children.length; i++) {
 
-                    for (j = 0; j < elem[0].children[x].children[0].children[i].attributes.length; j++) {
+                    for (var j = 0; j < elem[0].children[x].children[0].children[i].attributes.length; j++) {
                         if (!isNaN(elem[0].children[x].children[0].children[i].attributes[j].nodeValue))
                             temp[j] = parseFloat(elem[0].children[x].children[0].children[i].attributes[j].nodeValue);
                         else
@@ -407,11 +410,16 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
                 this.componentsList[x].setTransformations(matrix);
             }
-            for (i = 0; i < elem[0].children[x].children[1].children.length; i++) {
+			
+            for (var i = 0; i < elem[0].children[x].children[1].children.length; i++) {
                 if (elem[0].children[x].children[1].children[i].attributes[0].nodeValue == 'inherit')
                     listMaterial[i] = elem[0].children[x].children[1].children[i].attributes[0].nodeValue;
                 else
-                    listMaterial[i] = this.getMaterialById(elem[0].children[x].children[1].children[i].attributes[0].nodeValue);
+				{
+					
+					listMaterial[i] = this.getMaterialById(elem[0].children[x].children[1].children[i].attributes[0].nodeValue);
+					
+				}
             }
             this.componentsList[x].setMaterials(listMaterial);
             var texture;
@@ -421,7 +429,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                 texture = this.getTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
             }
             this.componentsList[x].setTextures(texture);
-            for (i = 0; i < elem[0].children[x].children[3].children.length; i++) {
+            for (var i = 0; i < elem[0].children[x].children[3].children.length; i++) {
                 if (elem[0].children[x].children[3].children[i].tagName == 'componentref')
                     childrenComponents.push(elem[0].children[x].children[3].children[i].attributes[0].nodeValue);
                 else if (elem[0].children[x].children[3].children[i].tagName == 'primitiveref')
@@ -441,35 +449,35 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     console.log(this.componentsList);
 }
 MySceneGraph.prototype.getTransformationById = function(id) {
-    for (i = 0; i < this.transformationsListId.length; i++) {
+    for (var i = 0; i < this.transformationsListId.length; i++) {
         if (this.transformationsListId[i] == id) {
             return this.transformationsList[i];
         }
     }
 }
 MySceneGraph.prototype.getTextureById = function(id) {
-    for (i = 0; i < this.textureList.length; i++) {
+    for (var i = 0; i < this.textureList.length; i++) {
         if (this.textureList[i].id == id) {
             return this.textureList[i];
         }
     }
 }
 MySceneGraph.prototype.getMaterialById = function(id) {
-    for (i = 0; i < this.materialsList.length; i++) {
+    for (var i = 0; i < this.materialsList.length; i++) {
         if (this.materialsList[i].id == id) {
             return this.materialsList[i];
         }
     }
 }
 MySceneGraph.prototype.getPrimitiveById = function(id) {
-    for (i = 0; i < this.priList.length; i++) {
+    for (var i = 0; i < this.priList.length; i++) {
         if (this.priList[i].id == id) {
             return this.priList[i];
         }
     }
 }
 MySceneGraph.prototype.getComponentById = function(id) {
-        for (i = 0; i < this.componentsList.length; i++) {
+        for (var i = 0; i < this.componentsList.length; i++) {
             if (this.componentsList[i].id == id) {
                 return this.componentsList[i];
             }

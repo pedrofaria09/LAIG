@@ -29,6 +29,10 @@ Triangle.prototype.initBuffers = function() {
  	this.x2, this.y2, this.z2,
  	this.x3, this.y3, this.z3
  	];
+	
+	var a=Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)+Math.pow(z1-z2,2));
+	var b=Math.sqrt(Math.pow(x1-x3,2)+Math.pow(y1-y3,2)+Math.pow(z1-z3,2));
+	var c=Math.sqrt(Math.pow(x3-x2,2)+Math.pow(y3-y2,2)+Math.pow(z3-z2,2));
 
  	this.indices = [
  	0, 1, 2, 
@@ -42,8 +46,8 @@ Triangle.prototype.initBuffers = function() {
 
  	this.texCoords = [
  	0,0,
- 	Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)+Math.pow(z1-z2,2)),0,
- 	0.5,1
+ 	a,0,
+ 	a-c*((Math.pow(c,2)-Math.pow(b,2)+Math.pow(a,2))/(2*a*c)),a*Math.sin(Math.acos((Math.pow(c,2)-Math.pow(b,2)+Math.pow(a,2))/(2*a*c)))
  	]
 
  	this.primitiveType = this.scene.gl.TRIANGLES;

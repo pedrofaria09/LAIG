@@ -1,5 +1,6 @@
-function XMLscene() {
+function XMLscene(app) {
     CGFscene.call(this);
+    this.app = app;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -20,6 +21,10 @@ XMLscene.prototype.init = function(application) {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.speed = 3;
+    this.materialIndice = 0;
+    this.materialsComponents = new Array();
+
     //this.axis=new CGFaxis(this);
 };
 
@@ -30,7 +35,7 @@ XMLscene.prototype.initLights = function() {
 };
 
 XMLscene.prototype.initCameras = function() {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
 };
 
 XMLscene.prototype.setDefaultAppearance = function() {
@@ -45,9 +50,53 @@ XMLscene.prototype.setDefaultAppearance = function() {
 XMLscene.prototype.onGraphLoaded = function() {
     this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
     this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
-    //this.lights[0].setVisible(true);
-    //this.lights[0].enable();
+
+    this.updateCamera(0);
+
+    this.initiateMaterials();
+
+    this.nrLuzes = this.graph.lightsList.length;
+
+    for (j = 1; j <= this.nrLuzes; j++) {
+        this["luz" + j] = false;
+    }
+
+    var myInterface = new MyInterface();
+    this.app.setInterface(myInterface);
+    myInterface.setActiveCamera(this.camera);
 };
+
+
+XMLscene.prototype.initiateMaterials = function(i) {
+
+    for (var i = 0; i < this.graph.componentsList.length; i++) {
+        this.materialsComponents[this.graph.componentsList[i].id] = 0;
+    }
+}
+
+XMLscene.prototype.updateCamera = function(i) {
+    if (i >= this.graph.viewsList.length) {
+        i = 0;
+    }
+    this.camera.setPosition(this.graph.viewsList[i].position);
+    this.camera.setTarget(this.graph.viewsList[i].target);
+    this.camera.far = this.graph.viewsList[i].far;
+    this.camera.near = this.graph.viewsList[i].near;
+    this.camera.fov = this.graph.viewsList[i].fov;
+
+    return i;
+}
+
+XMLscene.prototype.updateMaterials = function() {
+
+    for (var i = 0; i < this.graph.componentsList.length; i++) {
+        if (this.graph.componentsList[i].materials.length == this.materialsComponents[this.graph.componentsList[i].id] + 1) {
+            this.materialsComponents[this.graph.componentsList[i].id] = 0;
+        } else {
+            this.materialsComponents[this.graph.componentsList[i].id] = this.materialsComponents[this.graph.componentsList[i].id] + 1;
+        }
+    }
+}
 
 XMLscene.prototype.display = function() {
     // ---- BEGIN Background, camera and axis setup
@@ -74,8 +123,9 @@ XMLscene.prototype.display = function() {
     // only get executed after the graph has loaded correctly.
     // This is one possible way to do it
     if (this.graph.loadedOk) {
-        for (i = 0; i < this.lights.length; i++)
-            this.lights[i].update();
+
+        this.updateLights();
+
         this.graph.axis.display();
         //myquad= new Rectangle(this,1,0,1,0,1);
         //console.log(this.graph.componentsList[0].textures);
@@ -83,6 +133,7 @@ XMLscene.prototype.display = function() {
         //this.graph.componentsList[0].textures.apply();
         //this.graph.componentsList[0].childrenPrimitives[0].display();
         this.processaGrafo('root');
+        //console.log(this.graph.componentsList);
     }
 };
 
@@ -91,10 +142,14 @@ XMLscene.prototype.processaGrafo = function(nodeName) {
 
     if (nodeName != null) {
         var node = this.graph.componentsList[this.getRootPos(nodeName)];
-        if (node.materials != null)
-            material = node.materials[0];
+        if (node.materials != null) {
+            material = node.materials[this.materialsComponents[node.id]];
+        }
+
         if (material != null)
             material.apply();
+        if (node.textures != 'none')
+            node.textures.apply();
         this.multMatrix(node.transformations);
         if (node.childrenPrimitives != null) {
             //console.log(nodeName + ' entrei');
@@ -121,4 +176,17 @@ XMLscene.prototype.getRootPos = function(nodeName) {
         }
     }
     return -1;
+}
+
+XMLscene.prototype.updateLights = function() {
+    for (i = 1; i <= this.nrLuzes; i++) {
+        if (this[("luz" + i)]) {
+            this.lights[i].setVisible(true);
+            this.lights[i].enable();
+        } else {
+            this.lights[i].setVisible(false);
+            this.lights[i].disable();
+        }
+        this.lights[i].update();
+    }
 }
