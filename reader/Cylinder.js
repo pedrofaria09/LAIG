@@ -8,7 +8,7 @@ function Cylinder(scene, id, base, top, height, slices, stacks) {
     this.base = base;
     this.top = top;
     this.height = height;
-    this.slices = slices;
+    this.slices= 50;//= slices; ESTA A LER MAL ESTA VARIAVEL
     this.stacks = stacks;
 
 
@@ -19,50 +19,75 @@ Cylinder.prototype = Object.create(CGFobject.prototype);
 Cylinder.prototype.constructor = Cylinder;
 
 Cylinder.prototype.initBuffers = function() {
-    this.vertices = [];
-   this.indices = [];
-   this.normals = [];
-   this.texCoords = [];
+  
 
-   var diff = (this.base - this.top) / this.stacks;
+   var basesDX = (this.base - this.top) / this.stacks;
+   var startingTop=this.top;
 
-   var ang = 2 * Math.PI / this.slices;
-   var n = 0;
-   var tCoord = 1;
-   var sPatch = 1 / this.slices;
-   var tPatch = 1 / this.stacks;
+  var height=0;
 
-   //Vertices & Normals
-   for (var ind = 0; ind <= this.stacks; ind++) {
+   this.vertices = [];
+    
+    //this.indices = [];
+    
+    this.normals = [];
+    this.texCoords = [];
+    
+    var deg2rad = Math.PI / 180.0;
+    var alpha = (360 / this.slices) * deg2rad;
+    
+    
+   
+        for (var j = 0; j <= this.stacks; j++) {
+             for (var i = 0; i < this.slices; i++) 
+			{
+            
+            this.vertices.push(Math.cos((i) * alpha)*startingTop, Math.sin((i) * alpha)*startingTop, height );
+            this.normals.push(Math.cos((i) * alpha), Math.sin((i) * alpha), 0);
+        
+			}
+			
+			i=0;
+			this.vertices.push(Math.cos((i) * alpha)*startingTop, Math.sin((i) * alpha)*startingTop, height);
+			this.normals.push(Math.cos((i) * alpha), Math.sin((i) * alpha), 0);
+			height+=this.height/this.stacks;
+			startingTop+=basesDX;
+		}
+		this.indices = [];
+	
+	
 
-       var sCoord = 0;
-
-       for (var m = 0; m < this.slices; m++) {
-           this.vertices.push(Math.cos(ang * m) * (this.base - diff * ind),
-               Math.sin(ang * m) * (this.base - diff * ind),
-               n);
-           this.texCoords.push(sCoord, tCoord);
-           this.normals.push(Math.cos(ang * m), Math.sin(ang * m), 0);
-           sCoord += sPatch;
-       }
-       tCoord -= tPatch;
-       n += this.height / this.stacks;
-   }
-
-   //Indices
-   for (var j = 0; j < this.stacks; j++) {
-       for (var i = 0; i <= (this.slices); i += 1) {
-           this.indices.push((i + 1) % (this.slices) + (j + 0) * this.slices,
-               (i + 0) % (this.slices) + (j + 1) * this.slices,
-               (i + 0) % (this.slices) + (j + 0) * this.slices);
-
-           this.indices.push((i + 0) % (this.slices) + (j + 1) * this.slices,
-               (i + 1) % (this.slices) + (j + 0) * this.slices,
-               (i + 1) % (this.slices) + (j + 1) * this.slices);
-       }
-
-   }
+    for (var i = 0; i < this.stacks; i++) 
+    {
+        for (var j = 0; j < this.slices; j++) 
+        {
+            
+            this.indices.push(j+i*(this.slices+1),j+1+i*(this.slices+1),j+2+this.slices+i*(this.slices+1));
+            this.indices.push(j+i*(this.slices+1),j+2+this.slices+i*(this.slices+1),j+1+this.slices+i*(this.slices+1));
+        
+        }
+    }
+	
+    for (var j = 0; j <= this.stacks; j++) 
+    {
+        for (var i = 0; i <= this.slices; i++) 
+		{
+			this.texCoords.push(i/(this.slices-1),1-j/this.stacks);
+        
+		}
+	}
+	 
 
    this.primitiveType = this.scene.gl.TRIANGLES;
    this.initGLBuffers();
 };
+
+Cylinder.prototype.updateTextures = function(length_s,length_t){
+	this.texCoords = [];
+	 
+	 for (var i = 0; i <= this.stacks; i++) {
+        for (var j = 0; j <= this.slices; j++) {
+            this.texCoords.push((1 - (i / this.loops))/length_s, (1 - (j / this.slices))/length_t);
+        }
+    }
+}

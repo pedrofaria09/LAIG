@@ -24,12 +24,8 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="frente" near="0.1" far="500" angle="0.4">
+        <perspective id="Boavista" near="0.1" far="500" angle="0.4">
             <from x="40" y="40" z="40"/>
-            <to x="0" y="0" z="0"/>
-        </perspective>
-        <perspective id="tras" near="0.1" far="500" angle="0.4">
-            <from x="40" y="40" z="0"/>
             <to x="0" y="0" z="0"/>
         </perspective>
 
@@ -53,7 +49,7 @@
             <specular r="1" g="1" b="1" a="1"/>
         </omni>
 
-        <spot id="duas" enabled="1" angle="30" exponent="2">
+        <spot id="duas" enabled="0" angle="30" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="5" y="5" z="5"/>
             <location x="10" y="20" z="10" w="1"/>
@@ -148,6 +144,10 @@
             <rectangle x1="0" y1="0" x2="1" y2="1"/>
         </primitive>
 
+		<primitive id="quadradoTeste">
+            <rectangle x1="0" y1="0" x2="5" y2="3"/>
+        </primitive>
+
         <primitive id="triangulo">
             <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0.5" y3="1" z3="0"/>
         </primitive>
@@ -164,8 +164,8 @@
             <sphere radius="0.9" slices="50" stacks="50"/>
         </primitive>
 
-        <primitive id="quinta">
-            <torus inner="20" outer="21" slices="10" loops="11"/>
+        <primitive id="torus">
+            <torus inner="1" outer="1" slices="5" loops="5"/>
         </primitive>
 
     </primitives>
@@ -189,7 +189,8 @@
                 <componentref id="paredeDir"/>
                 <componentref id="chao"/>
                 <componentref id="r2d2"/>
-                <componentref id="teste"/>
+				<componentref id="teste"/>
+
             </children>
         </component>
         <!-- r2d2 -->
@@ -698,7 +699,7 @@
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        <!-- Chao -->
+        <!-- Parede Direita -->
         <component id="chao">
             <transformation>
                 <translate x="0" y="0" z="20"/>
@@ -717,21 +718,22 @@
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        <!-- Teste -->
+		<!-- TESTE -->
         <component id="teste">
             <transformation>
-                <translate x="0" y="0" z="1"/>
+                <translate x="0.1" y="0.1" z="0.1"/>
+
             </transformation>
 
             <materials>
                 <material id="primeiro"/>
-                <material id="white"/>
+				<material id="white"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="gelson"/>
 
             <children>
-                <primitiveref id="quadrado"/>
+                <primitiveref id="torus"/>
             </children>
         </component>
     </components>

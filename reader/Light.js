@@ -2,7 +2,8 @@
  * Light
  * @constructor
  */
- function Light(id, pos) {
- 	this.id=id;
- 	this.pos=pos; 	
- };
+function Light(id, activated, pos) {
+    this.id = id;
+    this.activated = activated;
+    this.pos = pos;
+};

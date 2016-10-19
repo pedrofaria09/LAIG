@@ -46,3 +46,16 @@ Rectangle.prototype.initBuffers = function() {
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
+ 
+Rectangle.prototype.updateTextura = function(length_s,length_t){
+
+  this.texCoords = [
+    0, Math.abs(this.y1-this.y2)/length_t,
+    Math.abs(this.x1-this.x2)/length_s, Math.abs(this.y1-this.y2)/length_t,
+    0,0,
+    Math.abs(this.x1-this.x2)/length_s,0
+  ];
+
+
+  this.updateTexCoordsGLBuffers();
+};

@@ -21,7 +21,10 @@ XMLscene.prototype.init = function(application) {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    this.speed = 3;
+
+
+
+
     this.materialIndice = 0;
     this.materialsComponents = new Array();
 
@@ -58,7 +61,8 @@ XMLscene.prototype.onGraphLoaded = function() {
     this.nrLuzes = this.graph.lightsList.length;
 
     for (j = 1; j <= this.nrLuzes; j++) {
-        this["luz" + j] = false;
+        this.ative = this.graph.lightsList[(j-1)].activated;
+        this["luz" + j] = this.ative;
     }
 
     var myInterface = new MyInterface();

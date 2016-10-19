@@ -104,6 +104,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
     temp = new Array();
     this.lightsList = new Array();
     isNotEqual = true;
+    activatedLight = false;
     for (x = 0; x < nnodes; x++) {
         for (a = 0; a < this.lightsList.length; a++) {
             if (this.lightsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
@@ -162,11 +163,14 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
             if (elem[0].children[x].attributes[1].nodeValue == 1) {
                 this.scene.lights[x].enable();
                 this.scene.lights[x].setVisible(true);
+                activatedLight = true;
             }
-            this.lightsList.push(new Light(elem[0].children[x].attributes[0].nodeValue, x));
+            this.lightsList.push(new Light(elem[0].children[x].attributes[0].nodeValue, activatedLight, x));
         }
         isNotEqual = true;
+        activatedLight = false;
     }
+    console.log(this.lightsList);
 };
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
     elem = rootElement.getElementsByTagName('materials');
@@ -353,15 +357,15 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     nnodes = elem[0].children.length;
     temp = new Array();
     this.componentsList = new Array();
-    
+
     //texture = new Array();
-    
+
     isNotEqual = true;
     for (var x = 0; x < nnodes; x++) {
-		childrenComponents = new Array();
-		childrenComponents = new Array();
-		childrenPrimitives = new Array();
-		listMaterial = new Array();
+        childrenComponents = new Array();
+        childrenComponents = new Array();
+        childrenPrimitives = new Array();
+        listMaterial = new Array();
         for (a = 0; a < this.componentsList.length; a++) {
             if (this.componentsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
@@ -370,7 +374,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
         if (isNotEqual) {
 
             this.componentsList[x] = new Component(elem[0].children[x].attributes[0].nodeValue);
-    //console.log(elem[0].children[x].children[0].children);
+            //console.log(elem[0].children[x].children[0].children);
             if (elem[0].children[x].children[0].children[0].tagName == 'transformationref') {
 
                 transformationref = this.getTransformationById(elem[0].children[x].children[0].children[0].attributes[0].nodeValue);
@@ -410,16 +414,15 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
                 this.componentsList[x].setTransformations(matrix);
             }
-			
+
             for (var i = 0; i < elem[0].children[x].children[1].children.length; i++) {
                 if (elem[0].children[x].children[1].children[i].attributes[0].nodeValue == 'inherit')
                     listMaterial[i] = elem[0].children[x].children[1].children[i].attributes[0].nodeValue;
-                else
-				{
-					
-					listMaterial[i] = this.getMaterialById(elem[0].children[x].children[1].children[i].attributes[0].nodeValue);
-					
-				}
+                else {
+
+                    listMaterial[i] = this.getMaterialById(elem[0].children[x].children[1].children[i].attributes[0].nodeValue);
+
+                }
             }
             this.componentsList[x].setMaterials(listMaterial);
             var texture;
@@ -446,7 +449,6 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
         childrenComponents = [];
         isNotEqual = true;
     }
-    console.log(this.componentsList);
 }
 MySceneGraph.prototype.getTransformationById = function(id) {
     for (var i = 0; i < this.transformationsListId.length; i++) {
