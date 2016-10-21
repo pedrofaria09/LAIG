@@ -25,7 +25,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="Boavista" near="0.1" far="500" angle="0.4">
-            <from x="40" y="40" z="40"/>
+            <from x="40" y="45" z="40"/>
             <to x="0" y="0" z="0"/>
         </perspective>
 
@@ -144,7 +144,7 @@
             <rectangle x1="0" y1="0" x2="1" y2="1"/>
         </primitive>
 
-		<primitive id="quadradoTeste">
+        <primitive id="quadradoTeste">
             <rectangle x1="0" y1="0" x2="5" y2="3"/>
         </primitive>
 
@@ -189,7 +189,7 @@
                 <componentref id="paredeDir"/>
                 <componentref id="chao"/>
                 <componentref id="r2d2"/>
-				<componentref id="teste"/>
+                <componentref id="teste"/>
 
             </children>
         </component>
@@ -718,7 +718,7 @@
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-		<!-- TESTE -->
+        <!-- TESTE -->
         <component id="teste">
             <transformation>
                 <translate x="0.1" y="0.1" z="0.1"/>
@@ -727,7 +727,7 @@
 
             <materials>
                 <material id="primeiro"/>
-				<material id="white"/>
+                <material id="white"/>
             </materials>
 
             <texture id="gelson"/>

@@ -42,7 +42,7 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'Rectangle.js', 'Triangle.js', 'Cylinder.js', 'Sphere.js', 'Torus.js', 'Component.js', 'MyQuad.js', 'MyHalfSphere.js', 'MyInterface.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'Rectangle.js', 'Triangle.js', 'Cylinder.js', 'Sphere.js', 'Torus.js', 'Component.js', 'MyQuad.js', 'MyHalfSphere.js', 'MyInterface.js', 'MyCylinder.js','Circle.js',
 
     main = function() {
         // Standard application, scene and interface setup

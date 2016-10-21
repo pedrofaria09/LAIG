@@ -18,6 +18,7 @@ function MySceneGraph(filename, scene) {
 MySceneGraph.prototype.onXMLReady = function() {
     console.log("XML Loading finished.");
     var rootElement = this.reader.xmlDoc.documentElement;
+
     error = this.parseGlobals(rootElement);
     error = this.parseIllumination(rootElement);
     error = this.parseLights(rootElement);
@@ -27,6 +28,7 @@ MySceneGraph.prototype.onXMLReady = function() {
     error = this.parseTransformations(rootElement);
     error = this.parsePrimitives(rootElement);
     error = this.parseComponents(rootElement);
+
     if (error != null) {
         this.onXMLError(error);
         return;
@@ -35,37 +37,109 @@ MySceneGraph.prototype.onXMLReady = function() {
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
     this.scene.onGraphLoaded();
 };
+
+/*
+ * Check if is a number
+ */
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function isLetter(str) {
+    return str.length === 1 && str.match(/[a-z]/i);
+}
 /*
  * Example of method that parses elements of one block and stores information in a specific data structure
  */
 MySceneGraph.prototype.parseGlobals = function(rootElement) {
     //falta o root q nao sei oque é
     elem = rootElement.getElementsByTagName('scene');
+
     if (elem == null || elem.length == 0) {
         return "list element is missing.";
+        return -1;
     }
+
+    if (elem.length > 1) {
+        console.warn("You must have only one element on scene tag.");
+        return -1;
+    }
+
+    if (!isNaN(elem[0].attributes[0].nodeValue)) {
+        console.warn("On root, you should put a string");
+        return -1;
+    }
+
+    if (!isNumber(elem[0].attributes[1].nodeValue)) {
+        console.warn("On axis_length, you should put a number");
+        return -1;
+    }
+
+    if (elem[0].attributes.length != 2) {
+        console.warn("You should have 2 attributes on scene");
+        return -1;
+    }
+
     this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
+
 }
+
+
 MySceneGraph.prototype.parseViews = function(rootElement) {
     elem = rootElement.getElementsByTagName('views');
     if (elem == null || elem.length == 0) {
         return "list element is missing.";
+        return -1;
     }
+
     nnodes = elem[0].children.length;
     temp = new Array();
     target = new Array();
     pos = new Array();
     this.viewsList = new Array();
     isNotEqual = true;
+
+    if (nnodes == 0) {
+        console.warn("You should have one or more views");
+        return -1;
+    }
+
     for (x = 0; x < nnodes; x++) {
         for (a = 0; a < this.viewsList.length; a++) {
-            if (this.viewsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
+            if (this.viewsList[a].id == elem[0].children[x].attributes[0].id) {
                 isNotEqual = false;
+                console.warn("You have two id's or more id's equal in views->perspective");
+                return -1;
             }
         }
         if (isNotEqual) {
             for (y = 0; y < elem[0].children[x].children.length; y++) {
                 for (w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
+                    if (!isNumber(elem[0].children[x].children[y].attributes[w].nodeValue)) {
+                        console.warn("You must enter a valid number in views->perspective->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
+                        return -1;
+                    }
+                    if (!isNaN(elem[0].children[x].id)) {
+                        console.warn("You must enter a valid id in views->perspective->id");
+                        return -1;
+                    }
+                    if (w > 0)
+                        if (!isNumber(elem[0].children[x].attributes[w].nodeValue)) {
+                            console.warn("You must enter a valid id in views->perspective->" + elem[0].children[x].attributes[w].nodeName);
+                            return -1;
+                        }
+                    if (elem[0].children[x].attributes.length != 4) {
+                        console.warn("You must have 4 attributes on views->perspective");
+                        return -1;
+                    }
+                    if (elem[0].children[x].children[y].attributes.length != 3) {
+                        console.warn("You must have 3 attributes on views->perspective->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName);
+                        return -1;
+                    }
+                    if (elem[0].children[x].children.length != 2) {
+                        console.warn("You must have 2 attributes on views->perspective->" + elem[0].children[x].id + "->" + elem[0].children[x].nodeName);
+                        return -1;
+                    }
                     temp[w] = parseFloat(elem[0].children[x].children[y].attributes[w].nodeValue);
                 }
                 switch (y) {
@@ -82,22 +156,59 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
         isNotEqual = true;
     }
 };
+
+
+
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
     elem = rootElement.getElementsByTagName('illumination');
     if (elem == null || elem.length == 0) {
         return "list element is missing.";
+        return -1;
     }
     backg = new Array(),
         amb = new Array();
-    //nao funciona corretamente
+
+    if (elem[0].attributes.length != 2) {
+        console.warn("You must have 2 attributes on illumination tag");
+        return -1;
+    }
+
+    for (var x = 0; x < elem[0].attributes.length; x++) {
+        if (!isNumber(elem[0].attributes[x].nodeValue)) {
+            console.warn("On illumination->" + elem[0].attributes[x].nodeName + " should be a boolean");
+            return -1;
+        }
+    }
+
+    for (var x = 0; x < elem[0].children.length; x++) {
+        if (elem[0].children.length != 2) {
+            console.warn("You must have 2 elements on illumination");
+        }
+        if (elem[0].children[x].attributes.length != 4) {
+            console.warn("You must have 4 attributes in illumination->" + elem[0].children[x].nodeName);
+            return -1;
+        }
+        for (var y = 0; y < elem[0].children[x].attributes.length; y++) {
+            if (!isNumber(elem[0].children[x].attributes[y].nodeValue)) {
+                console.warn("You must enter a valid number in illumination->" + elem[0].children[x].nodeName + "->" + elem[0].children[x].attributes[y].nodeName);
+                return -1;
+            }
+        }
+    }
+
+    //TODO VER DEPOIS!!!!!!
     for (var g = 0; g < 4; g++)
         backg.push(parseFloat(elem[0].children[1].attributes[g].nodeValue));
     this.background = backg;
-    //nenhum função vai buscar o ambiente
+
     for (var g = 0; g < 4; g++)
         amb.push(parseFloat(elem[0].children[0].attributes[g].nodeValue));
     this.ambient = amb;
+
 };
+
+
+
 MySceneGraph.prototype.parseLights = function(rootElement) {
     elem = rootElement.getElementsByTagName('lights');
     nnodes = elem[0].children.length;
@@ -105,10 +216,24 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
     this.lightsList = new Array();
     isNotEqual = true;
     activatedLight = false;
+
+
+    if (elem == null || elem.length == 0) {
+        return "list element is missing.";
+        return -1;
+    }
+
+    if (nnodes == 0) {
+        console.warn("You must have at last 1 omni or 1 spot light ");
+        return -1;
+    }
+
     for (x = 0; x < nnodes; x++) {
         for (a = 0; a < this.lightsList.length; a++) {
-            if (this.lightsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
+            if (this.lightsList[a].id == elem[0].children[x].id) {
                 isNotEqual = false;
+                console.warn("You have 2 or more ids equals on lights: " + elem[0].children[a].id);
+                return -1;
             }
         }
         if (isNotEqual) {
@@ -117,6 +242,30 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
             if (elem[0].children[x].tagName == "omni") {
                 for (y = 0; y < elem[0].children[x].children.length; y++) {
                     for (w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
+                        if (!isNumber(elem[0].children[x].children[y].attributes[w].nodeValue)) {
+                            console.warn("You must enter a valid number in lights->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
+                            return -1;
+                        }
+                        if (!isNaN(elem[0].children[x].id)) {
+                            console.warn("You must enter a valid id in lights->id");
+                            return -1;
+                        }
+                        if (!isNumber(elem[0].children[x].attributes[1].nodeValue)) {
+                            console.warn("You must enter a valid boolean in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].attributes[1].nodeName);
+                            return -1;
+                        }
+                        if (elem[0].children[x].attributes.length != 2) {
+                            console.warn("You must have 2 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id);
+                            return -1
+                        }
+                        if (elem[0].children[x].children.length != 4) {
+                            console.warn("You must have 4 children's in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id);
+                            return -1
+                        }
+                        if (elem[0].children[x].children[y].attributes.length != 4) {
+                            console.warn("You must have 4 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                            return -1
+                        }
                         temp[w] = parseFloat(elem[0].children[x].children[y].attributes[w].nodeValue);
                     }
                     switch (y) {
@@ -137,6 +286,34 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
             } else {
                 for (var y = 0; y < elem[0].children[x].children.length; y++) {
                     for (var w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
+                        if (!isNumber(elem[0].children[x].children[y].attributes[w].nodeValue)) {
+                            console.warn("You must enter a valid number in lights->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
+                            return -1;
+                        }
+                        if (!isNaN(elem[0].children[x].id)) {
+                            console.warn("You must enter a valid id in lights->id");
+                            return -1;
+                        }
+                        if ((w > 0) && (!isNumber(elem[0].children[x].attributes[w].nodeValue))) {
+                            console.warn("You must enter a valid number in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].attributes[w].nodeName);
+                            return -1;
+                        }
+                        if (elem[0].children[x].attributes.length != 4) {
+                            console.warn("You must have 4 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id);
+                            return -1
+                        }
+                        if (elem[0].children[x].children.length != 5) {
+                            console.warn("You must have 5 children's in lights->" + elem[0].children[x].tagName);
+                            return -1
+                        }
+                        if ((y != 0) && elem[0].children[x].children[y].attributes.length != 4) {
+                            console.warn("You must have 4 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                            return -1
+                        }
+                        if ((y == 0) && elem[0].children[x].children[y].attributes.length != 3) {
+                            console.warn("You must have 3 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                            return -1
+                        }
                         temp[w] = parseFloat(elem[0].children[x].children[y].attributes[w].nodeValue);
                     }
                     switch (y) {
@@ -170,24 +347,54 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
         isNotEqual = true;
         activatedLight = false;
     }
-    console.log(this.lightsList);
 };
+
+
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
     elem = rootElement.getElementsByTagName('materials');
+    if (elem == null || elem.length == 0) {
+        return "list Materials element is missing.";
+    }
     nnodes = elem[0].children.length;
     temp = new Array();
     this.materialsList = new Array();
     isNotEqual = true;
+    if (nnodes == 0) {
+        console.warn("You must have at last 1 Material ");
+        return -1;
+    }
     for (x = 0; x < nnodes; x++) {
         for (a = 0; a < this.materialsList.length; a++) {
             if (this.materialsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
+                console.warn("You have 2 or more ids equals on Materials with id: " + elem[0].children[a].id);
+                return -1;
             }
         }
         if (isNotEqual) {
             this.materialsList[x] = new Material(this.scene, elem[0].children[x].attributes[0].nodeValue, x);
             for (y = 0; y < elem[0].children[x].children.length; y++) {
                 for (w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
+                    if (!isNumber(elem[0].children[x].children[y].attributes[w].nodeValue)) {
+                        console.warn("You must enter a valid number in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
+                        return -1;
+                    }
+                    if (!isNaN(elem[0].children[x].id)) {
+                        console.warn("You must enter a valid id in material->id->" + elem[0].children[x].id);
+                        return -1;
+                    }
+                    if (elem[0].children[x].children.length != 5) {
+                        console.warn("You must have 5 children's in material->" + elem[0].children[x].id);
+                        return -1
+                    }
+                    if ((y != 4) && elem[0].children[x].children[y].attributes.length != 4) {
+                        console.warn("You must have 4 attributes in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                        return -1
+                    }
+                    if ((y == 4) && elem[0].children[x].children[y].attributes.length != 1) {
+                        console.warn("You must have 1 attributes in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                        return -1
+                    }
                     temp[w] = parseFloat(elem[0].children[x].children[y].attributes[w].nodeValue);
                 }
                 switch (y) {
@@ -212,30 +419,75 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
         isNotEqual = true;
     }
 };
+
+
+
 MySceneGraph.prototype.parseTextures = function(rootElement) {
     elem = rootElement.getElementsByTagName('textures');
     if (elem == null || elem.length == 0) {
         return "list texture element is missing.";
     }
+
     isNotEqual = true;
     nrTextures = elem[0].children.length;
+    if (nrTextures == 0) {
+        console.warn("You must have at last 1 texture ");
+        return -1;
+    }
     tempText = new Array();
     this.textureList = new Array();
     for (var i = 0; i < nrTextures; i++) {
-        for (var g = 0; g < elem[0].children[i].attributes.length; g++) {
-            if (g < 2)
-                tempText.push(elem[0].children[i].attributes[g].nodeValue);
-            if (g >= 2)
-                tempText.push(parseFloat(elem[0].children[i].attributes[g].nodeValue));
+        for (a = 0; a < this.textureList.length; a++) {
+            if (this.textureList[a].id == elem[0].children[i].attributes[0].nodeValue) {
+                isNotEqual = false;
+                console.warn("You have 2 or more ids equals on lights with id: " + elem[0].children[a].id);
+                return -1;
+            }
         }
-        this.textureList[i] = new Texture(this.scene, tempText[0], tempText[2], tempText[3]);
-        this.textureList[i].loadTexture(tempText[1]);
-        tempText = [];
+        if (isNotEqual) {
+            for (var g = 0; g < elem[0].children[i].attributes.length; g++) {
+                if (elem[0].children[i].attributes.length != 4) {
+                    console.warn("You must have 4 attributes in textures->" + elem[0].children[i].tagName + "->" + elem[0].children[i].id);
+                    return -1
+                }
+                if (g < 2) {
+                    if (!isNaN(elem[0].children[i].attributes[g].nodeValue)) {
+                        console.warn("You must have an string on textures->" + elem[0].children[i].tagName + "->" + elem[0].children[i].attributes[g].nodeName + "->" + elem[0].children[i].id);
+                        return -1
+                    }
+                    tempText.push(elem[0].children[i].attributes[g].nodeValue);
+                }
+                if (g >= 2) {
+                    if (!isNumber(elem[0].children[i].attributes[g].nodeValue)) {
+                        console.warn("You must have an number on textures->" + elem[0].children[i].tagName + "->" + elem[0].children[i].id + "->" + elem[0].children[i].attributes[g].nodeName);
+                        return -1
+                    }
+                    tempText.push(parseFloat(elem[0].children[i].attributes[g].nodeValue));
+                }
+            }
+            this.textureList[i] = new Texture(this.scene, tempText[0], tempText[2], tempText[3]);
+            this.textureList[i].loadTexture(tempText[1]);
+            tempText = [];
+        }
+        isNotEqual = true;
     }
+
 };
+
+
+
 MySceneGraph.prototype.parseTransformations = function(rootElement) {
     elem = rootElement.getElementsByTagName('transformations');
+
     nnodes = elem[0].children.length;
+
+    if (elem == null || elem.length == 0) {
+        return "list Transformations element is missing.";
+    }
+    if (nnodes == 0) {
+        console.warn("You must have at last 1 Transfomation block ");
+        return -1;
+    }
     temp = new Array();
     this.transformationsListId = new Array();
     this.transformationsList = new Array();
@@ -245,12 +497,45 @@ MySceneGraph.prototype.parseTransformations = function(rootElement) {
         for (a = 0; a < this.transformationsListId.length; a++) {
             if (this.transformationsListId[a] == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
+                console.warn("You have 2 or more ids equals on materials with id: " + elem[0].children[a].id);
+                return -1;
             }
+        }
+        if (elem[0].children[x].children.length == 0) {
+            console.warn("You must have at last 1 transformation in material->" + elem[0].children[x].id);
+            return -1;
         }
         if (isNotEqual) {
             this.transformationsListId[x] = elem[0].children[x].attributes[0].nodeValue;
             for (y = 0; y < elem[0].children[x].children.length; y++) {
+
                 for (w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
+
+                    if (elem[0].children[x].children[y].nodeName != "rotate") {
+                        if (!isNumber(elem[0].children[x].children[y].attributes[w].nodeValue)) {
+                            console.warn("You must enter a valid number in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
+                            return -1;
+                        }
+                        if (elem[0].children[x].children[y].attributes.length != 3) {
+                            console.warn("You must have 3 attributes in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                            return -1
+                        }
+
+                    } else {
+                        if (elem[0].children[x].children[y].attributes.length != 2) {
+                            console.warn("You must have 2 attributes in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
+                            return -1
+                        }
+                        if (!isLetter(elem[0].children[x].children[y].attributes[0].nodeValue)) {
+                            console.warn("You must have a char(x, y or z) in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName + "->" + elem[0].children[x].children[y].attributes[1].nodeName);
+                            return -1
+                        }
+                        if (!isNumber(elem[0].children[x].children[y].attributes[1].nodeValue)) {
+                            console.warn("You must have an angle in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName + "->" + elem[0].children[x].children[y].attributes[1].nodeName);
+                            return -1
+                        }
+                    }
+
                     if (!isNaN(elem[0].children[x].children[y].attributes[w].nodeValue))
                         temp[w] = parseFloat(elem[0].children[x].children[y].attributes[w].nodeValue);
                     else {
@@ -283,7 +568,13 @@ MySceneGraph.prototype.parseTransformations = function(rootElement) {
         }
         isNotEqual = true;
     }
+
 };
+
+
+
+
+
 MySceneGraph.prototype.parsePrimitives = function(rootElement) {
     var elem = rootElement.getElementsByTagName('primitives');
     if (elem == null || elem.length == 0) {
@@ -293,56 +584,89 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
     valid = true;
     isNotEqual = true;
     this.priList = new Array();
+
     for (var i = 0; i < nrPrimitives; i++) {
-        if (elem[0].children[i].children.length > 1) {
-            return "Error, must have 1 tag per primitive";
+        if (elem[0].children[i].children.length != 1) {
             valid = false;
+            console.warn("Error, must have 1 tag per primitive in id: " + elem[0].children[i].id);
+            return -1;
+
         }
         for (a = 0; a < this.priList.length; a++) {
             if (this.priList[a].id == elem[0].children[i].attributes[0].nodeValue) {
                 isNotEqual = false;
+                console.warn("You have 2 or more ids equals on primitives with id: " + elem[0].children[a].id);
+                return -1;
             }
         }
         if (valid && isNotEqual) {
+            for (j = 0; j < elem[0].children[i].children.length; j++) {
+                for (k = 0; k < elem[0].children[i].children[j].attributes.length; k++) {
+                    if (elem[0].children[i].children[j].nodeName == "rectangle" && elem[0].children[i].children[j].attributes.length != 4) {
+                        console.warn("You must enter 4 values in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName);
+                        return -1;
+                    }
+                    if (elem[0].children[i].children[j].nodeName == "triangle" && elem[0].children[i].children[j].attributes.length != 9) {
+                        console.warn("You must enter 9 values in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName);
+                        return -1;
+                    }
+                    if (elem[0].children[i].children[j].nodeName == "cylinder" && elem[0].children[i].children[j].attributes.length != 5) {
+                        console.warn("You must enter 5 values in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName);
+                        return -1;
+                    }
+                    if (elem[0].children[i].children[j].nodeName == "sphere" && elem[0].children[i].children[j].attributes.length != 3) {
+                        console.warn("You must enter 3 values in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName);
+                        return -1;
+                    }
+                    if (elem[0].children[i].children[j].nodeName == "torus" && elem[0].children[i].children[j].attributes.length != 4) {
+                        console.warn("You must enter 4 values in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName);
+                        return -1;
+                    }
+                    if (!isNumber(elem[0].children[i].children[j].attributes[k].nodeValue)) {
+                        console.warn("You must enter a valid number in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName + "->" + elem[0].children[i].children[j].attributes[k].nodeName);
+                        return -1;
+                    }
+                }
+            }
             switch (elem[0].children[i].children[0].nodeName) {
                 case "rectangle":
-                    x1 = elem[0].children[i].children[0].attributes[0].nodeValue;
-                    y1 = elem[0].children[i].children[0].attributes[1].nodeValue;
-                    x2 = elem[0].children[i].children[0].attributes[2].nodeValue;
-                    y2 = elem[0].children[i].children[0].attributes[3].nodeValue;
+                    x1 = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    y1 = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    x2 = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    y2 = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
                     this.priList[i] = new Rectangle(this.scene, elem[0].children[i].attributes[0].nodeValue, x1, y1, x2, y2);
                     break;
                 case "triangle":
-                    x1 = elem[0].children[i].children[0].attributes[0].nodeValue;
-                    y1 = elem[0].children[i].children[0].attributes[1].nodeValue;
-                    z1 = elem[0].children[i].children[0].attributes[2].nodeValue;
-                    x2 = elem[0].children[i].children[0].attributes[3].nodeValue;
-                    y2 = elem[0].children[i].children[0].attributes[4].nodeValue;
-                    z2 = elem[0].children[i].children[0].attributes[5].nodeValue;
-                    x3 = elem[0].children[i].children[0].attributes[6].nodeValue;
-                    y3 = elem[0].children[i].children[0].attributes[7].nodeValue;
-                    z3 = elem[0].children[i].children[0].attributes[8].nodeValue;
+                    x1 = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    y1 = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    z1 = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    x2 = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    y2 = parseFloat(elem[0].children[i].children[0].attributes[4].nodeValue);
+                    z2 = parseFloat(elem[0].children[i].children[0].attributes[5].nodeValue);
+                    x3 = parseFloat(elem[0].children[i].children[0].attributes[6].nodeValue);
+                    y3 = parseFloat(elem[0].children[i].children[0].attributes[7].nodeValue);
+                    z3 = parseFloat(elem[0].children[i].children[0].attributes[8].nodeValue);
                     this.priList[i] = new Triangle(this.scene, elem[0].children[i].attributes[0].nodeValue, x1, y1, z1, x2, y2, z2, x3, y3, z3);
                     break;
                 case "cylinder":
-                    base = elem[0].children[i].children[0].attributes[0].nodeValue;
-                    topo = elem[0].children[i].children[0].attributes[1].nodeValue;
-                    height = elem[0].children[i].children[0].attributes[2].nodeValue;
-                    slices = elem[0].children[i].children[0].attributes[3].nodeValue;
-                    stacks = elem[0].children[i].children[0].attributes[4].nodeValue;
-                    this.priList[i] = new Cylinder(this.scene, elem[0].children[i].attributes[0].nodeValue, base, topo, height, slices, stacks);
+                    base = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    topo = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    height = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    slices = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    stacks = parseFloat(elem[0].children[i].children[0].attributes[4].nodeValue);
+                    this.priList[i] = new MyCylinder(this.scene, elem[0].children[i].attributes[0].nodeValue, base, topo, height, slices, stacks);
                     break;
                 case "sphere":
-                    radius = elem[0].children[i].children[0].attributes[0].nodeValue;
-                    slices = elem[0].children[i].children[0].attributes[1].nodeValue;
-                    stacks = elem[0].children[i].children[0].attributes[2].nodeValue;
+                    radius = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    slices = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    stacks = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
                     this.priList[i] = new Sphere(this.scene, elem[0].children[i].attributes[0].nodeValue, radius, slices, stacks);
                     break;
                 case "torus":
-                    inner = elem[0].children[i].children[0].attributes[0].nodeValue;
-                    outer = elem[0].children[i].children[0].attributes[1].nodeValue;
-                    slices = elem[0].children[i].children[0].attributes[2].nodeValue;
-                    loops = elem[0].children[i].children[0].attributes[3].nodeValue;
+                    inner = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    outer = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    slices = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    loops = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
                     this.priList[i] = new Torus(this.scene, elem[0].children[i].attributes[0].nodeValue, inner, outer, slices, loops);
                     break;
                 default:
@@ -352,6 +676,9 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
         isNotEqual = true;
     }
 };
+
+
+
 MySceneGraph.prototype.parseComponents = function(rootElement) {
     elem = rootElement.getElementsByTagName('components');
     nnodes = elem[0].children.length;

@@ -2,9 +2,9 @@
  * Cylinder
  * @constructor
  */
-function Cylinder(scene, id, base, top, height, slices, stacks) {
+function Cylinder(scene, base, top, height, slices, stacks) {
     CGFobject.call(this, scene);
-    this.id = id;
+    //this.id = id;
     this.base = base;
     this.top = top;
     this.height = height;

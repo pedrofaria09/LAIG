@@ -61,7 +61,7 @@ XMLscene.prototype.onGraphLoaded = function() {
     this.nrLuzes = this.graph.lightsList.length;
 
     for (j = 1; j <= this.nrLuzes; j++) {
-        this.ative = this.graph.lightsList[(j-1)].activated;
+        this.ative = this.graph.lightsList[(j - 1)].activated;
         this["luz" + j] = this.ative;
     }
 
