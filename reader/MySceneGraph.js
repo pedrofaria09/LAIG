@@ -686,7 +686,6 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     this.componentsList = new Array();
 
     //texture = new Array();
-
     isNotEqual = true;
     for (var x = 0; x < nnodes; x++) {
         childrenComponents = new Array();
@@ -696,14 +695,62 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
         for (a = 0; a < this.componentsList.length; a++) {
             if (this.componentsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
+                console.warn("You have 2 or more ids equals on components with id: " + elem[0].children[a].id);
+                return -1;
             }
         }
         if (isNotEqual) {
+            if (elem[0].children[x].children.length != 4) {
+                console.warn("You must have 4 blocks (transformation-materials-texture-children) on components->id->" + elem[0].children[x].id);
+                return -1;
+            }
+            if (elem[0].children[x].children[0].tagName != "transformation") {
+                console.warn("You must have transformation block on components->id->" + elem[0].children[x].id);
+                return -1;
+            }
+            if (elem[0].children[x].children[1].tagName != "materials") {
+                console.warn("You must have materials block on components->id->" + elem[0].children[x].id);
+                return -1;
+            } else {
+                if (elem[0].children[x].children[1].children.length == 0) {
+                    console.warn("You must have at last 1 material element on components->id->" + elem[0].children[x].id);
+                    return -1;
+                }
+                for (var g = 0; g < elem[0].children[x].children[1].children.length; g++) {
+                    if (!isNaN(elem[0].children[x].children[1].children[g].id)) {
+                        console.warn("You must have a valid name on components->id->" + elem[0].children[x].id + "->material->" + elem[0].children[x].children[1].children[g].id);
+                        return -1
+                    }
+                }
+            }
+            if (elem[0].children[x].children[2].tagName != "texture") {
+                console.warn("You must have texture block on components->id->" + elem[0].children[x].id);
+                return -1;
+            } else if (!isNaN(elem[0].children[x].children[2].id)) {
+                console.warn("You must have a valid name on components->id->" + elem[0].children[x].id + "->texture->" + elem[0].children[x].children[2].id);
+                return -1
+            }
+            if (elem[0].children[x].children[3].tagName != "children") {
+                console.warn("You must have children block on components->id->" + elem[0].children[x].id);
+                return -1;
+            }
+
+            if (elem[0].children[x].children[0].length == 0) {
+                console.warn("You must have at last 1 element on components->id->" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].nodeName);
+                return -1;
+            }
 
             this.componentsList[x] = new Component(elem[0].children[x].attributes[0].nodeValue);
             //console.log(elem[0].children[x].children[0].children);
             if (elem[0].children[x].children[0].children[0].tagName == 'transformationref') {
-
+                if (!isNaN(elem[0].children[x].children[0].children[0].id)) {
+                    console.warn("You must enter a sring on components->id->" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[0].nodeName);
+                    return -1;
+                }
+                if (elem[0].children[x].children[0].children.length != 1) {
+                    console.warn("You must must have only 1 element on components->id->" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].nodeName);
+                    return -1;
+                }
                 transformationref = this.getTransformationById(elem[0].children[x].children[0].children[0].attributes[0].nodeValue);
                 this.componentsList[x].setTransformations(transformationref);
             } else {
@@ -718,9 +765,31 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                     }
                     switch (elem[0].children[x].children[0].children[i].tagName) {
                         case 'translate':
+                            if (elem[0].children[x].children[0].children[i].attributes.length != 3) {
+                                console.warn("You must have 3 attributes (x-y-z) on components->id->" + elem[0].children[x].id + "->transformation->translate");
+                                return -1
+                            }
+                            for (var g = 0; g < elem[0].children[x].children[0].children[i].attributes.length; g++) {
+                                if (!isNumber(elem[0].children[x].children[0].children[i].attributes[g].nodeValue)) {
+                                    console.warn("You must have a valid number on components->id->" + elem[0].children[x].id + "->transformation->translate->" + elem[0].children[x].children[0].children[i].attributes[g].nodeName);
+                                    return -1
+                                }
+                            }
                             mat4.translate(matrix, matrix, temp.slice());
                             break;
                         case 'rotate':
+                            if (elem[0].children[x].children[0].children[i].attributes.length != 2) {
+                                console.warn("You must have 2 attributes (axis-angle) on components->id->" + elem[0].children[x].id + "->transformation->rotate");
+                                return -1
+                            }
+                            if (!isNaN(elem[0].children[x].children[0].children[i].attributes[0].nodeValue)) {
+                                console.warn("You must have a valid letter (x, y or z) on components->id->" + elem[0].children[x].id + "->transformation->translate->axis");
+                                return -1
+                            }
+                            if ((elem[0].children[x].children[0].children[i].attributes[1].nodeValue < (-360)) || (elem[0].children[x].children[0].children[i].attributes[1].nodeValue > 360)) {
+                                console.warn("You must have a valid angle (-360 to 360) on components->id->" + elem[0].children[x].id + "->transformation->translate->angle");
+                                return -1
+                            }
                             switch (temp[0]) {
                                 case "x":
                                     mat4.rotate(matrix, matrix, temp[1] * Math.PI / 180, [1, 0, 0]);
@@ -734,6 +803,16 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                             }
                             break;
                         case 'scale':
+                            if (elem[0].children[x].children[0].children[i].attributes.length != 3) {
+                                console.warn("You must have 3 attributes (x-y-z) on components->id->" + elem[0].children[x].id + "->transformation->scale");
+                                return -1
+                            }
+                            for (var g = 0; g < elem[0].children[x].children[0].children[i].attributes.length; g++) {
+                                if (!isNumber(elem[0].children[x].children[0].children[i].attributes[g].nodeValue)) {
+                                    console.warn("You must have a valid number on components->id->" + elem[0].children[x].id + "->transformation->scale->" + elem[0].children[x].children[0].children[i].attributes[g].nodeName);
+                                    return -1
+                                }
+                            }
                             mat4.scale(matrix, matrix, temp.slice());
                             break;
                     }
@@ -759,7 +838,16 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                 texture = this.getTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
             }
             this.componentsList[x].setTextures(texture);
+            if (elem[0].children[x].children[3].children.length == 0) {
+                console.warn("You must have at last 1 componentref or primitiveref element on components->id->" + elem[0].children[x].id + "->children");
+                return -1;
+            }
             for (var i = 0; i < elem[0].children[x].children[3].children.length; i++) {
+
+                if (!isNaN(elem[0].children[x].children[3].children[i].id)) {
+                    console.warn("You must have a valid name on components->id->" + elem[0].children[x].id + "->children->" + elem[0].children[x].children[3].children[i].id);
+                    return -1
+                }
                 if (elem[0].children[x].children[3].children[i].tagName == 'componentref')
                     childrenComponents.push(elem[0].children[x].children[3].children[i].attributes[0].nodeValue);
                 else if (elem[0].children[x].children[3].children[i].tagName == 'primitiveref')
