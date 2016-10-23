@@ -42,7 +42,7 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'Rectangle.js', 'Triangle.js', 'Cylinder.js', 'Sphere.js', 'Torus.js', 'Component.js', 'MyQuad.js', 'MyHalfSphere.js', 'MyInterface.js', 'MyCylinder.js','Circle.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js', 'primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js', 'primitives/MyCylinder.js', 'primitives/Circle.js',
 
     main = function() {
         // Standard application, scene and interface setup
@@ -64,7 +64,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'M
 
         // create and load graph, and associate it to scene.
         // Check console for loading errors
-        var myGraph = new MySceneGraph('demo3.xml', myScene);
+        var myGraph = new MySceneGraph('LAIG1_T4_G06.dsx', myScene);
 
         // start
         app.run();

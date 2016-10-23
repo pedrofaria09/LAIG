@@ -79,7 +79,7 @@ MySceneGraph.prototype.parseGlobals = function(rootElement) {
         console.warn("You should have 2 attributes on scene");
         return -1;
     }
-
+    this.root = elem[0].attributes[0].nodeValue;
     this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
 
 }
@@ -103,23 +103,28 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
         console.warn("You should have one or more views");
         return -1;
     }
-
-    for (x = 0; x < nnodes; x++) {
-        for (a = 0; a < this.viewsList.length; a++) {
-            if (this.viewsList[a].id == elem[0].children[x].attributes[0].id) {
+    this.idView = elem[0].attributes[0].nodeValue;
+    for (var x = 0; x < nnodes; x++) {
+        for (var a = 0; a < this.viewsList.length; a++) {
+            if (this.viewsList[a][0] == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
                 console.warn("You have two id's or more id's equal in views->perspective");
                 return -1;
             }
         }
         if (isNotEqual) {
-            for (y = 0; y < elem[0].children[x].children.length; y++) {
-                for (w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
+            if (this.idView != "default") {
+                if (this.idView == elem[0].children[x].attributes[0].nodeValue) {
+                    this.idView = x;
+                }
+            }
+            for (var y = 0; y < elem[0].children[x].children.length; y++) {
+                for (var w = 0; w < elem[0].children[x].children[y].attributes.length; w++) {
                     if (!isNumber(elem[0].children[x].children[y].attributes[w].nodeValue)) {
                         console.warn("You must enter a valid number in views->perspective->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
                         return -1;
                     }
-                    if (!isNaN(elem[0].children[x].id)) {
+                    if (elem[0].children[x].attributes[0].nodeValue == "") {
                         console.warn("You must enter a valid id in views->perspective->id");
                         return -1;
                     }
@@ -152,6 +157,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
                 }
             }
             this.viewsList[x] = new CGFcamera(parseFloat(elem[0].children[x].attributes[3].nodeValue), parseFloat(elem[0].children[x].attributes[1].nodeValue), parseFloat(elem[0].children[x].attributes[2].nodeValue), pos, target);
+            this.viewsList[x][0] = elem[0].children[x].attributes[0].nodeValue;
         }
         isNotEqual = true;
     }
@@ -216,7 +222,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
     this.lightsList = new Array();
     isNotEqual = true;
     activatedLight = false;
-
+    var target = [];
 
     if (elem == null || elem.length == 0) {
         return "list element is missing.";
@@ -246,7 +252,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
                             console.warn("You must enter a valid number in lights->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
                             return -1;
                         }
-                        if (!isNaN(elem[0].children[x].id)) {
+                        if (elem[0].children[x].attributes[0].nodeValue == "") {
                             console.warn("You must enter a valid id in lights->id");
                             return -1;
                         }
@@ -290,7 +296,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
                             console.warn("You must enter a valid number in lights->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
                             return -1;
                         }
-                        if (!isNaN(elem[0].children[x].id)) {
+                        if (elem[0].children[x].attributes[0].nodeValue == "") {
                             console.warn("You must enter a valid id in lights->id");
                             return -1;
                         }
@@ -306,11 +312,11 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
                             console.warn("You must have 5 children's in lights->" + elem[0].children[x].tagName);
                             return -1
                         }
-                        if ((y != 0) && elem[0].children[x].children[y].attributes.length != 4) {
+                        if ((y != 0 && y != 1) && elem[0].children[x].children[y].attributes.length != 4) {
                             console.warn("You must have 4 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
                             return -1
                         }
-                        if ((y == 0) && elem[0].children[x].children[y].attributes.length != 3) {
+                        if ((y == 0 || y == 1) && elem[0].children[x].children[y].attributes.length != 3) {
                             console.warn("You must have 3 attributes in lights->" + elem[0].children[x].tagName + "->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].tagName);
                             return -1
                         }
@@ -318,10 +324,10 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
                     }
                     switch (y) {
                         case 0:
-                            this.scene.lights[x].setSpotDirection(temp[0], temp[1], temp[2]);
+                            target = temp.slice();
                             break;
                         case 1:
-                            this.scene.lights[x].setPosition(temp[0], temp[1], temp[2], temp[3]);
+                            this.scene.lights[x].setPosition(temp[0], temp[1], temp[2], 1);
                             break;
                         case 2:
                             this.scene.lights[x].setAmbient(temp[0], temp[1], temp[2], temp[3]);
@@ -334,8 +340,9 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
                             break;
                     }
                 }
-                this.scene.lights[x].setSpotCutOff(elem[0].children[x].attributes[2].nodeValue);
-                this.scene.lights[x].setSpotExponent(elem[0].children[x].attributes[3].nodeValue);
+                this.scene.lights[x].setSpotDirection(target[0] - this.scene.lights[x].position[0], target[1] - this.scene.lights[x].position[1], target[2] - this.scene.lights[x].position[2]);
+                this.scene.lights[x].setSpotCutOff(parseFloat(elem[0].children[x].attributes[2].nodeValue) * Math.PI / 180);
+                this.scene.lights[x].setSpotExponent(parseFloat(elem[0].children[x].attributes[3].nodeValue));
             }
             if (elem[0].children[x].attributes[1].nodeValue == 1) {
                 this.scene.lights[x].enable();
@@ -379,7 +386,7 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
                         console.warn("You must enter a valid number in material->" + elem[0].children[x].id + "->" + elem[0].children[x].children[y].nodeName + "->" + elem[0].children[x].children[y].attributes[w].nodeName);
                         return -1;
                     }
-                    if (!isNaN(elem[0].children[x].id)) {
+                    if (elem[0].children[x].attributes[0].nodeValue == "") {
                         console.warn("You must enter a valid id in material->id->" + elem[0].children[x].id);
                         return -1;
                     }
@@ -436,8 +443,9 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
     }
     tempText = new Array();
     this.textureList = new Array();
+    this.CGFtextureList = [];
     for (var i = 0; i < nrTextures; i++) {
-        for (a = 0; a < this.textureList.length; a++) {
+        for (var a = 0; a < this.textureList.length; a++) {
             if (this.textureList[a].id == elem[0].children[i].attributes[0].nodeValue) {
                 isNotEqual = false;
                 console.warn("You have 2 or more ids equals on lights with id: " + elem[0].children[a].id);
@@ -451,7 +459,7 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
                     return -1
                 }
                 if (g < 2) {
-                    if (!isNaN(elem[0].children[i].attributes[g].nodeValue)) {
+                    if (elem[0].children[i].attributes[g].nodeValue == "") {
                         console.warn("You must have an string on textures->" + elem[0].children[i].tagName + "->" + elem[0].children[i].attributes[g].nodeName + "->" + elem[0].children[i].id);
                         return -1
                     }
@@ -465,8 +473,9 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
                     tempText.push(parseFloat(elem[0].children[i].attributes[g].nodeValue));
                 }
             }
+            this.CGFtextureList[i] = new CGFtexture(this.scene, tempText[1]);
+            //this.textureList[i]=tempText[0];
             this.textureList[i] = new Texture(this.scene, tempText[0], tempText[2], tempText[3]);
-            this.textureList[i].loadTexture(tempText[1]);
             tempText = [];
         }
         isNotEqual = true;
@@ -700,6 +709,10 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
             }
         }
         if (isNotEqual) {
+            if (elem[0].children[x].id == "") {
+                console.warn("You must enter a sring on components->id->" + elem[0].children[x].id);
+                return -1;
+            }
             if (elem[0].children[x].children.length != 4) {
                 console.warn("You must have 4 blocks (transformation-materials-texture-children) on components->id->" + elem[0].children[x].id);
                 return -1;
@@ -717,7 +730,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                     return -1;
                 }
                 for (var g = 0; g < elem[0].children[x].children[1].children.length; g++) {
-                    if (!isNaN(elem[0].children[x].children[1].children[g].id)) {
+                    if (elem[0].children[x].children[1].children[g].id == "") {
                         console.warn("You must have a valid name on components->id->" + elem[0].children[x].id + "->material->" + elem[0].children[x].children[1].children[g].id);
                         return -1
                     }
@@ -741,9 +754,8 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
             }
 
             this.componentsList[x] = new Component(elem[0].children[x].attributes[0].nodeValue);
-            //console.log(elem[0].children[x].children[0].children);
             if (elem[0].children[x].children[0].children[0].tagName == 'transformationref') {
-                if (!isNaN(elem[0].children[x].children[0].children[0].id)) {
+                if (elem[0].children[x].children[0].children[0].id == "") {
                     console.warn("You must enter a sring on components->id->" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[0].nodeName);
                     return -1;
                 }
@@ -782,7 +794,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                                 console.warn("You must have 2 attributes (axis-angle) on components->id->" + elem[0].children[x].id + "->transformation->rotate");
                                 return -1
                             }
-                            if (!isNaN(elem[0].children[x].children[0].children[i].attributes[0].nodeValue)) {
+                            if (elem[0].children[x].children[0].children[i].attributes[0].nodeValue == "") {
                                 console.warn("You must have a valid letter (x, y or z) on components->id->" + elem[0].children[x].id + "->transformation->translate->axis");
                                 return -1
                             }
@@ -832,11 +844,15 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
             }
             this.componentsList[x].setMaterials(listMaterial);
             var texture;
-            if (elem[0].children[x].children[2].attributes[0].nodeValue == 'inherit' || elem[0].children[x].children[2].attributes[0].nodeValue == 'none')
+            if (elem[0].children[x].children[2].attributes[0].nodeValue == 'inherit' || elem[0].children[x].children[2].attributes[0].nodeValue == 'none') {
+                CGFtexture = elem[0].children[x].children[2].attributes[0].nodeValue;
                 texture = elem[0].children[x].children[2].attributes[0].nodeValue;
-            else {
+            } else {
+
+                CGFtexture = this.getCGFTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
                 texture = this.getTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
             }
+            this.componentsList[x].setCGFTextures(CGFtexture);
             this.componentsList[x].setTextures(texture);
             if (elem[0].children[x].children[3].children.length == 0) {
                 console.warn("You must have at last 1 componentref or primitiveref element on components->id->" + elem[0].children[x].id + "->children");
@@ -865,6 +881,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
         isNotEqual = true;
     }
 }
+
 MySceneGraph.prototype.getTransformationById = function(id) {
     for (var i = 0; i < this.transformationsListId.length; i++) {
         if (this.transformationsListId[i] == id) {
@@ -872,6 +889,14 @@ MySceneGraph.prototype.getTransformationById = function(id) {
         }
     }
 }
+MySceneGraph.prototype.getCGFTextureById = function(id) {
+    for (var i = 0; i < this.textureList.length; i++) {
+        if (this.textureList[i].id == id) {
+            return this.CGFtextureList[i];
+        }
+    }
+}
+
 MySceneGraph.prototype.getTextureById = function(id) {
     for (var i = 0; i < this.textureList.length; i++) {
         if (this.textureList[i].id == id) {

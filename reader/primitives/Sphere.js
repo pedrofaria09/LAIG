@@ -1,40 +1,45 @@
-/**
- * MyHalfSphere
- * @constructor
- */
-function MyHalfSphere(scene, slices, stacks) {
+function Sphere(scene, id, radius, slices, stacks) {
     CGFobject.call(this, scene);
 
+    this.id = id;
     this.slices = slices;
     this.stacks = stacks;
-    this.textS = 1.0 / this.slices;
-    this.textT = 1.0 / this.stacks;
-
+    this.radius = radius;
+    this.scene = scene;
     this.initBuffers();
-}
 
-MyHalfSphere.prototype = Object.create(CGFobject.prototype);
-MyHalfSphere.prototype.constructor = MyHalfSphere;
+};
 
-MyHalfSphere.prototype.initBuffers = function() {
+
+Sphere.prototype = Object.create(CGFobject.prototype);
+Sphere.prototype.constructor = Sphere;
+
+Sphere.prototype.initBuffers = function() {
 
     this.vertices = [];
     this.indices = [];
     this.normals = [];
     this.texCoords = [];
+    this.textS = 1.0 / this.slices;
+    this.textT = 1.0 / this.stacks;
 
-    var ang = 2 * Math.PI / this.slices;
-    var ang_vert = Math.PI / (2 * this.stacks);
+    var angLat = 2 * Math.PI / this.slices;
+    var angVert = Math.PI / this.stacks;
     var s = 0;
     var t = 1;
+
     //Vertices & Normals
-    for (var ind = 0; ind <= this.stacks; ind++) {
+    for (var ind = this.stacks; ind >= 0; ind--) {
 
         s = 0;
 
         for (var m = 0; m < this.slices; m++) {
-            this.vertices.push(Math.cos(ang * m) * Math.sin(Math.PI / 2 - ang_vert * ind), Math.sin(ang * m) * Math.sin(Math.PI / 2 - ang_vert * ind), Math.sin(ang_vert * ind));
-            this.normals.push(Math.cos(ang * m) * Math.sin(Math.PI / 2 - ang_vert * ind), Math.sin(ang * m) * Math.sin(Math.PI / 2 - ang_vert * ind), Math.sin(ang_vert * ind));
+            this.vertices.push(Math.cos(angLat * m) * Math.sin(angVert * ind) * this.radius,
+                Math.sin(angLat * m) * Math.sin(angVert * ind) * this.radius,
+                Math.cos(angVert * ind) * this.radius);
+            this.normals.push(Math.cos(angLat * m) * Math.sin(angVert * ind),
+                Math.sin(angLat * m) * Math.sin(angVert * ind),
+                Math.cos(angVert * ind));
             s += this.textS;
             this.texCoords.push(s, t);
 
@@ -44,7 +49,7 @@ MyHalfSphere.prototype.initBuffers = function() {
 
     //Indices
     for (var j = 0; j < this.stacks; j++) {
-        for (var i = 0; i < (this.slices); i += 1) {
+        for (var i = 0; i < (this.slices); i++) {
             this.indices.push((i + 1) % (this.slices) + (j + 0) * this.slices,
                 (i + 0) % (this.slices) + (j + 1) * this.slices,
                 (i + 0) % (this.slices) + (j + 0) * this.slices);
@@ -53,6 +58,7 @@ MyHalfSphere.prototype.initBuffers = function() {
                 (i + 1) % (this.slices) + (j + 0) * this.slices,
                 (i + 1) % (this.slices) + (j + 1) * this.slices);
         }
+
     }
 
     this.primitiveType = this.scene.gl.TRIANGLES;

@@ -17,7 +17,7 @@
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="root" axis_length="1"/>
 
-    <views default="default">
+    <views default="Boavista">
 
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
@@ -29,11 +29,22 @@
             <to x="0" y="0" z="0"/>
         </perspective>
 
+        <perspective id="segundaVista" near="0.1" far="500" angle="0.4">
+            <from x="40" y="40" z="0"/>
+            <to x="5" y="5" z="5"/>
+        </perspective>
+
+        <perspective id="terceiraVista" near="0.5" far="400" angle="0.3">
+            <from x="-40" y="30" z="0"/>
+            <to x="10" y="0" z="5"/>
+        </perspective>
+
+
     </views>
 
     <illumination doublesided="1" local="1">
 
-        <ambient r="1" g="1" b="1" a="1"/>
+        <ambient r="0" g="0" b="0" a="0"/>
         <background r="0" g="0" b="0" a="1"/>
 
     </illumination>
@@ -42,20 +53,29 @@
 
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="uma" enabled="1">
+        <omni id="uma" enabled="0">
             <location x="6" y="20" z="10" w="1"/>
-            <ambient r="1" g="1" b="1" a="1"/>
-            <diffuse r="1" g="1" b="1" a="1"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="0.7" g="0.5" b="0" a="1"/>
             <specular r="1" g="1" b="1" a="1"/>
         </omni>
 
-        <spot id="duas" enabled="0" angle="30" exponent="2">
+        <spot id="duas" enabled="1" angle="30" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="5" y="5" z="5"/>
-            <location x="10" y="20" z="10" w="1"/>
-            <ambient r="1" g="0.3" b="0.3" a="1"/>
-            <diffuse r="1" g="0.3" b="0.3" a="1"/>
-            <specular r="1" g="0.3" b="0.3" a="1"/>
+            <location x="10" y="20" z="10"/>
+            <ambient r="0.5" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.5" g="0.3" b="0.3" a="1"/>
+            <specular r="0.5" g="0.3" b="0.3" a="1"/>
+        </spot>
+		
+		<spot id="tres" enabled="0" angle="30" exponent="2">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="5" y="0" z="5"/>
+            <location x="30" y="30" z="30"/>
+            <ambient r="1" g="0" b="0" a="1"/>
+            <diffuse r="1" g="0" b="0" a="1"/>
+            <specular r="1" g="0" b="0" a="1"/>
         </spot>
 
     </lights>
@@ -74,7 +94,6 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="gelson" file="./images/gelson.jpg" length_s="1" length_t="1"/>
         <texture id="corpo" file="./images/corpo.jpg" length_s="1" length_t="1"/>
         <texture id="pe" file="./images/pe.png" length_s="1" length_t="1"/>
         <texture id="pefrente" file="./images/pefrente.jpg" length_s="1" length_t="1"/>
@@ -84,7 +103,11 @@
         <texture id="cabeca" file="./images/cabeca.jpg" length_s="1" length_t="1"/>
         <texture id="paredeEsq" file="./images/paredeEsq.jpg" length_s="1" length_t="1"/>
         <texture id="paredeDir" file="./images/paredeDir.jpg" length_s="1" length_t="1"/>
-        <texture id="chao" file="./images/chao.jpg" length_s="1" length_t="1"/>
+        <texture id="chao" file="./images/chao.jpg" length_s="0.05" length_t="0.05"/>
+        <texture id="cabecaBB8TXT" file="./images/cabecaBB8.png" length_s="1" length_t="1"/>
+        <texture id="corpoBB8TXT" file="./images/corpoBB8.png" length_s="1" length_t="1"/>
+        <texture id="pescocoBB8TXT" file="./images/pescocoBB8.png" length_s="1" length_t="1"/>
+        <texture id="sandTXT" file="./images/sand.jpg" length_s="1" length_t="1"/>
 
     </textures>
 
@@ -92,27 +115,49 @@
 
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="primeiro">
-            <emission r="0.1" g="0.1" b="0.1" a="0.3"/>
-            <ambient r="0" g="0" b="1" a="1"/>
-            <diffuse r="0" g="0" b="1" a="1"/>
-            <specular r="0" g="0" b="1" a="1"/>
+        <material id="orange">
+            <emission r="1" g="0.7" b="0" a="0.3"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="1" g="1" b="0" a="1"/>
+            <specular r="1" g="1" b="0" a="1"/>
+            <shininess value="10"/>
+        </material>
+		<material id="red">
+            <emission r="0.7" g="0" b="0" a="0.3"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="1" g="0" b="0" a="1"/>
+            <specular r="1" g="0" b="0" a="1"/>
+            <shininess value="10"/>
+        </material>
+		<material id="yellow">
+            <emission r="0.5" g="0.5" b="0" a="0.3"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="0.5" g="0.5" b="0" a="1"/>
+            <specular r="1" g="1" b="0" a="1"/>
             <shininess value="1"/>
         </material>
         <material id="white">
+            <emission r="0.2" g="0.2" b="0.2" a="1"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+            <shininess value="1"/>
+        </material>
+		<material id="gray">
+            <emission r="0.45" g="0.5" b="0.55" a="1"/>
+            <ambient r="0.45" g="0.5" b="0.55" a="1"/>
+            <diffuse r="0.45" g="0.5" b="0.55" a="1"/>
+            <specular r="0.45" g="0.5" b="0.55" a="1"/>
+            <shininess value="1"/>
+        </material>
+		<material id="liveWhite">
             <emission r="1" g="1" b="1" a="1"/>
             <ambient r="1" g="1" b="1" a="1"/>
             <diffuse r="1" g="1" b="1" a="1"/>
             <specular r="1" g="1" b="1" a="1"/>
             <shininess value="1"/>
         </material>
-        <material id="transparente">
-            <emission r="1" g="0" b="0" a="1"/>
-            <ambient r="1" g="0" b="0" a="1"/>
-            <diffuse r="1" g="0" b="0" a="1"/>
-            <specular r="1" g="0" b="0" a="1"/>
-            <shininess value="1"/>
-        </material>
+		
 
     </materials>
 
@@ -123,7 +168,7 @@
         <transformation id="centroQuadrante">
             <!-- instrucoes a usar sem limite nem ordem -->
             <!-- deve existir pelo menos uma transformacao -->
-            <translate x="4" y="1.5" z="4.25"/>
+            <translate x="0" y="0.5" z="0"/>
             <scale x="1" y="1" z="1"/>
             <rotate axis="y" angle="90"/>
             <rotate axis="x" angle="-90"/>
@@ -152,6 +197,10 @@
             <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0.5" y3="1" z3="0"/>
         </primitive>
 
+        <primitive id="uniCilindro">
+            <cylinder base="1" top="1" height="0.1" slices="50" stacks="50"/>
+        </primitive>
+
         <primitive id="cilindroCorpo">
             <cylinder base="0.9" top="0.9" height="3.5" slices="50" stacks="50"/>
         </primitive>
@@ -160,12 +209,24 @@
             <cylinder base="0.4" top="0.4" height="2.5" slices="50" stacks="50"/>
         </primitive>
 
+        <primitive id="esfera">
+            <sphere radius="1" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="cilindroBB2">
+            <cylinder base="0.3" top="0.52" height="0.5" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="cilindroTrono">
+            <cylinder base="3" top="2.5" height="0.5" slices="50" stacks="50"/>
+        </primitive>
+
         <primitive id="esferaCabeca">
             <sphere radius="0.9" slices="50" stacks="50"/>
         </primitive>
 
         <primitive id="torus">
-            <torus inner="1" outer="1" slices="5" loops="5"/>
+            <torus inner="1" outer="1" slices="50" loops="50"/>
         </primitive>
 
     </primitives>
@@ -179,31 +240,243 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="white"/>
             </materials>
 
-            <texture id="gelson"/>
+            <texture id="none"/>
 
             <children>
+                <componentref id="boia"/>
                 <componentref id="paredeEsq"/>
                 <componentref id="paredeDir"/>
                 <componentref id="chao"/>
                 <componentref id="r2d2"/>
-                <componentref id="teste"/>
-
+                <componentref id="r2d2_2"/>
+                <componentref id="r2d2_2_perna"/>
+                <componentref id="bb8"/>
+                <componentref id="bb8_2"/>
+                <componentref id="trono"/>
+                <componentref id="sol1"/>
+                <componentref id="sol2"/>
             </children>
         </component>
-        <!-- r2d2 -->
-        <component id="r2d2">
+
+        <component id="sol1">
             <transformation>
-                <translate x="0" y="-1" z="0"/>
+                <translate x="12.6" y="15" z="0"/>
+                <scale x="0.5" y="0.7" z="0.5"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+				<material id="yellow"/>
+                <material id="orange"/>
+				<material id="red"/>
             </materials>
 
-            <texture id="gelson"/>
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="sol2">
+            <transformation>
+                <translate x="14.2" y="12" z="0"/>
+                <scale x="0.5" y="0.65" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id="gray"/>
+				<material id="liveWhite"/>
+				
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <!-- Trono -->
+        <component id="trono">
+            <transformation>
+                <translate x="10" y="0" z="3"/>
+                <scale x="0.7" y="0.9" z="0.7"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="sandTXT"/>
+
+            <children>
+                <componentref id="trono1"/>
+                <componentref id="trono2"/>
+                <componentref id="trono3"/>
+            </children>
+        </component>
+
+        <!-- Trono1 -->
+        <component id="trono1">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+
+            <children>
+                <primitiveref id="cilindroTrono"/>
+            </children>
+        </component>
+        <!-- Trono2 -->
+        <component id="trono2">
+            <transformation>
+                <translate x="0" y="0.5" z="0"/>
+                <scale x="0.7" y="1" z="0.7"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+
+            <children>
+                <primitiveref id="cilindroTrono"/>
+            </children>
+        </component>
+        <!-- Trono3 -->
+        <component id="trono3">
+            <transformation>
+                <translate x="0" y="0.8" z="0"/>
+                <scale x="0.5" y="1" z="0.5"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="chao"/>
+
+            <children>
+                <primitiveref id="cilindroTrono"/>
+            </children>
+        </component>
+
+        <!-- bb8 -->
+        <component id="bb8">
+            <transformation>
+                <translate x="3" y="1" z="10"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="esfera1BB8"/>
+                <componentref id="esfera2BB8"/>
+                <componentref id="pescoco2BB8"/>
+            </children>
+        </component>
+
+        <!-- bb8_2 -->
+        <component id="bb8_2">
+            <transformation>
+                <translate x="10" y="2.15" z="3"/>
+                <rotate axis="z" angle="20"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="esfera1BB8"/>
+                <componentref id="esfera2BB8"/>
+                <componentref id="pescoco2BB8"/>
+            </children>
+        </component>
+
+        <!-- esfera1BB8 -->
+        <component id="esfera1BB8">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="corpoBB8TXT"/>
+
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <!-- esfera2BB8 -->
+        <component id="esfera2BB8">
+            <transformation>
+                <translate x="0" y="1.2" z="0"/>
+                <scale x="0.5" y="0.5" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="cabecaBB8TXT"/>
+
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <!-- pescoco2BB8 -->
+        <component id="pescoco2BB8">
+            <transformation>
+                <translate x="0" y="0.7" z="0"/>
+                <scale x="1" y="0.7" z="1"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="pescocoBB8TXT"/>
+
+            <children>
+                <primitiveref id="cilindroBB2"/>
+            </children>
+        </component>
+
+        <!-- r2d2 -->
+        <component id="r2d2">
+            <transformation>
+                <translate x="5" y="0" z="5"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
 
             <children>
                 <componentref id="corpo"/>
@@ -216,6 +489,30 @@
             </children>
         </component>
 
+        <!-- r2d2_2 -->
+        <component id="r2d2_2">
+            <transformation>
+                <translate x="13.1" y="0" z="10"/>
+                <rotate axis="y" angle="90"/>
+                <rotate axis="x" angle="-10"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="corpo"/>
+                <componentref id="ombroEsquerdo"/>
+                <componentref id="ombroDireito"/>
+                <componentref id="bracoDireito"/>
+                <componentref id="bracoEsquerdo"/>
+                <componentref id="cabeca"/>
+            </children>
+        </component>
+
         <!-- CORPO -->
         <component id="corpo">
             <transformation>
@@ -223,7 +520,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="corpo"/>
@@ -236,163 +533,56 @@
         <!-- OMBRO ESQUERDO -->
         <component id="ombroEsquerdo">
             <transformation>
-                <translate x="0" y="0" z="0"/>
+                <translate x="-1" y="3" z="0"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
-            <texture id="gelson"/>
+            <texture id="none"/>
 
             <children>
-                <componentref id="ombEsqCima"/>
-                <componentref id="ombEsqBaixo"/>
-                <componentref id="ombEsqFrente"/>
-                <componentref id="ombEsqTras"/>
-                <componentref id="ombEsqEsq"/>
-                <componentref id="ombEsqDir"/>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
             </children>
         </component>
 
-        <!-- OMBRO ESQUERDO DIREITO -->
-        <component id="ombEsqEsq">
-            <transformation>
-                <translate x="5.5" y="3.5" z="4.5"/>
-                <rotate axis="y" angle="90"/>
-            </transformation>
-
-            <materials>
-                <material id="primeiro"/>
-            </materials>
-
-            <texture id="ombrofora"/>
-
-            <children>
-                <primitiveref id="quadrado"/>
-            </children>
-        </component>
-
-        <!-- OMBRO ESQUERDO ESQUERDO -->
-        <component id="ombEsqDir">
-            <transformation>
-                <translate x="4.5" y="3.5" z="3.5"/>
-                <rotate axis="y" angle="-90"/>
-            </transformation>
-
-            <materials>
-                <material id="primeiro"/>
-            </materials>
-
-            <texture id="ombrofora"/>
-
-            <children>
-                <primitiveref id="quadrado"/>
-            </children>
-        </component>
-
-        <!-- OMBRO ESQUERDO CIMA -->
-        <component id="ombEsqCima">
-            <transformation>
-                <translate x="4.5" y="4.5" z="4.5"/>
-                <rotate axis="x" angle="-90"/>
-            </transformation>
-
-            <materials>
-                <material id="primeiro"/>
-            </materials>
-
-            <texture id="ombrofrente"/>
-
-            <children>
-                <primitiveref id="quadrado"/>
-            </children>
-        </component>
-
-        <!-- OMBRO ESQUERDO BAIXO -->
-        <component id="ombEsqBaixo">
-            <transformation>
-                <translate x="4.5" y="3.5" z="3.5"/>
-                <rotate axis="x" angle="90"/>
-            </transformation>
-
-            <materials>
-                <material id="primeiro"/>
-            </materials>
-
-            <texture id="ombrofrente"/>
-
-            <children>
-                <primitiveref id="quadrado"/>
-            </children>
-        </component>
-
-        <!-- OMBRO ESQUERDO FRENTE -->
-        <component id="ombEsqFrente">
-            <transformation>
-                <translate x="4.5" y="3.5" z="4.5"/>
-            </transformation>
-
-            <materials>
-                <material id="primeiro"/>
-            </materials>
-
-            <texture id="ombrofrente"/>
-
-            <children>
-                <primitiveref id="quadrado"/>
-            </children>
-        </component>
-
-        <!-- OMBRO ESQUERDO TRAS -->
-        <component id="ombEsqTras">
-            <transformation>
-                <translate x="5.5" y="3.5" z="3.5"/>
-                <rotate axis="y" angle="180"/>
-            </transformation>
-
-            <materials>
-                <material id="primeiro"/>
-            </materials>
-
-            <texture id="ombrofrente"/>
-
-            <children>
-                <primitiveref id="quadrado"/>
-            </children>
-        </component>
-
-        <!-- OMBRO ESQUERDO -->
+        <!-- OMBRO DIREITO -->
         <component id="ombroDireito">
             <transformation>
-                <translate x="0" y="0" z="0"/>
+                <translate x="1" y="3" z="0"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
-            <texture id="gelson"/>
+            <texture id="none"/>
 
             <children>
-                <componentref id="ombDirCima"/>
-                <componentref id="ombDirBaixo"/>
-                <componentref id="ombDirFrente"/>
-                <componentref id="ombDirTras"/>
-                <componentref id="ombDirEsq"/>
-                <componentref id="ombDirDir"/>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
             </children>
         </component>
 
-        <!-- OMBRO DIREITO DIREITO -->
-        <component id="ombDirEsq">
+        <!-- Cubo Esquerdo -->
+        <component id="cuboEsq">
             <transformation>
-                <translate x="3.5" y="3.5" z="4.5"/>
+                <translate x="0.5" y="-0.5" z="0.5"/>
                 <rotate axis="y" angle="90"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="ombrofora"/>
@@ -402,15 +592,15 @@
             </children>
         </component>
 
-        <!-- OMBRO DIREITO ESQUERDO -->
-        <component id="ombDirDir">
+        <!-- Cubo Direito -->
+        <component id="cuboDir">
             <transformation>
-                <translate x="2.5" y="3.5" z="3.5"/>
+                <translate x="-0.5" y="-0.5" z="-0.5"/>
                 <rotate axis="y" angle="-90"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="ombrofora"/>
@@ -420,15 +610,15 @@
             </children>
         </component>
 
-        <!-- OMBRO DIREITO CIMA -->
-        <component id="ombDirCima">
+        <!-- Cubo Cima -->
+        <component id="cuboCima">
             <transformation>
-                <translate x="2.5" y="4.5" z="4.5"/>
+                <translate x="-0.5" y="0.5" z="0.5"/>
                 <rotate axis="x" angle="-90"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="ombrofrente"/>
@@ -438,15 +628,15 @@
             </children>
         </component>
 
-        <!-- OMBRO DIREITO BAIXO -->
-        <component id="ombDirBaixo">
+        <!-- Cubo Baixo -->
+        <component id="cuboBaixo">
             <transformation>
-                <translate x="2.5" y="3.5" z="3.5"/>
+                <translate x="-0.5" y="-0.5" z="-0.5"/>
                 <rotate axis="x" angle="90"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="ombrofrente"/>
@@ -456,14 +646,14 @@
             </children>
         </component>
 
-        <!-- OMBRO DIREITO FRENTE -->
-        <component id="ombDirFrente">
+        <!-- Cubo Frente -->
+        <component id="cuboFrente">
             <transformation>
-                <translate x="2.5" y="3.5" z="4.5"/>
+                <translate x="-0.5" y="-0.5" z="0.5"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="ombrofrente"/>
@@ -473,15 +663,15 @@
             </children>
         </component>
 
-        <!-- OMBRO DIREITO TRAS -->
-        <component id="ombDirTras">
+        <!-- Cubo Tras -->
+        <component id="cuboTras">
             <transformation>
-                <translate x="3.5" y="3.5" z="3.5"/>
+                <translate x="0.5" y="-0.5" z="-0.5"/>
                 <rotate axis="y" angle="180"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="ombrofrente"/>
@@ -494,13 +684,13 @@
         <!-- BRACO DIREITO -->
         <component id="bracoDireito">
             <transformation>
-                <translate x="2.7" y="3.7" z="4"/>
+                <translate x="-1.2" y="3" z="0"/>
                 <rotate axis="x" angle="-240"/>
 
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="braco"/>
@@ -513,13 +703,13 @@
         <!-- BRACO ESQUERDO -->
         <component id="bracoEsquerdo">
             <transformation>
-                <translate x="5.3" y="3.7" z="4"/>
+                <translate x="1.2" y="3" z="0"/>
                 <rotate axis="x" angle="-240"/>
                 <rotate axis="z" angle="180"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="braco"/>
@@ -532,7 +722,7 @@
         <!-- Cabeça -->
         <component id="cabeca">
             <transformation>
-                <translate x="4" y="5.1" z="4.25"/>
+                <translate x="0" y="4.1" z="0"/>
                 <rotate axis="x" angle="-90"/>
                 <rotate axis="z" angle="180"/>
             </transformation>
@@ -551,17 +741,38 @@
         <!-- Perna -->
         <component id="perna">
             <transformation>
-                <translate x="4" y="0.85" z="4.25"/>
-
+                <translate x="0" y="-0.1" z="0"/>
                 <rotate axis="y" angle="-90"/>
                 <scale x="0.5" y="0.7" z="0.7"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
-            <texture id="gelson"/>
+            <texture id="none"/>
+
+            <children>
+                <componentref id="pernaTriEsquerdo"/>
+                <componentref id="pernaTriDireito"/>
+                <componentref id="pernaRetFrente"/>
+                <componentref id="pernaRetBaixo"/>
+                <componentref id="pernaRetTrás"/>
+            </children>
+        </component>
+
+        <!-- Perna -->
+        <component id="r2d2_2_perna">
+            <transformation>
+                <translate x="13" y="-0.1" z="10"/>
+                <scale x="0.5" y="0.7" z="0.7"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
 
             <children>
                 <componentref id="pernaTriEsquerdo"/>
@@ -580,7 +791,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="pefrente"/>
@@ -589,6 +800,7 @@
                 <primitiveref id="triangulo"/>
             </children>
         </component>
+
         <!-- pernaTriDireito -->
         <component id="pernaTriDireito">
             <transformation>
@@ -597,7 +809,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="pefrente"/>
@@ -606,6 +818,7 @@
                 <primitiveref id="triangulo"/>
             </children>
         </component>
+
         <!-- pernaRetFrente -->
         <component id="pernaRetFrente">
             <transformation>
@@ -615,7 +828,7 @@
             </transformation>
 
             <materials>
-                <material id="transparente"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="pe"/>
@@ -624,6 +837,7 @@
                 <primitiveref id="quadrado"/>
             </children>
         </component>
+
         <!-- pernaRetBaixo -->
         <component id="pernaRetBaixo">
             <transformation>
@@ -636,12 +850,13 @@
                 <material id="white"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="pe"/>
 
             <children>
                 <primitiveref id="quadrado"/>
             </children>
         </component>
+
         <!-- pernaRetTrás -->
         <component id="pernaRetTrás">
             <transformation>
@@ -652,7 +867,7 @@
             </transformation>
 
             <materials>
-                <material id="transparente"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="pe"/>
@@ -671,7 +886,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="paredeEsq"/>
@@ -690,7 +905,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="paredeDir"/>
@@ -699,7 +914,8 @@
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        <!-- Parede Direita -->
+
+        <!-- Chao -->
         <component id="chao">
             <transformation>
                 <translate x="0" y="0" z="20"/>
@@ -709,7 +925,7 @@
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
+                <material id="inherit"/>
             </materials>
 
             <texture id="chao"/>
@@ -718,23 +934,25 @@
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        <!-- TESTE -->
-        <component id="teste">
-            <transformation>
-                <translate x="0.1" y="0.1" z="0.1"/>
 
+        <!-- Boia -->
+        <component id="boia">
+            <transformation>
+                <translate x="3" y="0.4" z="10"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="0.4" y="0.4" z="0.4"/>
             </transformation>
 
             <materials>
-                <material id="primeiro"/>
-                <material id="white"/>
+                <material id="inherit"/>
             </materials>
 
-            <texture id="gelson"/>
+            <texture id="sandTXT"/>
 
             <children>
                 <primitiveref id="torus"/>
             </children>
         </component>
+
     </components>
 </dsx>

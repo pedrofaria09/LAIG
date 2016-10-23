@@ -54,13 +54,16 @@ XMLscene.prototype.onGraphLoaded = function() {
     this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
     this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-    this.updateCamera(0);
+    if (this.graph.idView == "default")
+        this.updateCamera(0);
+    else
+        this.updateCamera(this.graph.idView);
 
     this.initiateMaterials();
 
     this.nrLuzes = this.graph.lightsList.length;
 
-    for (j = 1; j <= this.nrLuzes; j++) {
+    for (j = 1; j <= this.graph.lightsList.length; j++) {
         this.ative = this.graph.lightsList[(j - 1)].activated;
         this["luz" + j] = this.ative;
     }
@@ -82,6 +85,7 @@ XMLscene.prototype.updateCamera = function(i) {
     if (i >= this.graph.viewsList.length) {
         i = 0;
     }
+	
     this.camera.setPosition(this.graph.viewsList[i].position);
     this.camera.setTarget(this.graph.viewsList[i].target);
     this.camera.far = this.graph.viewsList[i].far;
@@ -119,7 +123,7 @@ XMLscene.prototype.display = function() {
     // Draw axis
     //this.graph.axis.display();
 
-    this.setDefaultAppearance();
+    //this.setDefaultAppearance();
 
     // ---- END Background, camera and axis setup
 
@@ -131,39 +135,56 @@ XMLscene.prototype.display = function() {
         this.updateLights();
 
         this.graph.axis.display();
-        //myquad= new Rectangle(this,1,0,1,0,1);
-        //console.log(this.graph.componentsList[0].textures);
-
-        //this.graph.componentsList[0].textures.apply();
-        //this.graph.componentsList[0].childrenPrimitives[0].display();
-        this.processaGrafo('root');
-        //console.log(this.graph.componentsList);
+        
+        this.processaGrafo(this.graph.root,null,null);
+		
     }
 };
 
-XMLscene.prototype.processaGrafo = function(nodeName) {
+XMLscene.prototype.processaGrafo = function(nodeName,texture,materialFather) {
     var material = null;
-
+	var compTexture = null;
     if (nodeName != null) {
         var node = this.graph.componentsList[this.getRootPos(nodeName)];
-        if (node.materials != null) {
+        if (node.materials != "inherit") {
             material = node.materials[this.materialsComponents[node.id]];
         }
+		else material=materialFather;
 
-        if (material != null)
-            material.apply();
-        if (node.textures != 'none')
-            node.textures.apply();
+	
+			if(node.textures == 'none'){
+				material.setTexture(null);
+				compTexture=null;
+			}
+			else if(node.textures == 'inherit'){
+				compTexture=texture;
+				material.setTexture(texture);
+			}
+			else{
+				material.setTexture(node.textures);
+				compTexture=node.textures;
+			}
+			material.apply();
+		
+		
         this.multMatrix(node.transformations);
         if (node.childrenPrimitives != null) {
-            //console.log(nodeName + ' entrei');
+           if((node.texture.length_s !=1||node.texture.length_t!=1 ) && node.texture!="none"){
+			  
+			    node.childrenPrimitives[0].updateTexture(node.texture.length_s,node.texture.length_t);
+		   }
             node.childrenPrimitives[0].display();
+			
+			if((node.texture.length_s !=1||node.texture.length_t!=1 )&& node.texture!="none"){
+			   node.childrenPrimitives[0].updateTexture(1,1);	
+		   }
+			
         }
         if (node.childrenComponents != null) {
             for (var i = 0; i < node.childrenComponents.length; i++) {
                 this.pushMatrix();
-                material.apply();
-                this.processaGrafo(node.childrenComponents[i]);
+            
+                this.processaGrafo(node.childrenComponents[i],compTexture,material);
                 this.popMatrix();
             }
         }
@@ -185,12 +206,13 @@ XMLscene.prototype.getRootPos = function(nodeName) {
 XMLscene.prototype.updateLights = function() {
     for (i = 1; i <= this.nrLuzes; i++) {
         if (this[("luz" + i)]) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
+        	
+            this.lights[i-1].setVisible(true);
+            this.lights[i-1].enable();
         } else {
-            this.lights[i].setVisible(false);
-            this.lights[i].disable();
+            this.lights[i-1].setVisible(false);
+            this.lights[i-1].disable();
         }
-        this.lights[i].update();
+        this.lights[i-1].update();
     }
 }
