@@ -96,7 +96,7 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
     nnodes = elem[0].children.length;
     this.animationsList = new Array();
     isNotEqual = true;
-    var matrix = [];
+    var matrixLinear = [];
 
     if (nnodes == 0) {
         console.warn("You should have one or more Animations");
@@ -107,31 +107,58 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
         for (var a = 0; a < this.animationsList.length; a++) {
             if (this.viewsList[a] == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
-                console.warn("You have two id's or more id's equal in views->perspective");
+                console.warn("You have two id's or more id's equal in animations->" + elem[0].children[x].attributes[0].nodeValue);
                 return -1;
             }
         }
         if (isNotEqual) {
+            if (!isNumber(elem[0].children[x].attributes[1].nodeValue)) {
+                console.warn("You must have a number on animations->id" + elem[0].children[x].id + "->" + elem[0].children[x].attributes[1].nodeName);
+                return -1;
+            }
+            //TODO TIRAR COMENTARIO DA LINHA ABAIXO APOS CONSTRUIR O CONSTRUTOR!!!!
             //this.animationsList[x] = new Animation(elem[0].children[x].attributes[0].nodeValue, parseFloat(elem[0].children[x].attributes[1].nodeValue), elem[0].children[x].attributes[2].nodeValue)
             if (elem[0].children[x].attributes[2].nodeValue == "linear") {
+                if (elem[0].children[x].attributes.length != 3) {
+                    console.warn("You must 3 attributes on animations->" + elem[0].children[x].id);
+                    return -1;
+                }
                 for (var j = 0; j < elem[0].children[x].children.length; j++) {
-                    matrix[j] = [];
+                    matrixLinear[j] = [];
                     for (var k = 0; k < elem[0].children[x].children[j].attributes.length; k++) {
-                        matrix[j].push(parseFloat(elem[0].children[x].children[j].attributes[k].nodeValue));
+                        if (!isNumber(elem[0].children[x].children[j].attributes[k].nodeValue)) {
+                            console.warn("You must have a number on animations->id" + elem[0].children[x].id + "->" + elem[0].children[x].children[j].attributes[k].nodeName);
+                            return -1;
+                        }
+                        matrixLinear[j].push(parseFloat(elem[0].children[x].children[j].attributes[k].nodeValue));
                     }
 
                 }
-            //TODO tratar erros e buscar valores.
             } else if (elem[0].children[x].attributes[2].nodeValue == "circular") {
                 if (elem[0].children[x].attributes.length != 7) {
-                    console.warn("You must 7 attributes on animations->" + elem[0].children[x].id) + "->type";
+                    console.warn("You must 7 attributes on animations->" + elem[0].children[x].id);
                     return -1;
                 }
-                for (var j = 0; j < elem[0].children[x].attributes.length; j++) {
-                    var center = elem[0].children[x].attributes[3].nodeValue;
-                    var centerRes = center.split(" ");
-                    console.log(centerRes);
+                var center = elem[0].children[x].attributes[3].nodeValue;
+                var centerRes = center.split(" ");
+
+                //saveCenter have the NUMBERS of center values.
+                var saveCenter = new Array();
+                for (var g = 0; g < centerRes.length; g++) {
+                    if (!isNumber(centerRes[g])) {
+                        console.warn("You must have 3 valid numbers on animations->id" + elem[0].children[x].id + "->center");
+                        return -1;
+                    }
+                    saveCenter[g] = parseFloat(centerRes[g]);
                 }
+                if (!isNumber(elem[0].children[x].attributes[4].nodeValue) || !isNumber(elem[0].children[x].attributes[5].nodeValue) || !isNumber(elem[0].children[x].attributes[6].nodeValue)) {
+                    console.warn("You must enter a valid number on animations->id" + elem[0].children[x].id + "->(radius OR startang OR rotang)");
+                    return -1;
+                }
+                radius = parseFloat(elem[0].children[x].attributes[4].nodeValue);
+                startang = parseFloat(elem[0].children[x].attributes[5].nodeValue);
+                rotang = parseFloat(elem[0].children[x].attributes[6].nodeValue);
+
             } else {
                 console.warn("You must enter a valid type of movement (linear or circular) on animations->" + elem[0].children[x].id) + "->type";
                 return -1;
