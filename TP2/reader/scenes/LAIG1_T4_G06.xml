@@ -188,11 +188,13 @@
         <!-- demorar. Nesta versão do formato DSX, type pode ter -->
         <!-- o valor "linear" ou "circular"; na animacao circular -->
         <!-- os angulos sao expressos em graus  -->
-        <animation id="ss" span="ff" type="linear">
-            <controlpoint xx="ff" yy="ff" zz="ff" />
+        <animation id="firstAnimation" span="10" type="linear">
+            <controlpoint xx="2" yy="1" zz="0" />
+            <controlpoint xx="1" yy="1" zz="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
         </animation>
-        <animation id="ss" span="ff" type="circular" center="ff ff ff"
-                   radius="ff" startang="ff" rotang="ff" />
+        <animation id="secondAnimation" span="20" type="circular" center="2 2 2"
+                   radius="5" startang="50" rotang="80" />
     </animations>
 
 
@@ -242,46 +244,6 @@
         <primitive id="torus">
             <torus inner="1" outer="1" slices="50" loops="50"/>
         </primitive>
-
-        <!-- Nova primitiva: plano, discretizado em grelha -->
-        <!-- exemplo:                                -->
-        <!-- <plane dimX="3" dimY="2" partsX="10" partsY="7"/> -->
-        <!-- gera um plano de dimensões 3 x 2 unidades -->
-        <!-- assente em XY, centrado na origem, com a -->
-        <!-- face visível apontando para +Z e discretizado -->
-        <!-- em 10 partes no eixo XX e 7 partes no YY  -->
-        <plane dimX="ff" dimY="ff" partsX="ii" partsY="ii"/>
-        <!-- Nova primitiva: patch, discretizado em grelha -->
-        <!-- Exemplo:                                   -->
-        <!-- <patch orderU="2" orderV="3" partsU="7" partsV="9" > -->
-        <!--     <controlpoint x=0.0 y=0.0 z=0.0 />   -->
-        <!--     <controlpoint x=2.0 y=1.0 z=0.0 />   -->
-        <!--     etc, total de 12 pontos              -->
-        <!-- O exemplo gera um patch com              -->
-        <!--     Direcao U: ordem=2 (3 pontos por curva), -->
-        <!--                discretizacao em 7 partes -->
-        <!--     Direcao V: ordem=3 (4 pontos por curva), -->
-        <!--                discretizacao em 9 partes. -->
-        <!-- O numero total de pontos a fornecer e' -->
-        <!--      (2+1)*(3+1)=12 pontos              -->
-        <patch orderU="ii" orderV="ii" partsU="ii" partsV="ii" >
-            <controlpoint x="ff" y="ff" z="ff" />
-
-          </patch>
-        <!-- Nova primitiva: corresponde a um veículo voador -->
-        <!-- Inclui pelo menos uma superfície não-plana -->
-        <!-- gerada utilizando evaluators -->
-        <vehicle />
-
-        <!-- Nova primitiva: terreno baseado em shaders -->
-        <!-- parâmetros:                        -->
-        <!-- nome do ficheiro de textura jpg ou png com -->
-        <!-- a textura que deve ser visualizada sobre o -->
-        <!-- terreno (dimensões devem ser potências de 2) -->
-        <!-- nome do ficheiro jpg ou png com o mapa de -->
-        <!-- alturas que deve ser usado para formar o -->
-        <!-- terreno (dimensões devem ser potências de 2)  -->
-        <terrain texture="ss" heightmap="ss" />
 
     </primitives>
 

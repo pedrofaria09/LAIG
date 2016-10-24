@@ -68,7 +68,7 @@
             <diffuse r="0.5" g="0.3" b="0.3" a="1"/>
             <specular r="0.5" g="0.3" b="0.3" a="1"/>
         </spot>
-		
+
 		<spot id="tres" enabled="0" angle="30" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="5" y="0" z="5"/>
@@ -157,7 +157,7 @@
             <specular r="1" g="1" b="1" a="1"/>
             <shininess value="1"/>
         </material>
-		
+
 
     </materials>
 
@@ -289,7 +289,7 @@
             <materials>
                 <material id="gray"/>
 				<material id="liveWhite"/>
-				
+
             </materials>
 
             <texture id="none"/>

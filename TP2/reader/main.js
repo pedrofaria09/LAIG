@@ -64,7 +64,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'M
 
         // create and load graph, and associate it to scene.
         // Check console for loading errors
-        var myGraph = new MySceneGraph('LAIG1_T4_G06.dsx', myScene);
+        var myGraph = new MySceneGraph('LAIG1_T4_G06.xml', myScene);
 
         // start
         app.run();

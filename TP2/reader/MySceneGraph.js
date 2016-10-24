@@ -28,6 +28,7 @@ MySceneGraph.prototype.onXMLReady = function() {
     error = this.parseTransformations(rootElement);
     error = this.parsePrimitives(rootElement);
     error = this.parseComponents(rootElement);
+    error = this.parseAnimations(rootElement);
 
     if (error != null) {
         this.onXMLError(error);
@@ -83,6 +84,65 @@ MySceneGraph.prototype.parseGlobals = function(rootElement) {
     this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
 
 }
+
+MySceneGraph.prototype.parseAnimations = function(rootElement) {
+    elem = rootElement.getElementsByTagName('animations');
+
+    if (elem == null || elem.length == 0) {
+        return "list element is missing.";
+        return -1;
+    }
+
+    nnodes = elem[0].children.length;
+    this.animationsList = new Array();
+    isNotEqual = true;
+    var matrix = [];
+
+    if (nnodes == 0) {
+        console.warn("You should have one or more Animations");
+        return -1;
+    }
+
+    for (var x = 0; x < nnodes; x++) {
+        for (var a = 0; a < this.animationsList.length; a++) {
+            if (this.viewsList[a] == elem[0].children[x].attributes[0].nodeValue) {
+                isNotEqual = false;
+                console.warn("You have two id's or more id's equal in views->perspective");
+                return -1;
+            }
+        }
+        if (isNotEqual) {
+            //this.animationsList[x] = new Animation(elem[0].children[x].attributes[0].nodeValue, parseFloat(elem[0].children[x].attributes[1].nodeValue), elem[0].children[x].attributes[2].nodeValue)
+            if (elem[0].children[x].attributes[2].nodeValue == "linear") {
+                for (var j = 0; j < elem[0].children[x].children.length; j++) {
+                    matrix[j] = [];
+                    for (var k = 0; k < elem[0].children[x].children[j].attributes.length; k++) {
+                        matrix[j].push(parseFloat(elem[0].children[x].children[j].attributes[k].nodeValue));
+                    }
+
+                }
+            //TODO tratar erros e buscar valores.
+            } else if (elem[0].children[x].attributes[2].nodeValue == "circular") {
+                if (elem[0].children[x].attributes.length != 7) {
+                    console.warn("You must 7 attributes on animations->" + elem[0].children[x].id) + "->type";
+                    return -1;
+                }
+                for (var j = 0; j < elem[0].children[x].attributes.length; j++) {
+                    var center = elem[0].children[x].attributes[3].nodeValue;
+                    var centerRes = center.split(" ");
+                    console.log(centerRes);
+                }
+            } else {
+                console.warn("You must enter a valid type of movement (linear or circular) on animations->" + elem[0].children[x].id) + "->type";
+                return -1;
+            }
+        }
+
+
+        isNotEqual = true;
+    }
+    console.log(elem);
+};
 
 
 MySceneGraph.prototype.parseViews = function(rootElement) {

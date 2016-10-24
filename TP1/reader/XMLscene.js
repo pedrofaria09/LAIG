@@ -85,7 +85,7 @@ XMLscene.prototype.updateCamera = function(i) {
     if (i >= this.graph.viewsList.length) {
         i = 0;
     }
-	
+
     this.camera.setPosition(this.graph.viewsList[i].position);
     this.camera.setTarget(this.graph.viewsList[i].target);
     this.camera.far = this.graph.viewsList[i].far;
@@ -135,9 +135,9 @@ XMLscene.prototype.display = function() {
         this.updateLights();
 
         this.graph.axis.display();
-        
+
         this.processaGrafo(this.graph.root,null,null);
-		
+
     }
 };
 
@@ -151,7 +151,7 @@ XMLscene.prototype.processaGrafo = function(nodeName,texture,materialFather) {
         }
 		else material=materialFather;
 
-	
+
 			if(node.textures == 'none'){
 				material.setTexture(null);
 				compTexture=null;
@@ -165,25 +165,25 @@ XMLscene.prototype.processaGrafo = function(nodeName,texture,materialFather) {
 				compTexture=node.textures;
 			}
 			material.apply();
-		
-		
+
+
         this.multMatrix(node.transformations);
         if (node.childrenPrimitives != null) {
-           if((node.texture.length_s !=1||node.texture.length_t!=1 ) && node.texture!="none"){
-			  
+           if((node.texture.length_s !=1||node.texture.length_t!=1 ) && !(node.childrenPrimitives[0] instanceof Sphere) && node.texture!="none"){
+
 			    node.childrenPrimitives[0].updateTexture(node.texture.length_s,node.texture.length_t);
 		   }
             node.childrenPrimitives[0].display();
-			
-			if((node.texture.length_s !=1||node.texture.length_t!=1 )&& node.texture!="none"){
-			   node.childrenPrimitives[0].updateTexture(1,1);	
+
+			if((node.texture.length_s !=1||node.texture.length_t!=1 ) && !(node.childrenPrimitives[0] instanceof Sphere)&& node.texture!="none"){
+			   node.childrenPrimitives[0].updateTexture(1,1);
 		   }
-			
+
         }
         if (node.childrenComponents != null) {
             for (var i = 0; i < node.childrenComponents.length; i++) {
                 this.pushMatrix();
-            
+
                 this.processaGrafo(node.childrenComponents[i],compTexture,material);
                 this.popMatrix();
             }
@@ -206,7 +206,7 @@ XMLscene.prototype.getRootPos = function(nodeName) {
 XMLscene.prototype.updateLights = function() {
     for (i = 1; i <= this.nrLuzes; i++) {
         if (this[("luz" + i)]) {
-        	
+
             this.lights[i-1].setVisible(true);
             this.lights[i-1].enable();
         } else {
