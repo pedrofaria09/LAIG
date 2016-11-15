@@ -42,7 +42,7 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js', 'primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js', 'primitives/MyCylinder.js', 'primitives/Circle.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js', 'primitives/Diamond.js', 'primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js', 'primitives/MyCylinder.js', 'primitives/Circle.js', 'Animation.js', 'LinearAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js', 'CircularAnimation.js',
 
     main = function() {
         // Standard application, scene and interface setup
@@ -64,7 +64,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'M
 
         // create and load graph, and associate it to scene.
         // Check console for loading errors
-        var myGraph = new MySceneGraph('LAIG1_T4_G06.xml', myScene);
+        var myGraph = new MySceneGraph('tatooine.xml', myScene);
 
         // start
         app.run();

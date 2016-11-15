@@ -53,3 +53,26 @@ demo3.xml
 LAIG1_T4_G06.zip
 identification.txt
 >>>>>>> b5f5eb1fa59a303e1135d00eabd2ff6560cc220b
+LAIG1_T4_G06/
+EnunciadoProvaIndividual1.pdf
+TP1.rar
+TP2.rar
+TP2/reader.rar
+WebCGF.docs.0.19.2.zip
+WebGLSurfaceDemo.zip
+WebGLSurfaceDemo/lib/CGF.js
+WebGLSurfaceDemo/lib/CGF/shaders/Gouraud/fragment.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Gouraud/lambert-vertex.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Gouraud/multiple_light-vertex.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Gouraud/textured/fragment.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Phong/multiple_light-phong-fragment.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Phong/multiple_light-phong-vertex.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Phong/phong-fragment.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/Phong/phong-vertex.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/picking/fragment.glsl
+WebGLSurfaceDemo/lib/CGF/shaders/picking/vertex.glsl
+WebGLSurfaceDemo/reader/LightingScene.js
+WebGLSurfaceDemo/reader/index.html
+WebGLSurfaceDemo/reader/main.js
+WebGLSurfaceDemo/reader/texture.jpg

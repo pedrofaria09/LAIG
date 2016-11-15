@@ -27,8 +27,8 @@ MySceneGraph.prototype.onXMLReady = function() {
     error = this.parseViews(rootElement);
     error = this.parseTransformations(rootElement);
     error = this.parsePrimitives(rootElement);
-    error = this.parseComponents(rootElement);
     error = this.parseAnimations(rootElement);
+    error = this.parseComponents(rootElement);
 
     if (error != null) {
         this.onXMLError(error);
@@ -96,7 +96,6 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
     nnodes = elem[0].children.length;
     this.animationsList = new Array();
     isNotEqual = true;
-    var matrixLinear = [];
 
     if (nnodes == 0) {
         console.warn("You should have one or more Animations");
@@ -104,6 +103,7 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
     }
 
     for (var x = 0; x < nnodes; x++) {
+        var matrixLinear = [];
         for (var a = 0; a < this.animationsList.length; a++) {
             if (this.viewsList[a] == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
@@ -134,41 +134,37 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
                     }
 
                 }
+                this.animationsList[x] = new LinearAnimation(elem[0].children[x].attributes[0].nodeValue, parseFloat(elem[0].children[x].attributes[1].nodeValue), matrixLinear);
             } else if (elem[0].children[x].attributes[2].nodeValue == "circular") {
-                if (elem[0].children[x].attributes.length != 7) {
-                    console.warn("You must 7 attributes on animations->" + elem[0].children[x].id);
+                if (elem[0].children[x].attributes.length != 9) {
+                    console.warn("You must 9 attributes on animations->" + elem[0].children[x].id);
                     return -1;
                 }
-                var center = elem[0].children[x].attributes[3].nodeValue;
-                var centerRes = center.split(" ");
-
-                //saveCenter have the NUMBERS of center values.
-                var saveCenter = new Array();
-                for (var g = 0; g < centerRes.length; g++) {
-                    if (!isNumber(centerRes[g])) {
-                        console.warn("You must have 3 valid numbers on animations->id" + elem[0].children[x].id + "->center");
-                        return -1;
-                    }
-                    saveCenter[g] = parseFloat(centerRes[g]);
-                }
-                if (!isNumber(elem[0].children[x].attributes[4].nodeValue) || !isNumber(elem[0].children[x].attributes[5].nodeValue) || !isNumber(elem[0].children[x].attributes[6].nodeValue)) {
-                    console.warn("You must enter a valid number on animations->id" + elem[0].children[x].id + "->(radius OR startang OR rotang)");
+                if (!isNumber(elem[0].children[x].attributes[1].nodeValue) ||
+                    !isNumber(elem[0].children[x].attributes[3].nodeValue) ||
+                    !isNumber(elem[0].children[x].attributes[4].nodeValue) ||
+                    !isNumber(elem[0].children[x].attributes[5].nodeValue) ||
+                    !isNumber(elem[0].children[x].attributes[6].nodeValue) ||
+                    !isNumber(elem[0].children[x].attributes[7].nodeValue) ||
+                    !isNumber(elem[0].children[x].attributes[8].nodeValue)) {
+                    console.warn("You must enter a valid number on animations->id" + elem[0].children[x].id + "->(centerx OR centery OR centerz OR radius OR startang OR rotang)");
                     return -1;
                 }
-                radius = parseFloat(elem[0].children[x].attributes[4].nodeValue);
-                startang = parseFloat(elem[0].children[x].attributes[5].nodeValue);
-                rotang = parseFloat(elem[0].children[x].attributes[6].nodeValue);
-
+                span = parseFloat(elem[0].children[x].attributes[1].nodeValue);
+                centerx = parseFloat(elem[0].children[x].attributes[3].nodeValue);
+                centery = parseFloat(elem[0].children[x].attributes[4].nodeValue);
+                centerz = parseFloat(elem[0].children[x].attributes[5].nodeValue);
+                radius = parseFloat(elem[0].children[x].attributes[6].nodeValue);
+                startang = parseFloat(elem[0].children[x].attributes[7].nodeValue);
+                rotang = parseFloat(elem[0].children[x].attributes[8].nodeValue);
+                this.animationsList[x] = new CircularAnimation(elem[0].children[x].attributes[0].nodeValue, span, centerx, centery, centerz, radius, startang, rotang);
             } else {
                 console.warn("You must enter a valid type of movement (linear or circular) on animations->" + elem[0].children[x].id) + "->type";
                 return -1;
             }
         }
-
-
         isNotEqual = true;
     }
-    console.log(elem);
 };
 
 
@@ -680,7 +676,8 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
     valid = true;
     isNotEqual = true;
     this.priList = new Array();
-
+    matrixLinear = [];
+    matrixAux = [];
     for (var i = 0; i < nrPrimitives; i++) {
         if (elem[0].children[i].children.length != 1) {
             valid = false;
@@ -765,6 +762,42 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                     loops = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
                     this.priList[i] = new Torus(this.scene, elem[0].children[i].attributes[0].nodeValue, inner, outer, slices, loops);
                     break;
+                case "plane":
+                    dimX = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    dimY = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    partsX = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    partsY = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    this.priList[i] = new Plane(this.scene, elem[0].children[i].attributes[0].nodeValue, dimX, dimY, partsX, partsY);
+                    break;
+                case "patch":
+                    if (elem[0].children[i].children[0].attributes.length != 4) {
+                        console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
+                        return -1;
+                    }
+
+                    for (var j = 0; j < elem[0].children[i].children[0].children.length; j++) {
+                        if(elem[0].children[i].children[0].children[j].attributes.length != 3) {
+                            console.warn("You must have 3 attributes on patch->" + elem[0].children[i].id + "->controlpoint Nr:"+ (j+1));
+                            return -1;
+                        }
+                        matrixLinear[j] = [];
+                        for (var k = 0; k < elem[0].children[i].children[0].children[j].attributes.length; k++) {
+                            if (!isNumber(elem[0].children[i].children[0].children[j].attributes[k].nodeValue)) {
+                                console.warn("You must have a number on patch->id" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[j].attributes[k].nodeName);
+                                return -1;
+                            }
+                            matrixLinear[j].push(parseFloat(elem[0].children[i].children[0].children[j].attributes[k].nodeValue));
+                        }
+                        matrixLinear[j].push(1);
+                    }
+                    orderU = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    orderV = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    partsU = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    partsV = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+
+                    this.priList[i] = new Patch(this.scene, elem[0].children[i].attributes[0].nodeValue, orderU, orderV, partsU, partsV, matrixLinear);
+
+                    break;
                 default:
             }
         }
@@ -798,10 +831,6 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
         if (isNotEqual) {
             if (elem[0].children[x].id == "") {
                 console.warn("You must enter a sring on components->id->" + elem[0].children[x].id);
-                return -1;
-            }
-            if (elem[0].children[x].children.length != 4) {
-                console.warn("You must have 4 blocks (transformation-materials-texture-children) on components->id->" + elem[0].children[x].id);
                 return -1;
             }
             if (elem[0].children[x].children[0].tagName != "transformation") {
@@ -963,10 +992,25 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
                 this.componentsList[x].setChildrenPrimitives(childrenPrimitives.slice());
             }
         }
+
+        var animations = new Array();
+        if (elem[0].children[x].getElementsByTagName('animation').length > 0) {
+            console.log(elem[0].children[x].getElementsByTagName('animation'));
+            for (var j = 0; j < elem[0].children[x].getElementsByTagName('animation')[0].children.length; j++) {
+                console.log(elem[0].children[x].getElementsByTagName('animation')[0].children[j].attributes[0].nodeValue);
+                animations[j] = this.getAnimationById(elem[0].children[x].getElementsByTagName('animation')[0].children[j].attributes[0].nodeValue);
+            }
+            this.componentsList[x].setAnimations(animations);
+        }
+
+
         childrenPrimitives = [];
         childrenComponents = [];
         isNotEqual = true;
+
+
     }
+    console.log(this.componentsList);
 }
 
 MySceneGraph.prototype.getTransformationById = function(id) {
@@ -1006,9 +1050,18 @@ MySceneGraph.prototype.getPrimitiveById = function(id) {
     }
 }
 MySceneGraph.prototype.getComponentById = function(id) {
-        for (var i = 0; i < this.componentsList.length; i++) {
-            if (this.componentsList[i].id == id) {
-                return this.componentsList[i];
+    for (var i = 0; i < this.componentsList.length; i++) {
+        if (this.componentsList[i].id == id) {
+            return this.componentsList[i];
+        }
+    }
+}
+MySceneGraph.prototype.getAnimationById = function(id) {
+        console.log(id)
+        for (var i = 0; i < this.animationsList.length; i++) {
+            console.log(this.animationsList[i].id);
+            if (this.animationsList[i].id == id) {
+                return this.animationsList[i];
             }
         }
     }

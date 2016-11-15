@@ -100,7 +100,7 @@
         <texture id="ombrofrente" file="./images/ombrofrente.jpg" length_s="1" length_t="1"/>
         <texture id="braco" file="./images/braco.jpg" length_s="1" length_t="1"/>
         <texture id="cabeca" file="./images/cabeca.jpg" length_s="1" length_t="1"/>
-        <texture id="paredeEsq" file="./images/paredeEsq.jpg" length_s="1" length_t="1"/>
+        <texture id="paredeEsq" file="./images/lalala.png" length_s="1" length_t="1"/>
         <texture id="paredeDir" file="./images/paredeDir.jpg" length_s="1" length_t="1"/>
         <texture id="chao" file="./images/chao.jpg" length_s="0.05" length_t="0.05"/>
         <texture id="cabecaBB8TXT" file="./images/cabecaBB8.png" length_s="1" length_t="1"/>
@@ -181,7 +181,6 @@
 
     </transformations>
 
-    <!-- novo bloco de animacao -->
     <animations>
         <!-- podem existir zero ou mais nós "animation" -->
         <!-- span é o tempo, em segundos, que a animação deve -->
@@ -192,8 +191,13 @@
             <controlpoint xx="2" yy="1" zz="0"/>
             <controlpoint xx="1" yy="1" zz="0"/>
             <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="0" yy="5" zz="0"/>
         </animation>
-        <animation id="secondAnimation" span="20" type="circular" center="2 2 2" radius="5" startang="50" rotang="80"/>
+        <animation id="oi" span="3" type="linear">
+            <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="5" yy="0" zz="0"/>
+        </animation>
+        <animation id="secondAnimation" span="20" type="circular" centerx="2" centery="2" centerz="2" radius="5" startang="50" rotang="80"/>
     </animations>
 
     <primitives>
@@ -267,17 +271,23 @@
             <!--                discretizacao em 9 partes. -->
             <!-- O numero total de pontos a fornecer e' -->
             <!--      (2+1)*(3+1)=12 pontos              -->
-            <patch orderU="2" orderV="3" partsU="7" partsV="9">
-                <controlpoint x="0.0" y="0.0" z="0.0"/>
-                <controlpoint x="2.0" y="1.0" z="0.0"/>
-            </patch>
-        </primitive>
+            <patch orderU="2" orderV="3" partsU="20" partsV="20">
+                <controlpoint x="-2" y="-2" z="1"/>
+                <controlpoint x="-2" y="-1" z="-2"/>
+                <controlpoint x="-2" y="1" z="5"/>
+                <controlpoint x="-2" y="2" z="-1"/>
 
-        <primitive id="vehicle">
-            <!-- Nova primitiva: corresponde a um veículo voador -->
-            <!-- Inclui pelo menos uma superfície não-plana -->
-            <!-- gerada utilizando evaluators -->
-            <vehicle/>
+                <controlpoint x="0" y="-2" z="0"/>
+                <controlpoint x="0" y="-1" z="-1"/>
+                <controlpoint x="0" y="1" z="1.5"/>
+                <controlpoint x="0" y="2" z="0"/>
+
+                <controlpoint x="2" y="-2" z="-1"/>
+                <controlpoint x="2" y="-1" z="2"/>
+                <controlpoint x="2" y="1" z="-5"/>
+                <controlpoint x="2" y="2" z="1"/>
+
+            </patch>
         </primitive>
 
     </primitives>
@@ -309,6 +319,23 @@
                 <componentref id="trono"/>
                 <componentref id="sol1"/>
                 <componentref id="sol2"/>
+                <componentref id="Test"/>
+            </children>
+        </component>
+
+        <component id="Test">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="yellow"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="patch"/>
             </children>
         </component>
 
@@ -562,6 +589,11 @@
                 <componentref id="bracoEsquerdo"/>
                 <componentref id="cabeca"/>
             </children>
+
+            <animation>
+                <animationref id="firstAnimation"/>
+                <animationref id="oi"/>
+            </animation>
         </component>
 
         <!-- CORPO -->
@@ -959,7 +991,7 @@
                 <material id="inherit"/>
             </materials>
 
-            <texture id="paredeDir"/>
+            <texture id="paredeEsq"/>
 
             <children>
                 <primitiveref id="quadrado"/>
