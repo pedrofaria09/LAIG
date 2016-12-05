@@ -7,15 +7,6 @@ function Patch(scene, id, orderU, orderV, partsU, partsV, controlpoints) {
     this.partsV = partsV;
     this.controlpoints = controlpoints;
 
-    this.appearance = new CGFappearance(this.scene);
-    this.appearance.setAmbient(1, 1, 1, 1);
-    this.appearance.setDiffuse(1, 1, 1, 1);
-    this.appearance.setSpecular(1, 1, 1, 1);
-    this.appearance.setShininess(300);
-    this.texture = new CGFtexture(this.scene, "images/texture.jpg");
-    this.appearance.setTexture(this.texture);
-    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-
     this.makeSurface(this.orderU, this.orderV, this.controlpoints);
 }
 
@@ -66,7 +57,7 @@ Patch.prototype.makeSurface = function(degree1, degree2, controlvertexes) {
 
 Patch.prototype.display = function() {
     // draw scene
-    this.appearance.apply();
-    this.scene.translate(-3, 0.5, 0);
-    this.obj.display();
+    this.scene.pushMatrix();
+        this.obj.display();
+    this.scene.popMatrix();
 }

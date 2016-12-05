@@ -6,7 +6,7 @@ function Component(id) {
     this.childrenComponents = null;
     this.childrenPrimitives = null;
     this.texture = null;
-    this.animations = new Array();
+	this.animations = new Array();
 }
 
 Component.prototype.setTransformations = function(transformation) {

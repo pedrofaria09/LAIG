@@ -433,10 +433,15 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
                 activatedLight = true;
             }
             this.lightsList.push(new Light(elem[0].children[x].attributes[0].nodeValue, activatedLight, x));
+
         }
+
+
         isNotEqual = true;
         activatedLight = false;
     }
+
+    console.log(this.scene.lights);
 };
 
 
@@ -557,7 +562,6 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
                 }
             }
             this.CGFtextureList[i] = new CGFtexture(this.scene, tempText[1]);
-            //this.textureList[i]=tempText[0];
             this.textureList[i] = new Texture(this.scene, tempText[0], tempText[2], tempText[3]);
             tempText = [];
         }
@@ -677,7 +681,6 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
     isNotEqual = true;
     this.priList = new Array();
     matrixLinear = [];
-    matrixAux = [];
     for (var i = 0; i < nrPrimitives; i++) {
         if (elem[0].children[i].children.length != 1) {
             valid = false;
@@ -715,10 +718,10 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                         console.warn("You must enter 4 values in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName);
                         return -1;
                     }
-                    if (!isNumber(elem[0].children[i].children[j].attributes[k].nodeValue)) {
+                    /*if (!isNumber(elem[0].children[i].children[j].attributes[k].nodeValue)) {
                         console.warn("You must enter a valid number in primitive->" + elem[0].children[i].id + "->" + elem[0].children[i].children[j].nodeName + "->" + elem[0].children[i].children[j].attributes[k].nodeName);
                         return -1;
-                    }
+                    }*/
                 }
             }
             switch (elem[0].children[i].children[0].nodeName) {
@@ -763,40 +766,55 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                     this.priList[i] = new Torus(this.scene, elem[0].children[i].attributes[0].nodeValue, inner, outer, slices, loops);
                     break;
                 case "plane":
-                    dimX = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
-                    dimY = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                    partsX = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
-                    partsY = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
-                    this.priList[i] = new Plane(this.scene, elem[0].children[i].attributes[0].nodeValue, dimX, dimY, partsX, partsY);
-                    break;
+                  dimX = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                  dimY = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                  partsX = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                  partsY = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                  this.priList[i] = new Plane(this.scene, elem[0].children[i].attributes[0].nodeValue, dimX, dimY, partsX, partsY);
+                  break;
                 case "patch":
-                    if (elem[0].children[i].children[0].attributes.length != 4) {
-                        console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
+                if (elem[0].children[i].children[0].attributes.length != 4) {
+                    console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
+                    return -1;
+                }
+
+                for (var j = 0; j < elem[0].children[i].children[0].children.length; j++) {
+                    if(elem[0].children[i].children[0].children[j].attributes.length != 3) {
+                        console.warn("You must have 3 attributes on patch->" + elem[0].children[i].id + "->controlpoint Nr:"+ (j+1));
                         return -1;
                     }
-
-                    for (var j = 0; j < elem[0].children[i].children[0].children.length; j++) {
-                        if(elem[0].children[i].children[0].children[j].attributes.length != 3) {
-                            console.warn("You must have 3 attributes on patch->" + elem[0].children[i].id + "->controlpoint Nr:"+ (j+1));
+                    matrixLinear[j] = [];
+                    for (var k = 0; k < elem[0].children[i].children[0].children[j].attributes.length; k++) {
+                        if (!isNumber(elem[0].children[i].children[0].children[j].attributes[k].nodeValue)) {
+                            console.warn("You must have a number on patch->id" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[j].attributes[k].nodeName);
                             return -1;
                         }
-                        matrixLinear[j] = [];
-                        for (var k = 0; k < elem[0].children[i].children[0].children[j].attributes.length; k++) {
-                            if (!isNumber(elem[0].children[i].children[0].children[j].attributes[k].nodeValue)) {
-                                console.warn("You must have a number on patch->id" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[j].attributes[k].nodeName);
-                                return -1;
-                            }
-                            matrixLinear[j].push(parseFloat(elem[0].children[i].children[0].children[j].attributes[k].nodeValue));
-                        }
-                        matrixLinear[j].push(1);
+                        matrixLinear[j].push(parseFloat(elem[0].children[i].children[0].children[j].attributes[k].nodeValue));
                     }
-                    orderU = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
-                    orderV = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                    partsU = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
-                    partsV = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    matrixLinear[j].push(1);
+                }
+                orderU = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                orderV = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                partsU = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                partsV = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
 
-                    this.priList[i] = new Patch(this.scene, elem[0].children[i].attributes[0].nodeValue, orderU, orderV, partsU, partsV, matrixLinear);
+                this.priList[i] = new Patch(this.scene, elem[0].children[i].attributes[0].nodeValue, orderU, orderV, partsU, partsV, matrixLinear);
+                console.log(matrixLinear);
+                break;
+                case 'chessboard':
+                    var colors = new Array();
+                    for(var h=0;h<3;h++){
+                      colors[h]=[];
+                      for(var j=0;j<4;j++){
+                        colors[h][j]=parseFloat(elem[0].children[i].children[0].children[h].attributes[j].nodeValue);
 
+                      }
+                    }
+
+                    this.priList[i] = new ChessBoard(this.scene,elem[0].children[i].attributes[0].nodeValue,parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue),this.getCGFTextureById(elem[0].children[i].children[0].attributes[2].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[4].nodeValue),colors);
+                    break;
+                case 'vehicle':
+                    this.priList[i] = new Vehicle(this.scene,elem[0].children[i].attributes[0].nodeValue);
                     break;
                 default:
             }
@@ -804,6 +822,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
         valid = true;
         isNotEqual = true;
     }
+    console.log(this.priList);
 };
 
 

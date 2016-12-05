@@ -20,43 +20,31 @@ Sphere.prototype.initBuffers = function() {
     this.indices = [];
     this.normals = [];
     this.texCoords = [];
-    this.textS = 1.0 / this.slices;
-    this.textT = 1.0 / this.stacks;
 
-    var angLat = 2 * Math.PI / this.slices;
-    var angVert = Math.PI / this.stacks;
+
+    var angLat = 2*Math.PI/this.slices;
+    var angVert = Math.PI/this.stacks;
     var s = 0;
     var t = 1;
 
-    //Vertices & Normals
-    for (var ind = this.stacks; ind >= 0; ind--) {
+    for (var i = this.stacks; i >= 0; i--) {
 
         s = 0;
 
-        for (var m = 0; m < this.slices; m++) {
-            this.vertices.push(Math.cos(angLat * m) * Math.sin(angVert * ind) * this.radius,
-                Math.sin(angLat * m) * Math.sin(angVert * ind) * this.radius,
-                Math.cos(angVert * ind) * this.radius);
-            this.normals.push(Math.cos(angLat * m) * Math.sin(angVert * ind),
-                Math.sin(angLat * m) * Math.sin(angVert * ind),
-                Math.cos(angVert * ind));
-            s += this.textS;
+        for (var j = 0; j < this.slices; j++) {
+            this.vertices.push(Math.cos(angLat*j)*Math.sin(angVert*i)*this.radius,Math.sin(angLat*j)*Math.sin(angVert*i)*this.radius,Math.cos(angVert*i)*this.radius);
+            this.normals.push(Math.cos(angLat*j)*Math.sin(angVert*i),Math.sin(angLat*j)*Math.sin(angVert*i),Math.cos(angVert*i));
+            s += 1/this.slices;
             this.texCoords.push(s, t);
 
         }
-        t -= this.textT;
+        t -= 1/this.stacks;
     }
 
-    //Indices
     for (var j = 0; j < this.stacks; j++) {
         for (var i = 0; i < (this.slices); i++) {
-            this.indices.push((i + 1) % (this.slices) + (j + 0) * this.slices,
-                (i + 0) % (this.slices) + (j + 1) * this.slices,
-                (i + 0) % (this.slices) + (j + 0) * this.slices);
-
-            this.indices.push((i + 0) % (this.slices) + (j + 1) * this.slices,
-                (i + 1) % (this.slices) + (j + 0) * this.slices,
-                (i + 1) % (this.slices) + (j + 1) * this.slices);
+            this.indices.push((i+1)%this.slices+j*this.slices,i%this.slices+(j+1)*this.slices,i%this.slices+j*this.slices);
+            this.indices.push(i%this.slices+(j+1)*this.slices,(i+1)%this.slices+j*this.slices,(i+1)%this.slices+(j+1)*this.slices);
         }
 
     }

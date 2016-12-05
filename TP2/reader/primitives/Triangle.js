@@ -56,9 +56,10 @@ Triangle.prototype.initBuffers = function() {
     ];
 
     this.texCoords = [
-        0, 0,
-        a, 0,
-        a - c * ((Math.pow(c, 2) - Math.pow(b, 2) + Math.pow(a, 2)) / (2 * a * c)), a * Math.sin(Math.acos((Math.pow(c, 2) - Math.pow(b, 2) + Math.pow(a, 2)) / (2 * a * c)))
+        0, 1,
+
+          a, 1,
+          a - c * ((Math.pow(c, 2) - Math.pow(b, 2) + Math.pow(a, 2)) / (2 * a * c)),1- a * Math.sin(Math.acos((Math.pow(c, 2) - Math.pow(b, 2) + Math.pow(a, 2)) / (2 * a * c)))      
     ]
 
     this.primitiveType = this.scene.gl.TRIANGLES;

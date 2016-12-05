@@ -5129,7 +5129,6 @@ function CGFlight(a, b) {
     CGFobject.call(this, a);
     this.scene = a;
     this.id = b;
-    console.log("Created Light " + b);
     this.setPosition(0, 0, 0, 1);
     this.setAmbient(0.1, 0.1, 0.1, 1.0);
     this.setDiffuse(0.5, 0.5, 0.5, 1.0);

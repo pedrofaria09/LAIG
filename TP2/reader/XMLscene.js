@@ -13,7 +13,7 @@ XMLscene.prototype.init = function(application) {
 
     this.initLights();
     this.enableTextures(true);
-    this.time = null;
+	this.time=null;
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -95,16 +95,17 @@ XMLscene.prototype.updateCamera = function(i) {
     return i;
 }
 
-XMLscene.prototype.update = function(t) {
-    t = t / 1000;
-    if (this.graph.loadedOk) {
-        if (this.time == null) {
-            this.timer = t;
-            this.time = 0.0001;
-        } else {
-            this.time = (t - this.timer);
-        }
-    }
+XMLscene.prototype.update = function(t){
+  t=t/1000;
+  if(this.graph.loadedOk){
+	  if(this.time==null){
+		  this.timer=t;
+		  this.time=0.0001;
+	  }
+	  else{
+		this.time=(t-this.timer);
+	  }
+  }
 
 }
 
@@ -151,56 +152,59 @@ XMLscene.prototype.display = function() {
 
         this.graph.axis.display();
 
-        this.processaGrafo(this.graph.root, null, null);
+        this.processaGrafo(this.graph.root,null,null);
 
     }
 };
 
-XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
+XMLscene.prototype.processaGrafo = function(nodeName,texture,materialFather) {
     var material = null;
-    var compTexture = null;
+	var compTexture = null;
     if (nodeName != null) {
         var node = this.graph.componentsList[this.getRootPos(nodeName)];
         if (node.materials != "inherit") {
             material = node.materials[this.materialsComponents[node.id]];
-        } else material = materialFather;
-
-
-        if (node.textures == 'none') {
-            material.setTexture(null);
-            compTexture = null;
-        } else if (node.textures == 'inherit') {
-            compTexture = texture;
-            material.setTexture(texture);
-        } else {
-            material.setTexture(node.textures);
-            compTexture = node.textures;
         }
-        material.apply();
+		else material=materialFather;
+
+
+			if(node.textures == 'none'){
+				material.setTexture(null);
+				compTexture=null;
+			}
+			else if(node.textures == 'inherit'){
+				compTexture=texture;
+				material.setTexture(texture);
+			}
+			else{
+				material.setTexture(node.textures);
+				compTexture=node.textures;
+			}
+			material.apply();
 
 
         this.multMatrix(node.transformations);
-        if (node.animations.length > 0) {
-            this.callAnimations(node.animations, this.time);
-            //this.multMatrix(node.animations[0].callMatrix(this.time));
-        }
+		if(node.animations.length>0){
+      this.callAnimations(node.animations,this.time);
+			//this.multMatrix(node.animations[0].callMatrix(this.time));
+		}
         if (node.childrenPrimitives != null) {
-            /*if((node.texture.length_s !=1||node.texture.length_t!=1 ) && node.texture!="none"){
+           if((node.texture.length_s !=1||node.texture.length_t!=1 ) && node.texture!="none" && !(node.childrenPrimitives[0] instanceof Sphere || node.childrenPrimitives[0] instanceof Patch || node.childrenPrimitives[0] instanceof Plane || node.childrenPrimitives[0] instanceof Vehicle)){
 
 			    node.childrenPrimitives[0].updateTexture(node.texture.length_s,node.texture.length_t);
-		   }*/
+		   }
             node.childrenPrimitives[0].display();
 
-            /*if((node.texture.length_s !=1||node.texture.length_t!=1 )&& node.texture!="none"){
+			if((node.texture.length_s !=1||node.texture.length_t!=1 )&& node.texture!="none" && !(node.childrenPrimitives[0] instanceof Sphere || node.childrenPrimitives[0] instanceof Patch || node.childrenPrimitives[0] instanceof Plane || node.childrenPrimitives[0] instanceof Vehicle)){
 			   node.childrenPrimitives[0].updateTexture(1,1);
-		   }*/
+		   }
 
         }
         if (node.childrenComponents != null) {
             for (var i = 0; i < node.childrenComponents.length; i++) {
                 this.pushMatrix();
 
-                this.processaGrafo(node.childrenComponents[i], compTexture, material);
+                this.processaGrafo(node.childrenComponents[i],compTexture,material);
                 this.popMatrix();
             }
         }
@@ -219,32 +223,42 @@ XMLscene.prototype.getRootPos = function(nodeName) {
     return -1;
 }
 
-XMLscene.prototype.callAnimations = function(animations, time) {
-    var counter = 0;
-    for (i = 0; i < animations.length; i++) {
-        counter += animations[i].span;
-        if (counter > time) {
-            if (i != 0)
-                var timer = time - animations[i - 1].span;
-            else var timer = time;
-            this.multMatrix(animations[i].callMatrix(timer));
-            break;
-        } else {
-            this.multMatrix(animations[i].callMatrix(time));
-        }
+XMLscene.prototype.callAnimations = function(animations,time) {
+  var counter=0;
+  for(i=0;i<animations.length;i++){
+    counter+=animations[i].span;
+    if(counter>time){
+      if(i!=0)
+        var timer=time-this.countTimer(animations,i);
+      else var timer=time;
+      timer
+      this.multMatrix( animations[i].callMatrix(timer));
+      break;
     }
+    else{
+      this.multMatrix( animations[i].callMatrix(time));
+    }
+  }
+}
+
+XMLscene.prototype.countTimer = function(animations,num) {
+var counter=0;
+  for(i=0;i<num;i++){
+    counter+=animations[i].span;
+  }
+  return counter;
 }
 
 XMLscene.prototype.updateLights = function() {
     for (i = 1; i <= this.nrLuzes; i++) {
         if (this[("luz" + i)]) {
 
-            this.lights[i - 1].setVisible(true);
-            this.lights[i - 1].enable();
+            this.lights[i-1].setVisible(true);
+            this.lights[i-1].enable();
         } else {
-            this.lights[i - 1].setVisible(false);
-            this.lights[i - 1].disable();
+            this.lights[i-1].setVisible(false);
+            this.lights[i-1].disable();
         }
-        this.lights[i - 1].update();
+        this.lights[i-1].update();
     }
 }
