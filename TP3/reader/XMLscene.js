@@ -11,6 +11,8 @@ XMLscene.prototype.init = function(application) {
 
     this.initCameras();
 
+    this.SelectedPick=0;
+
     this.initLights();
     this.enableTextures(true);
     this.time = null;
@@ -23,7 +25,7 @@ XMLscene.prototype.init = function(application) {
     this.gl.depthFunc(this.gl.LEQUAL);
 
 
-    this.setUpdatePeriod(30);
+    this.setUpdatePeriod(100);
 
     this.materialIndice = 0;
     this.materialsComponents = new Array();
@@ -83,6 +85,24 @@ XMLscene.prototype.initiateMaterials = function(i) {
     }
 }
 
+XMLscene.prototype.pickingBoard = function(i) {
+
+
+
+var material= new Material(this,null,null);
+    for (var i = 0; i < 11; i++) {
+        for(var j=0;j<14;j++){
+          var ret = new Rectangle(this,null,i/11,j/14,(i+1)/11,(j+1)/14);
+          if(this.pickMode){
+              this.registerForPick(this.pickmeId, ret);
+              this.pickmeId++;
+          }
+          material.apply();
+          ret.display();
+        }
+    }
+}
+
 XMLscene.prototype.updateCamera = function(i) {
     if (i >= this.graph.viewsList.length) {
         i = 0;
@@ -128,12 +148,18 @@ XMLscene.prototype.logPicking = function() {
                 var obj = this.pickResults[i][0];
                 if (obj) {
                     var customId = this.pickResults[i][1];
+                    this.SelectedPick=customId;
                     console.log("Picked object: " + obj + ", with pick id " + customId);
                 }
             }
             this.pickResults.splice(0, this.pickResults.length);
         }
     }
+}
+
+XMLscene.prototype.paintSelected = function() {
+  var ret = new Rectangle(this,null,Math.floor(this.SelectedPick/14)/11,(this.SelectedPick%14-1)/14,(Math.floor(this.SelectedPick/14)+1)/11,(this.SelectedPick%14)/14);
+  ret.display();
 }
 
 XMLscene.prototype.display = function() {
@@ -166,6 +192,18 @@ XMLscene.prototype.display = function() {
 
 
     if (this.graph.loadedOk) {
+
+        this.pushMatrix();
+          this.translate(0,0,0.01);
+          this.scale(20,20,1);
+
+        if(this.pickMode)
+          this.pickingBoard();
+
+        if(this.SelectedPick!=0){
+          this.paintSelected();
+        }
+        this.popMatrix();
 
         this.updateLights();
 
@@ -202,7 +240,6 @@ XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
         this.multMatrix(node.transformations);
         if (node.animations.length > 0) {
             this.callAnimations(node.animations, this.time);
-            //this.multMatrix(node.animations[0].callMatrix(this.time));
         }
         if (node.childrenPrimitives != null) {
             if ((node.texture.length_s != 1 || node.texture.length_t != 1) && node.texture != "none" && !(node.childrenPrimitives[0] instanceof Sphere || node.childrenPrimitives[0] instanceof Patch || node.childrenPrimitives[0] instanceof Plane || node.childrenPrimitives[0] instanceof Vehicle)) {
@@ -216,18 +253,7 @@ XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
             }
 
         }
-        if (node.pickme) {
-            if (node.childrenComponents != null) {
-                for (var i = 0; i < node.childrenComponents.length; i++) {
-                    if(this.pickMode){
-                        //console.log(this.pickMode);
-                        this.registerForPick(this.pickmeId, node.childrenComponents[i]);
-                        //console.log(node.childrenComponents[i]);
-                    }
-                }
-            }
-            this.pickmeId++;
-        }
+
         if (node.childrenComponents != null) {
             for (var i = 0; i < node.childrenComponents.length; i++) {
                 this.pushMatrix();

@@ -16,8 +16,6 @@ varying vec4 normal;
 
 uniform float du;
 uniform float dv;
-uniform float sv;
-uniform float su;
 
 
 void main() {
@@ -28,13 +26,9 @@ void main() {
 
 	float posx=floor(vTextureCoord.s*du);
 	float posy=floor(vTextureCoord.t*dv);
-	vec3 offset=vec3(0.0,0.0,0.0);
 
-	if((su==(posx) && sv==(posy))||(su==(posx-1.0) && sv==(posy-1.0))||(su==(posx) && sv==(posy-1.0))||(su==(posx-1.0) && sv==(posy))){
-		offset=vec3(0.0,0.0,0.5);
-	}
 
-	vec4 vertex=vec4(aVertexPosition+offset, 1.0);
+	vec4 vertex=vec4(aVertexPosition, 1.0);
 
 	gl_Position = uPMatrix * uMVMatrix * vertex;
 

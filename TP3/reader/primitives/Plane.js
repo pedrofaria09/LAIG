@@ -51,8 +51,6 @@ Plane.prototype.makeSurface = function(dimX, dimY, partsX, partsY) {
 }
 
 Plane.prototype.display = function() {
-    // draw scene
-    //this.appearance.apply();
-    this.scene.translate(-3,0.5,0);
+  
     this.obj.display();
 }

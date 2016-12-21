@@ -803,7 +803,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                 break;
                 case 'chessboard':
                     var colors = new Array();
-                    for(var h=0;h<3;h++){
+                    for(var h=0;h<4;h++){
                       colors[h]=[];
                       for(var j=0;j<4;j++){
                         colors[h][j]=parseFloat(elem[0].children[i].children[0].children[h].attributes[j].nodeValue);
@@ -811,7 +811,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                       }
                     }
 
-                    this.priList[i] = new ChessBoard(this.scene,elem[0].children[i].attributes[0].nodeValue,parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue),this.getCGFTextureById(elem[0].children[i].children[0].attributes[2].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[4].nodeValue),colors);
+                    this.priList[i] = new ChessBoard(this.scene,elem[0].children[i].attributes[0].nodeValue,parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue),this.getCGFTextureById(elem[0].children[i].children[0].attributes[2].nodeValue),colors);
                     break;
                 case 'vehicle':
                     this.priList[i] = new Vehicle(this.scene,elem[0].children[i].attributes[0].nodeValue);
@@ -832,7 +832,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     nnodes = elem[0].children.length;
     temp = new Array();
     this.componentsList = new Array();
-
+    console.log(elem);
     //texture = new Array();
     isNotEqual = true;
     for (var x = 0; x < nnodes; x++) {
@@ -840,6 +840,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
         childrenComponents = new Array();
         childrenPrimitives = new Array();
         listMaterial = new Array();
+
         for (a = 0; a < this.componentsList.length; a++) {
             if (this.componentsList[a].id == elem[0].children[x].attributes[0].nodeValue) {
                 isNotEqual = false;
@@ -1033,6 +1034,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
 
     }
+    console.log(  this.componentsList);
 }
 
 MySceneGraph.prototype.getTransformationById = function(id) {

@@ -91,5 +91,9 @@ MyInterface.prototype.processKeyDown = function(event) {
                 this.scene.updateMaterials();
                 break;
             }
+        case(27):{
+                this.scene.SelectedPick=0;
+                break;
+            }
     };
 };
