@@ -93,6 +93,8 @@ MyInterface.prototype.processKeyDown = function(event) {
             }
         case(27):{
                 this.scene.SelectedPick=0;
+                this.scene.SelectedPeca=0;
+                this.scene.State=0;
                 break;
             }
     };

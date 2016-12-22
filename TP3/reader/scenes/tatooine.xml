@@ -115,7 +115,7 @@
         <texture id="corpoBB8TXT" file="./images/corpoBB8.png" length_s="1" length_t="1"/>
         <texture id="pescocoBB8TXT" file="./images/pescocoBB8.png" length_s="1" length_t="1"/>
         <texture id="sandTXT" file="./images/sand.jpg" length_s="1" length_t="1"/>
-
+        <texture id="board" file="./images/board.jpg" length_s="1" length_t="1"/>
     </textures>
 
     <materials>
@@ -257,6 +257,22 @@
             <rectangle x1="0" y1="0" x2="1" y2="1"/>
         </primitive>
 
+        <primitive id="peca1">
+            <peca x="6.5" y="15"/>
+        </primitive>
+
+        <primitive id="peca2">
+            <peca x="13.5" y="15"/>
+        </primitive>
+
+        <primitive id="peca3">
+            <peca x="6.5" y="5"/>
+        </primitive>
+
+        <primitive id="peca4">
+            <peca x="13.5" y="5"/>
+        </primitive>
+
         <primitive id="quadradoTeste">
             <rectangle x1="0" y1="0" x2="5" y2="3"/>
         </primitive>
@@ -266,7 +282,7 @@
         </primitive>
 
         <primitive id="uniCilindro">
-            <cylinder base="1" top="1" height="0.1" slices="50" stacks="50"/>
+            <cylinder base="0.5" top="0.5" height="1" slices="50" stacks="50"/>
         </primitive>
 
         <primitive id="cilindroCorpo">
@@ -301,8 +317,8 @@
             <vehicle/>
         </primitive>
 
-        <primitive id="chessboard2">
-            <chessboard du="11" dv="14" textureref="ombrofora">
+        <primitive id="chessboard">
+            <chessboard du="11" dv="14" textureref="board">
                 <c1 r="1" g="1" b="0" a="1"/>
                 <c2 r="0" g="1" b="1" a="1"/>
                 <cs r="0.4" g="0" b="0.4" a="1"/>
@@ -318,7 +334,7 @@
             <!-- assente em XY, centrado na origem, com a -->
             <!-- face visível apontando para +Z e discretizado -->
             <!-- em 10 partes no eixo XX e 7 partes no YY  -->
-            <plane dimX="4" dimY="4" partsX="5" partsY="5"/>
+            <plane dimX="1" dimY="1" partsX="11" partsY="14"/>
         </primitive>
 
         <primitive id="patch">
@@ -367,6 +383,10 @@
             <texture id="none"/>
             <children>
                 <componentref id="paredeDir"/>
+                <componentref id="peca1"/>
+                <componentref id="peca2"/>
+                <componentref id="peca3"/>
+                <componentref id="peca4"/>
             </children>
         </component>
 
@@ -381,10 +401,80 @@
                 <material id="inherit"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="board"/>
 
             <children>
-                <primitiveref id="chessboard2"/>
+                <primitiveref id="chessboard"/>
+            </children>
+        </component>
+
+        <component id="peca1">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca1"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="peca2">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca2"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="peca3">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca3"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="peca4">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca4"/>
             </children>
 
             <pickme/>
