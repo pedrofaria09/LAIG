@@ -12,38 +12,7 @@ XMLscene.prototype.init = function(application) {
     this.initCameras();
 
     //relativo ao jogo///////////////////////////7
-    this.turn=1;
-    this.SelectedPick=0;
-    this.SelectedPeca=0;
-    this.State=0;
-    this.SelectedObj=null;
-    this.board=[['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-  ['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','r','a','c','a','c','a','c','a','r','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','e','a','c','a','c','a','c','a','e','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
-	['b','b','b','b','b','b','b','b','b','b','b'],
-	['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c']];
+    this.game= new Game(this);
     /////////////////////////////////////////////////
 
     this.initLights();
@@ -180,9 +149,11 @@ XMLscene.prototype.logPicking = function() {
             for (var i = 0; i < this.pickResults.length; i++) {
                 var obj = this.pickResults[i][0];
                 if (obj) {
-                    this.SelectedObj=obj;
+
                     var customId = this.pickResults[i][1];
-                    this.stateMachine(customId);
+                    if(customId>154)
+                      this.game.SelectedObj=obj;
+                    this.game.stateMachine(customId);
                     console.log("Picked object: " + obj + ", with pick id " + customId);
                 }
             }
@@ -192,12 +163,16 @@ XMLscene.prototype.logPicking = function() {
 }
 
 XMLscene.prototype.paintSelected = function() {
-  if(this.SelectedPick!=154)
-  var ret = new Rectangle(this,null,Math.floor(this.SelectedPick/14)/11,(this.SelectedPick%14-1)/14,(Math.floor(this.SelectedPick/14)+1)/11,(this.SelectedPick%14)/14);
-  else  var ret = new Rectangle(this,null,Math.floor((this.SelectedPick-1)/14)/11,((this.SelectedPick-1)%14)/14,(Math.floor(this.SelectedPick/14))/11,((this.SelectedPick-1)%14+1)/14);
+  if(this.game.SelectedPick!=154)
+    var ret = new Rectangle(this,null,Math.floor(this.game.SelectedPick/14)/11,(this.game.SelectedPick%14-1)/14,(Math.floor(this.game.SelectedPick/14)+1)/11,(this.game.SelectedPick%14)/14);
+  else  var ret = new Rectangle(this,null,Math.floor((this.game.SelectedPick-1)/14)/11,((this.game.SelectedPick-1)%14)/14,(Math.floor(this.game.SelectedPick/14))/11,((this.game.SelectedPick-1)%14+1)/14);
   var material= new Material(this,null,null);
+  this.pushMatrix();
+  this.translate(0,0,0.05);
+  this.scale(20,20,1);
   material.apply();
   ret.display();
+  this.popMatrix();
 }
 
 XMLscene.prototype.display = function() {
@@ -231,15 +206,9 @@ XMLscene.prototype.display = function() {
 
     if (this.graph.loadedOk) {
         this.pickmeId = 1;
-
-      /*  this.pushMatrix();
-          this.translate(0,0,0.009);
-          this.scale(20,20,1);
-          if(this.SelectedPick!=0){
-            this.paintSelected();
-          }
-        this.popMatrix();*/
-
+        if(this.game.SelectedPick!=0){
+          this.paintSelected();
+        }
         this.updateLights();
 
         this.graph.axis.display();
@@ -342,67 +311,6 @@ XMLscene.prototype.countTimer = function(animations, num) {
         counter += animations[i].span;
     }
     return counter;
-}
-
-XMLscene.prototype.stateMachine = function(pick) {
-  var xmlscene=this;
-    switch(this.State){
-      case 0:
-      console.log();
-            if(pick>154)
-              {
-                var pos=this.coordsToPosition([this.SelectedObj.childrenPrimitives[0].y,this.SelectedObj.childrenPrimitives[0].x]);
-                this.boardToString();
-                this.sendMessage('/checkChosenPawn./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']',function (data){
-                    if(data.currentTarget.responseText=="ok"){
-                      console.log();
-                      xmlscene.changeSelected(pick-154);
-                      xmlscene.changeState(1);
-                    }
-
-               });
-
-              }
-            break;
-    }
-}
-
-XMLscene.prototype.changeSelected = function(ind) {
-  this.SelectedPeca=ind;
-}
-
-XMLscene.prototype.changeState = function(ind) {
-  this.State=ind;
-}
-
-XMLscene.prototype.coordsToPosition = function(coords) {
-    return [15-Math.ceil(coords[0]/20*14),Math.ceil(coords[1]/20*11)];
-}
-
-XMLscene.prototype.sendMessage = function(string,onSuccess,onError) {
-  var requestPort = 8081
-  var request = new XMLHttpRequest();
-  request.open('GET', 'http://localhost:'+requestPort+string, true);
-
-  request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
-  request.onerror = onError || function(){console.log("Error waiting for response");};
-
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-  request.send();
-}
-
-
-
-XMLscene.prototype.boardToString = function() {
-    var string="[";
-    for(var i=0;i<this.board.length;i++){
-      if(i!=this.board.length-1)
-        string+='['+this.board[i].toString()+'],'
-      else string+='['+this.board[i].toString()+']'
-    }
-    string+=']';
-
-    return string;
 }
 
 XMLscene.prototype.updateLights = function() {

@@ -74,8 +74,8 @@ availableWallVertical(Board,X,Y):-(checkColisionVertical(Board,[X,Y]),P1 is 2*X-
  ,append([[X,Y]],List,NewList), asserta(availableWallV(NewList)));true),(Y<11,Y1 is Y+1, X1 is X;Y1 is 1,X1 is X+1),X<14,!,garbage_collect,availableWallVertical(Board,X1,Y1);true.
 
 %given the intial position [Xi,Yi] and the final position [Xf,Yf], it determines which is the movement that needs to be made (Result)
- posToMov([Xi,Yi],[Xf,Yf],Result):-Yi==Yf,Xi-Xf=:=1,Result='N';Xi-Xf=:=2,Result='NN';Yi==Yf,Xf-Xi=:=1,Result='S';Xf-Xi=:=2,Result='SS';
- Xi==Xf,Yi-Yf=:=1,Result='O';Yi-Yf=:=2,Result='OO';Xi==Xf,Yf-Yi=:=1,Result='E';Yf-Yi=:=2,Result='EE';
+ posToMov([Xi,Yi],[Xf,Yf],Result):-Yi==Yf,Xi-Xf=:=1,Result='N';Yi==Yf,Xi-Xf=:=2,Result='NN';Yi==Yf,Xf-Xi=:=1,Result='S';Yi==Yf,Xf-Xi=:=2,Result='SS';
+ Xi==Xf,Yi-Yf=:=1,Result='O';Xi==Xf,Yi-Yf=:=2,Result='OO';Xi==Xf,Yf-Yi=:=1,Result='E';Xi==Xf,Yf-Yi=:=2,Result='EE';
  Xf-Xi=:=1,Yf-Yi=:=1,Result='SE';Xi-Xf=:=1,Yf-Yi=:=1,Result='NE';Xi-Xf=:=1,Yi-Yf=:=1,Result='NO';Xf-Xi=:=1,Yi-Yf=:=1,Result='SO'.
 
 %receives a Board and the number of walls left to be placed, and places a wall randomly given all the lists of available positions, updating it to NewNoard, and updates the walls left to be places after this placement (NewVert,NewHor)

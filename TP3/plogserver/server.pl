@@ -67,13 +67,15 @@ handle_request(Request, MyReply, '200 OK') :- translateInput(Request,MyReply), !
 handle_request(syntax_error, 'Syntax Error', '400 Bad Request') :- !.
 handle_request(_, 'Bad Request', '400 Bad Request').
 
-translateInput(['checkChosenPawn',Turn,Board,Pos],'ok'):-write('suag '),write(Pos),nl,checkChosenPawn(Turn,Board,Pos),!.
-translateInput([_,_,_,_],'no'):-!.
+translateInput(['checkChosenPawn',Turn,Board,Pos,_],'ok'):-write('suag '),write(Pos),nl,checkChosenPawn(Turn,Board,Pos),!.
+translateInput(['move',Turn,Board,PosI,PosF],'ok'):-write('suag '),write(Pos),nl,posToMov(PosI,PosF,Result),!.
+
+translateInput([_,_,_,_,_],'no'):-!.
 
 % Reads first Line of HTTP Header and parses request
 % Returns term parsed from Request-URI
 % Returns syntax_error in case of failure in parsing
-read_request(Stream, [Pred1,Turn1,Board1,Pos1]) :-
+read_request(Stream, [Pred1,Turn1,Board1,Pos1,Pos2]) :-
 	read_line(Stream, LineCodes),
 	print_header_line(LineCodes),
 
@@ -82,16 +84,14 @@ read_request(Stream, [Pred1,Turn1,Board1,Pos1]) :-
 	append(Get,RL,LineCodes),
 	processPred(RL,Pred,RestOfCommand),
 	catch(read_from_codes(Pred, Pred1), error(syntax_error(_),_), fail),
-	write('yolo'),write(Pred1),nl,
 	processPred(RestOfCommand,Turn,RestOfCommand1),
 	catch(read_from_codes(Turn, Turn1), error(syntax_error(_),_), fail),
-	write('yolo'),write(Turn1),nl,
 	processPred(RestOfCommand1,Board,RestOfCommand2),
 	catch(read_from_codes(Board, Board1), error(syntax_error(_),_), fail),
-	write('yolo'),write(Board1),nl,
-	read_request_aux(RestOfCommand2,RL2),
-	catch(read_from_codes(RL2, Pos1), error(syntax_error(_),_), fail),
-	write('yolo'),write(Pos1),nl, !.
+	processPred(RestOfCommand2,Pos,RestOfCommand3),
+	catch(read_from_codes(Pos, Pos1), error(syntax_error(_),_), fail),
+	read_request_aux(RestOfCommand3,RL2),
+	catch(read_from_codes(RL2, Pos2), error(syntax_error(_),_), fail), !.
 read_request(_,syntax_error).
 
 read_request_aux([32|_],[46]) :- !.

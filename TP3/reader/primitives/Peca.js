@@ -14,20 +14,28 @@ function Peca(scene, id, x,y) {
     this.material.setEmission(0,0,0,1);
     this.material.setDiffuse(1,1,0,1);
 
-    this.replaceCil = new MyCylinder(scene,null, 0.52,0.52,1.02, 20,20);
-};
+      this.replaceCil = new MyCylinder(scene,null, 0.52,0.52,1.02, 20,20);
+  };
 
-Peca.prototype = Object.create(CGFobject.prototype);
-Peca.prototype.constructor = Peca;
+  Peca.prototype = Object.create(CGFobject.prototype);
+  Peca.prototype.constructor = Peca;
 
-Peca.prototype.display = function() {
+  Peca.prototype.changeX = function(int) {
+    this.x=int;
+  };
+  Peca.prototype.changeY = function(int) {
+    this.y=int;
+  };
 
-    this.scene.pushMatrix();
-      this.scene.translate(this.x,this.y,0);
-      this.cil.display();
-      if(this.scene.SelectedPeca==this.pecaId){
-        this.material.apply();
-        this.replaceCil.display();
-      }
-    this.scene.popMatrix();
-};
+  Peca.prototype.display = function() {
+    if(this.pecaId==1)
+    console.log(this.y);
+      this.scene.pushMatrix();
+        this.scene.translate(this.x,this.y,0);
+        this.cil.display();
+        if(this.scene.game.SelectedPeca==this.pecaId){
+          this.material.apply();
+          this.replaceCil.display();
+        }
+      this.scene.popMatrix();
+  };
