@@ -39,7 +39,7 @@ Game.prototype.stateMachine = function(pick) {
   var xmlscene=this;
     switch(this.State){
       case 0:
-            if(pick>154)
+            if(pick>154 && pick<159)
               {
                 var pos=this.coordsToPosition([this.SelectedObj.childrenPrimitives[0].y,this.SelectedObj.childrenPrimitives[0].x]);
                 this.sendMessage('/checkChosenPawn./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']./[]',function (data){
@@ -71,6 +71,36 @@ Game.prototype.stateMachine = function(pick) {
                 xmlscene.SelectedPick=0;
            });
           }
+          break;
+        case 2:
+            if((pick>158 && pick<176 && this.turn==2)||(pick>175 && this.turn==1)){
+                xmlscene.changeState(3);
+            }
+          break;
+        case 3:
+            if(pick<155){
+              if(pick%14!=0)
+                var posX=15-pick%14;
+              else var posX=1;
+              var posY=Math.ceil(pick/14);
+              this.SelectedPick=pick;
+              console.log(this.SelectedObj)
+              var choice;
+              if(this.SelectedObj.childrenPrimitives[0].tipo=="hor")
+                choice=1;
+              else choice =2;
+              this.sendMessage('/placeWall./'+this.turn+'./'+this.boardToString()+'./'+choice+'./['+posX+','+posY+']',function (data){
+                  if(data.currentTarget.responseText=="ok"){
+                    if(choice==1)
+                      xmlscene.changePosPeca(posY-0.5,posX+0.6);
+                    else xmlscene.changePosPeca(posY+0.4,posX-0.6);
+                    xmlscene.changeState(0);
+                    xmlscene.SelectedObj=null;
+                  }
+                  xmlscene.SelectedPick=0;
+             });
+            }
+          break;
     }
 }
 

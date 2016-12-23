@@ -28,8 +28,6 @@ function Peca(scene, id, x,y) {
   };
 
   Peca.prototype.display = function() {
-    if(this.pecaId==1)
-    console.log(this.y);
       this.scene.pushMatrix();
         this.scene.translate(this.x,this.y,0);
         this.cil.display();

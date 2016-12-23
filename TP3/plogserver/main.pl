@@ -3,9 +3,8 @@
 
 
 %receives a Board, the number of vertical and horizontal walls remaining (Vert and Hor), updates it to the NewBoard and returns the number of horizontal and vertical walls remaining after placement (NewHor and NewVert)
-placeWall(Vert,Hor,Board,NewBoard,NewVert,NewHor):-chooseWall(Vert, Hor, Choice,[X,Y]),
-((Choice==1,Vert>0,checkColisionVertical(Board,[X,Y]),P1 is 2*X-1,P2 is 2*Y,replaceMatrix(Board,P1,P2,1,q,StackBoard),P3 is 2*X+1,replaceMatrix(StackBoard,P3,P2,1,q,NewBoard),checkPawnsPath(NewBoard),NewVert is Vert-1,NewHor is Hor;
-Choice==2,Hor>0,checkColisionHorizontal(Board,[X,Y]),P1 is 2*X,replaceMatrix(Board,P1,Y,1,w,StackBoard),P2 is Y+1,replaceMatrix(StackBoard,P1,P2,1,w,NewBoard),checkPawnsPath(NewBoard),NewVert is Vert,NewHor is Hor-1);placeWall(Vert,Hor,Board,NewBoard,NewVert,NewHor)).
+placeWall(Choice,Board,NewBoard,[X,Y]):-(Choice==1,checkColisionVertical(Board,[X,Y]),P1 is 2*X-1,P2 is 2*Y,replaceMatrix(Board,P1,P2,1,q,StackBoard),P3 is 2*X+1,replaceMatrix(StackBoard,P3,P2,1,q,NewBoard),checkPawnsPath(NewBoard);
+Choice==2,checkColisionHorizontal(Board,[X,Y]),P1 is 2*X,replaceMatrix(Board,P1,Y,1,w,StackBoard),P2 is Y+1,replaceMatrix(StackBoard,P1,P2,1,w,NewBoard),checkPawnsPath(NewBoard)).
 
 calcboard([
   [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],

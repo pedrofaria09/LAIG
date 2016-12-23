@@ -11,9 +11,7 @@ XMLscene.prototype.init = function(application) {
 
     this.initCameras();
 
-    //relativo ao jogo///////////////////////////7
     this.game= new Game(this);
-    /////////////////////////////////////////////////
 
     this.initLights();
     this.enableTextures(true);

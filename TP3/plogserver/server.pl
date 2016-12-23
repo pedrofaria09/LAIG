@@ -69,6 +69,7 @@ handle_request(_, 'Bad Request', '400 Bad Request').
 
 translateInput(['checkChosenPawn',Turn,Board,Pos,_],'ok'):-write('suag '),write(Pos),nl,checkChosenPawn(Turn,Board,Pos),!.
 translateInput(['move',Turn,Board,PosI,PosF],'ok'):-write('suag '),write(Pos),nl,posToMov(PosI,PosF,Result),!.
+translateInput(['placeWall',_,Board,Choice,Pos],'ok'):-write('suag '),write(Pos),nl,placeWall(Choice,Board,_,Pos),!.
 
 translateInput([_,_,_,_,_],'no'):-!.
 

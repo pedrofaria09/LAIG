@@ -261,6 +261,129 @@
             <peca x="6.5" y="15"/>
         </primitive>
 
+        <primitive id="wall1">
+            <wall tipo="hor" x="0" y="-1"/>
+        </primitive>
+
+        <primitive id="wall2">
+            <wall tipo="hor" x="0" y="-2"/>
+        </primitive>
+
+        <primitive id="wall3">
+            <wall tipo="hor" x="0" y="-3"/>
+        </primitive>
+
+        <primitive id="wall4">
+            <wall tipo="hor" x="4" y="-1"/>
+        </primitive>
+
+        <primitive id="wall5">
+            <wall tipo="hor" x="4" y="-2"/>
+        </primitive>
+
+        <primitive id="wall6">
+            <wall tipo="hor" x="4" y="-3"/>
+        </primitive>
+
+        <primitive id="wall7">
+            <wall tipo="hor" x="8" y="-1"/>
+        </primitive>
+
+        <primitive id="wall8">
+            <wall tipo="hor" x="8" y="-2"/>
+        </primitive>
+        <primitive id="wall9">
+            <wall tipo="ver" x="12" y="-0.5"/>
+        </primitive>
+        <primitive id="wall10">
+            <wall tipo="ver" x="12.7" y="-0.5"/>
+        </primitive>
+        <primitive id="wall11">
+            <wall tipo="ver" x="13.4" y="-0.5"/>
+        </primitive>
+
+        <primitive id="wall12">
+            <wall tipo="ver" x="14.1" y="-0.5"/>
+        </primitive>
+
+        <primitive id="wall13">
+            <wall tipo="ver" x="14.8" y="-0.5"/>
+        </primitive>
+
+        <primitive id="wall14">
+            <wall tipo="ver" x="15.5" y="-0.5"/>
+        </primitive>
+
+        <primitive id="wall15">
+            <wall tipo="ver" x="16.2" y="-0.5"/>
+        </primitive>
+
+        <primitive id="wall16">
+            <wall tipo="ver" x="16.9" y="-0.5"/>
+        </primitive>
+
+        <primitive id="wall17">
+            <wall tipo="hor" x="0" y="21"/>
+        </primitive>
+
+        <primitive id="wall18">
+            <wall tipo="hor" x="0" y="23"/>
+        </primitive>
+
+        <primitive id="wall19">
+            <wall tipo="hor" x="0" y="22"/>
+        </primitive>
+
+        <primitive id="wall20">
+            <wall tipo="hor" x="4" y="21"/>
+        </primitive>
+
+        <primitive id="wall21">
+            <wall tipo="hor" x="4" y="23"/>
+        </primitive>
+
+        <primitive id="wall22">
+            <wall tipo="hor" x="4" y="22"/>
+        </primitive>
+
+        <primitive id="wall23">
+            <wall tipo="hor" x="8" y="21"/>
+        </primitive>
+
+        <primitive id="wall24">
+            <wall tipo="hor" x="8" y="22"/>
+        </primitive>
+
+        <primitive id="wall25">
+            <wall tipo="ver" x="12" y="23.5"/>
+        </primitive>
+        <primitive id="wall26">
+            <wall tipo="ver" x="12.7" y="23.5"/>
+        </primitive>
+        <primitive id="wall27">
+            <wall tipo="ver" x="13.4" y="23.5"/>
+        </primitive>
+
+        <primitive id="wall28">
+            <wall tipo="ver" x="14.1" y="23.5"/>
+        </primitive>
+
+        <primitive id="wall29">
+            <wall tipo="ver" x="14.8" y="23.5"/>
+        </primitive>
+
+        <primitive id="wall30">
+            <wall tipo="ver" x="15.5" y="23.5"/>
+        </primitive>
+
+        <primitive id="wall31">
+            <wall tipo="ver" x="16.2" y="23.5"/>
+        </primitive>
+
+        <primitive id="wall32">
+            <wall tipo="ver" x="16.9" y="23.5"/>
+        </primitive>
+
         <primitive id="peca2">
             <peca x="13.5" y="15"/>
         </primitive>
@@ -387,6 +510,38 @@
                 <componentref id="peca2"/>
                 <componentref id="peca3"/>
                 <componentref id="peca4"/>
+                <componentref id="wall1"/>
+                <componentref id="wall2"/>
+                <componentref id="wall3"/>
+                <componentref id="wall4"/>
+                <componentref id="wall5"/>
+                <componentref id="wall6"/>
+                <componentref id="wall7"/>
+                <componentref id="wall8"/>
+                <componentref id="wall9"/>
+                <componentref id="wall10"/>
+                <componentref id="wall11"/>
+                <componentref id="wall12"/>
+                <componentref id="wall13"/>
+                <componentref id="wall14"/>
+                <componentref id="wall15"/>
+                <componentref id="wall16"/>
+                <componentref id="wall17"/>
+                <componentref id="wall18"/>
+                <componentref id="wall19"/>
+                <componentref id="wall20"/>
+                <componentref id="wall21"/>
+                <componentref id="wall22"/>
+                <componentref id="wall23"/>
+                <componentref id="wall24"/>
+                <componentref id="wall25"/>
+                <componentref id="wall26"/>
+                <componentref id="wall27"/>
+                <componentref id="wall28"/>
+                <componentref id="wall29"/>
+                <componentref id="wall30"/>
+                <componentref id="wall31"/>
+                <componentref id="wall32"/>
             </children>
         </component>
 
@@ -479,6 +634,561 @@
 
             <pickme/>
         </component>
+
+        <component id="wall1">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall1"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall2">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall2"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall3">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall3"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall4">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall4"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall5">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall5"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall6">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall6"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall7">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall7"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall8">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall8"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall9">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall9"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall10">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall10"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall11">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall11"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall12">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall12"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall13">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall13"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall14">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall14"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall15">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall15"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall16">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall16"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall17">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall17"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall18">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall18"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall19">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall19"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall20">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall20"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall21">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall21"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall22">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall22"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall23">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall23"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall24">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall24"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall25">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall25"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall26">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall26"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall27">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall27"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall28">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall28"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall29">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall29"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall30">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall30"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall31">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall31"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall32">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall32"/>
+            </children>
+
+            <pickme/>
+        </component>
+
 
 
     </components>

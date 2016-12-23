@@ -777,6 +777,12 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                   var y = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
                   this.priList[i] = new Peca(this.scene, elem[0].children[i].attributes[0].nodeValue, x,y);
                   break;
+                case "wall":
+                  var tipo = elem[0].children[i].children[0].attributes[0].nodeValue;
+                  var x = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                  var y = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                  this.priList[i] = new Wall(this.scene, elem[0].children[i].attributes[0].nodeValue,tipo, x,y);
+                  break;
                 case "patch":
                 if (elem[0].children[i].children[0].attributes.length != 4) {
                     console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
