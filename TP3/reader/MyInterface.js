@@ -92,9 +92,12 @@ MyInterface.prototype.processKeyDown = function(event) {
                 break;
             }
         case(27):{
-                this.scene.SelectedPick=0;
-                this.scene.SelectedPeca=0;
-                this.scene.State=0;
+                if(this.scene.game.SelectedWall!=null || this.scene.game.SelectedPeca!=0)
+                  this.scene.game.State--;
+                this.scene.game.SelectedObj=null;
+                this.scene.game.SelectedWall=null;
+                this.scene.game.SelectedPeca=0;
+
                 break;
             }
     };

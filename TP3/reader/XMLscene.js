@@ -149,7 +149,7 @@ XMLscene.prototype.logPicking = function() {
                 if (obj) {
 
                     var customId = this.pickResults[i][1];
-                    if(customId>154)
+                    if(customId>154 && (this.game.SelectedWall==null && this.game.SelectedPeca==0))
                       this.game.SelectedObj=obj;
                     this.game.stateMachine(customId);
                     console.log("Picked object: " + obj + ", with pick id " + customId);

@@ -3,6 +3,7 @@ function Game(scene) {
   this.turn=1;
   this.SelectedPick=0;
   this.SelectedPeca=0;
+  this.SelectedWall=null;
   this.State=0;
   this.SelectedObj=null;
   this.wallsPlaced=0;
@@ -37,6 +38,7 @@ function Game(scene) {
 
 Game.prototype.stateMachine = function(pick) {
   var xmlscene=this;
+  console.log(this.State);
     switch(this.State){
       case 0:
             if(pick>154 && pick<159)
@@ -44,7 +46,6 @@ Game.prototype.stateMachine = function(pick) {
                 var pos=this.coordsToPosition([this.SelectedObj.childrenPrimitives[0].y,this.SelectedObj.childrenPrimitives[0].x]);
                 this.sendMessage('/checkChosenPawn./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']./[]',function (data){
                     if(data.currentTarget.responseText=="ok"){
-                      console.log();
                       xmlscene.changeSelected(pick-154);
                       xmlscene.changeState(1);
                     }
@@ -81,35 +82,44 @@ Game.prototype.stateMachine = function(pick) {
           break;
         case 2:
             if((pick>158 && pick<176 && this.turn==2)||(pick>175 && this.turn==1)){
+                this.SelectedWall=this.SelectedObj.childrenPrimitives[0];
                 xmlscene.changeState(3);
             }
           break;
         case 3:
             if(pick<155){
-              if(pick%14!=0)
-                var posX=15-pick%14;
-              else var posX=1;
-              var posY=Math.ceil(pick/14);
-              this.SelectedPick=pick;
-              var choice;
-              if(this.SelectedObj.childrenPrimitives[0].tipo=="hor")
-                choice=2;
-              else choice =1;
-              this.sendMessage('/placeWall./'+this.turn+'./'+this.boardToString()+'./'+choice+'./['+posX+','+posY+']',function (data){
-                  if(data.currentTarget.responseText=="ok"){
-                    if(choice==2)
-                      xmlscene.changePosPeca(posY-0.5,posX+0.6);
-                    else xmlscene.changePosPeca(posY+0.4,posX-0.6);
-                    xmlscene.changeState(0);
-                    xmlscene.changeTurn();
-                    xmlscene.SelectedObj=null;
-                    if(choice==2)
-                      xmlscene.placeWall([posX,posY],'w');
-                    else xmlscene.placeWall([posX,posY],'q');
-                  }
-                  xmlscene.wallsPlaced++;
-                  xmlscene.SelectedPick=0;
-             });
+              if(!this.SelectedWall.placed){
+                if(pick%14!=0)
+                  var posX=15-pick%14;
+                else var posX=1;
+                var posY=Math.ceil(pick/14);
+                this.SelectedPick=pick;
+                var choice;
+                if(this.SelectedWall.tipo=="hor")
+                  choice=2;
+                else choice =1;
+                this.sendMessage('/placeWall./'+this.turn+'./'+this.boardToString()+'./'+choice+'./['+posX+','+posY+']',function (data){
+                    if(data.currentTarget.responseText=="ok"){
+                      if(choice==2)
+                        xmlscene.changePosPeca(posY-0.5,posX+0.6);
+                      else xmlscene.changePosPeca(posY+0.4,posX-0.6);
+                      xmlscene.changeState(0);
+                      xmlscene.changeTurn();
+                      xmlscene.SelectedWall.place();
+                      xmlscene.SelectedWall=null;
+                      xmlscene.SelectedObj=null;
+                      if(choice==2)
+                        xmlscene.placeWall([posX,posY],'w');
+                      else xmlscene.placeWall([posX,posY],'q');
+                    }
+                    xmlscene.wallsPlaced++;
+                    xmlscene.SelectedPick=0;
+               });
+             }else{
+                 xmlscene.changeState(2);
+                 this.SelectedObj=null;
+             }
+
             }
           break;
     }

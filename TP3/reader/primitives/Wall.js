@@ -9,8 +9,8 @@ function Wall(scene, id,tipo,x,y) {
     this.y=y;
     this.tipo=tipo;
     this.pecaId=id.split('ll')[1];
+    this.placed=false;
 
-    console.log(this.x);
     if(this.tipo=="hor")
     {
       this.lado= new Rectangle(scene, null, 0, 0, 40/11, 0.4);
@@ -37,8 +37,13 @@ function Wall(scene, id,tipo,x,y) {
     this.y=int;
   };
 
-  Wall.prototype.display = function() {
+  Wall.prototype.place = function() {
+    this.placed=true;
+  };
 
+  Wall.prototype.display = function() {
+    if(this.scene.game.SelectedWall!=null && this.scene.game.SelectedWall==this)
+      this.material.apply();
     if(this.tipo=="hor"){
       this.scene.pushMatrix();
         this.scene.translate(this.x,this.y,0);
