@@ -5,7 +5,7 @@ function Game(scene) {
   this.SelectedPeca=0;
   this.State=0;
   this.SelectedObj=null;
-
+  this.wallsPlaced=0;
   this.board=[['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
 ['b','b','b','b','b','b','b','b','b','b','b'],
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
@@ -64,9 +64,16 @@ Game.prototype.stateMachine = function(pick) {
             this.sendMessage('/move./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']./['+posX+','+posY+']',function (data){
                 if(data.currentTarget.responseText=="ok"){
                   xmlscene.changePosPeca(posY,posX);
-                  xmlscene.changeState(2);
+                  if(xmlscene.wallsPlaced==32)
+                    {
+                      xmlscene.changeState(0);
+                      xmlscene.changeTurn();
+                    }else xmlscene.changeState(2);
                   xmlscene.SelectedPeca=0;
                   xmlscene.SelectedObj=null;
+                  if(xmlscene.turn==1)
+                  xmlscene.changePawnPos(pos,[posX,posY],'r');
+                  else xmlscene.changePawnPos(pos,[posX,posY],'e');
                 }
                 xmlscene.SelectedPick=0;
            });
@@ -84,19 +91,23 @@ Game.prototype.stateMachine = function(pick) {
               else var posX=1;
               var posY=Math.ceil(pick/14);
               this.SelectedPick=pick;
-              console.log(this.SelectedObj)
               var choice;
               if(this.SelectedObj.childrenPrimitives[0].tipo=="hor")
-                choice=1;
-              else choice =2;
+                choice=2;
+              else choice =1;
               this.sendMessage('/placeWall./'+this.turn+'./'+this.boardToString()+'./'+choice+'./['+posX+','+posY+']',function (data){
                   if(data.currentTarget.responseText=="ok"){
-                    if(choice==1)
+                    if(choice==2)
                       xmlscene.changePosPeca(posY-0.5,posX+0.6);
                     else xmlscene.changePosPeca(posY+0.4,posX-0.6);
                     xmlscene.changeState(0);
+                    xmlscene.changeTurn();
                     xmlscene.SelectedObj=null;
+                    if(choice==2)
+                      xmlscene.placeWall([posX,posY],'w');
+                    else xmlscene.placeWall([posX,posY],'q');
                   }
+                  xmlscene.wallsPlaced++;
                   xmlscene.SelectedPick=0;
              });
             }
@@ -107,6 +118,12 @@ Game.prototype.stateMachine = function(pick) {
 Game.prototype.changePosPeca = function(posY,posX) {
   this.SelectedObj.childrenPrimitives[0].changeY((14-posX+0.5)/14*20);
   this.SelectedObj.childrenPrimitives[0].changeX((posY-0.5)/11*20);
+}
+
+Game.prototype.changeTurn = function() {
+  if(this.turn==1)
+    this.turn=2;
+  else this.turn=1;
 }
 
 Game.prototype.boardToString = function() {
@@ -131,6 +148,23 @@ Game.prototype.sendMessage = function(string,onSuccess,onError) {
 
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
   request.send();
+}
+
+Game.prototype.changePawnPos = function(PosI,PosF,Char) {
+  this.board[2*PosI[0]-2][2*PosI[1]-2]='c';
+  this.board[2*PosF[0]-2][2*PosF[1]-2]=Char;
+}
+
+Game.prototype.placeWall = function(Pos,Char) {
+  if(Char=='q'){
+    this.board[2*Pos[0]-2][2*Pos[1]-1]=Char;
+    this.board[2*Pos[0]][2*Pos[1]-1]=Char;
+  }
+  else{
+     this.board[2*Pos[0]-1][Pos[1]]=Char;
+      this.board[2*Pos[0]-1][Pos[1]-1]=Char;
+  }
+  console.log(this.board);
 }
 
 Game.prototype.changeSelected = function(ind) {
