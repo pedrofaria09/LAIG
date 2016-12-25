@@ -1,13 +1,33 @@
 function XMLscene(app) {
+    this.xmlFile=1;
     CGFscene.call(this);
     this.app = app;
+    this.app.setInterface(null);
+    this.cameraTarget=null;
+    var myGraph = new MySceneGraph('tatooine.xml', this);
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
+XMLscene.prototype.changeScene = function() {
+  this.xmlFile++;
+  if(this.xmlFile>2)
+    this.xmlFile=1;
+  console.log(this.xmlFile);
+  switch(this.xmlFile){
+    case 1:
+      var myGraph = new MySceneGraph('tatooine.xml', this);
+      break;
+    case 2:
+      var myGraph = new MySceneGraph('tatooine.dsx', this);
+      break;
+  }
+}
+
 XMLscene.prototype.init = function(application) {
     CGFscene.prototype.init.call(this, application);
+
 
     this.initCameras();
 
@@ -30,15 +50,12 @@ XMLscene.prototype.init = function(application) {
     this.materialIndice = 0;
     this.materialsComponents = new Array();
 
-    this.pickmeId = 1;
 
-    //this.axis=new CGFaxis(this);
+
+    this.pickmeId = 1;
 };
 
 XMLscene.prototype.initLights = function() {
-    //this.lights[0].setPosition(2, 3, 3, 1);
-    //this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-    //this.lights[0].update();
 };
 
 XMLscene.prototype.initCameras = function() {
@@ -55,6 +72,9 @@ XMLscene.prototype.setDefaultAppearance = function() {
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function() {
+
+
+
     this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
     this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
@@ -72,11 +92,14 @@ XMLscene.prototype.onGraphLoaded = function() {
         this["luz" + j] = this.ative;
     }
 
-    var myInterface = new MyInterface();
-    this.app.setInterface(myInterface);
-    myInterface.setActiveCamera(this.camera);
-};
+    //if(this.app.interface==null){
+      var myInterface = new MyInterface();
+      this.app.setInterface(myInterface);
+      console.log(this.app);
+      myInterface.setActiveCamera(this.camera);
 
+
+};
 
 XMLscene.prototype.initiateMaterials = function(i) {
 
@@ -86,9 +109,6 @@ XMLscene.prototype.initiateMaterials = function(i) {
 }
 
 XMLscene.prototype.pickingBoard = function(i) {
-
-
-
 var material= new Material(this,null,null);
     for (var i = 0; i < 11; i++) {
         for(var j=0;j<14;j++){
@@ -107,12 +127,36 @@ XMLscene.prototype.updateCamera = function(i) {
     if (i >= this.graph.viewsList.length) {
         i = 0;
     }
+    if(i!=null){
+      this.cameraTarget={
+        'position':this.graph.viewsList[i].position,
+        'target':this.graph.viewsList[i].target,
+        'times':1
+      };
+      this.camera.far = this.graph.viewsList[i].far;
+      this.camera.near = this.graph.viewsList[i].near;
+      this.camera.fov = this.graph.viewsList[i].fov;
+    }else if(  this.cameraTarget!=null){
+      var array=vec4.create();
+      vec4.subtract(array, this.cameraTarget['position'],this.camera.position)
+      vec4.multiply(array, array,vec4.fromValues(this.cameraTarget['times']/100,this.cameraTarget['times']/100,this.cameraTarget['times']/100,1))
+      vec4.add(array, array,this.camera.position);
+      this.camera.setPosition(array);
 
-    this.camera.setPosition(this.graph.viewsList[i].position);
-    this.camera.setTarget(this.graph.viewsList[i].target);
-    this.camera.far = this.graph.viewsList[i].far;
-    this.camera.near = this.graph.viewsList[i].near;
-    this.camera.fov = this.graph.viewsList[i].fov;
+      var array=vec4.create();
+      vec4.subtract(array, this.cameraTarget['target'],this.camera.target)
+      vec4.multiply(array, array,vec4.fromValues(this.cameraTarget['times']/100,this.cameraTarget['times']/100,this.cameraTarget['times']/100,1))
+      vec4.add(array, array,this.camera.target);
+      this.camera.setTarget(array);
+
+      var arrayTeste=vec4.create();
+      vec4.subtract(arrayTeste, this.cameraTarget['position'],this.camera.position);
+      if(JSON.stringify(arrayTeste)==JSON.stringify((vec4.fromValues(0,0,0,0)))){
+        this.cameraTarget=null;
+      }
+      else this.cameraTarget['times']++;
+    }
+
 
     return i;
 }
@@ -190,19 +234,8 @@ XMLscene.prototype.display = function() {
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
-    // Draw axis
-    //this.graph.axis.display();
-
-    //this.setDefaultAppearance();
-
-    // ---- END Background, camera and axis setup
-
-    // it is important that things depending on the proper loading of the graph
-    // only get executed after the graph has loaded correctly.
-    // This is one possible way to do it
-
-
     if (this.graph.loadedOk) {
+      this.updateCamera(null);
         this.pickmeId = 1;
         if(this.game.SelectedPick!=0){
           this.paintSelected();

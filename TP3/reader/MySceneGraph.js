@@ -3,14 +3,11 @@ function MySceneGraph(filename, scene) {
     // Establish bidirectional references between scene and graph
     this.scene = scene;
     scene.graph = this;
+    this.filename = 'scenes/' + filename;
     // File reading
     this.reader = new CGFXMLreader();
-    /*
-     * Read the contents of the xml file, and refer to this class for loading and error handlers.
-     * After the file is read, the reader calls onXMLReady on this object.
-     * If any error occurs, the reader calls onXMLError on this object, with an error message
-     */
-    this.reader.open('scenes/' + filename, this);
+    this.reader.open(this.filename, this);
+
 }
 /*
  * Callback to be executed after successful reading
@@ -30,11 +27,12 @@ MySceneGraph.prototype.onXMLReady = function() {
     error = this.parseAnimations(rootElement);
     error = this.parseComponents(rootElement);
 
+
     if (error != null) {
         this.onXMLError(error);
         return;
     }
-    this.loadedOk = true;
+   this.loadedOk = true;
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
     this.scene.onGraphLoaded();
 };
@@ -80,9 +78,8 @@ MySceneGraph.prototype.parseGlobals = function(rootElement) {
         console.warn("You should have 2 attributes on scene");
         return -1;
     }
+      this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
     this.root = elem[0].attributes[0].nodeValue;
-    this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
-
 }
 
 MySceneGraph.prototype.parseAnimations = function(rootElement) {
@@ -169,6 +166,7 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 
 
 MySceneGraph.prototype.parseViews = function(rootElement) {
+
     elem = rootElement.getElementsByTagName('views');
     if (elem == null || elem.length == 0) {
         return "list element is missing.";
@@ -285,7 +283,6 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
         }
     }
 
-    //TODO VER DEPOIS!!!!!!
     for (var g = 0; g < 4; g++)
         backg.push(parseFloat(elem[0].children[1].attributes[g].nodeValue));
     this.background = backg;
@@ -293,7 +290,6 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
     for (var g = 0; g < 4; g++)
         amb.push(parseFloat(elem[0].children[0].attributes[g].nodeValue));
     this.ambient = amb;
-
 };
 
 
@@ -446,6 +442,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 
 
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
+
     elem = rootElement.getElementsByTagName('materials');
     if (elem == null || elem.length == 0) {
         return "list Materials element is missing.";
@@ -783,6 +780,9 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                   var y = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
                   this.priList[i] = new Wall(this.scene, elem[0].children[i].attributes[0].nodeValue,tipo, x,y);
                   break;
+                case "board":
+                  this.priList[i] = new Board(this.scene, elem[0].children[i].attributes[0].nodeValue);
+                  break;
                 case "patch":
                 if (elem[0].children[i].children[0].attributes.length != 4) {
                     console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
@@ -842,11 +842,15 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     elem = rootElement.getElementsByTagName('components');
     nnodes = elem[0].children.length;
     temp = new Array();
+
     this.componentsList = new Array();
-    console.log(elem);
-    //texture = new Array();
+
+
+
     isNotEqual = true;
+
     for (var x = 0; x < nnodes; x++) {
+
         childrenComponents = new Array();
         childrenComponents = new Array();
         childrenPrimitives = new Array();
@@ -992,14 +996,14 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
             this.componentsList[x].setMaterials(listMaterial);
             var texture;
             if (elem[0].children[x].children[2].attributes[0].nodeValue == 'inherit' || elem[0].children[x].children[2].attributes[0].nodeValue == 'none') {
-                CGFtexture = elem[0].children[x].children[2].attributes[0].nodeValue;
+                var CGFTexture = elem[0].children[x].children[2].attributes[0].nodeValue;
                 texture = elem[0].children[x].children[2].attributes[0].nodeValue;
             } else {
 
-                CGFtexture = this.getCGFTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
+                var CGFTexture = this.getCGFTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
                 texture = this.getTextureById(elem[0].children[x].children[2].attributes[0].nodeValue);
             }
-            this.componentsList[x].setCGFTextures(CGFtexture);
+            this.componentsList[x].setCGFTextures(CGFTexture);
             this.componentsList[x].setTextures(texture);
             if (elem[0].children[x].children[3].children.length == 0) {
                 console.warn("You must have at last 1 componentref or primitiveref element on components->id->" + elem[0].children[x].id + "->children");
@@ -1078,6 +1082,7 @@ MySceneGraph.prototype.getMaterialById = function(id) {
     }
 }
 MySceneGraph.prototype.getPrimitiveById = function(id) {
+
     for (var i = 0; i < this.priList.length; i++) {
         if (this.priList[i].id == id) {
             return this.priList[i];

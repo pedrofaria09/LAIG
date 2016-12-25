@@ -25,13 +25,13 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="Boavista" near="0.1" far="500" angle="0.4">
-            <from x="40" y="45" z="40"/>
+            <from x="30" y="30" z="30"/>
             <to x="0" y="0" z="0"/>
         </perspective>
 
         <perspective id="segundaVista" near="0.1" far="500" angle="0.4">
-            <from x="40" y="40" z="0"/>
-            <to x="5" y="5" z="5"/>
+            <from x="40" y="40" z="40"/>
+            <to x="20" y="20" z="0"/>
         </perspective>
 
         <perspective id="terceiraVista" near="0.5" far="400" angle="0.3">
@@ -102,6 +102,7 @@
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
         <texture id="corpo" file="./images/corpo.jpg" length_s="1" length_t="1"/>
+        <texture id="caseBoard" file="./images/caseBoard.jpg" length_s="1" length_t="1"/>
         <texture id="pe" file="./images/pe.png" length_s="1" length_t="1"/>
         <texture id="pefrente" file="./images/pefrente.jpg" length_s="1" length_t="1"/>
         <texture id="ombrofora" file="./images/ombrofora.jpg" length_s="1" length_t="1"/>
@@ -257,131 +258,135 @@
             <rectangle x1="0" y1="0" x2="1" y2="1"/>
         </primitive>
 
+        <primitive id="board">
+            <board/>
+        </primitive>
+
         <primitive id="peca1">
             <peca x="6.5" y="15"/>
         </primitive>
 
         <primitive id="wall1">
-            <wall tipo="hor" x="0" y="-1"/>
+            <wall tipo="hor" x="0.3" y="-1.7"/>
         </primitive>
 
         <primitive id="wall2">
-            <wall tipo="hor" x="0" y="-2"/>
+            <wall tipo="hor" x="0.3" y="-2.7"/>
         </primitive>
 
         <primitive id="wall3">
-            <wall tipo="hor" x="0" y="-3"/>
+            <wall tipo="hor" x="0.3" y="-3.7"/>
         </primitive>
 
         <primitive id="wall4">
-            <wall tipo="hor" x="4" y="-1"/>
+            <wall tipo="hor" x="4.3" y="-1.7"/>
         </primitive>
 
         <primitive id="wall5">
-            <wall tipo="hor" x="4" y="-2"/>
+            <wall tipo="hor" x="4.3" y="-2.7"/>
         </primitive>
 
         <primitive id="wall6">
-            <wall tipo="hor" x="4" y="-3"/>
+            <wall tipo="hor" x="4.3" y="-3.7"/>
         </primitive>
 
         <primitive id="wall7">
-            <wall tipo="hor" x="8" y="-1"/>
+            <wall tipo="hor" x="8.3" y="-1.7"/>
         </primitive>
 
         <primitive id="wall8">
-            <wall tipo="hor" x="8" y="-2"/>
+            <wall tipo="hor" x="8.3" y="-2.7"/>
         </primitive>
         <primitive id="wall9">
-            <wall tipo="ver" x="12" y="-0.5"/>
+            <wall tipo="ver" x="12.3" y="-1.1"/>
         </primitive>
         <primitive id="wall10">
-            <wall tipo="ver" x="12.7" y="-0.5"/>
+            <wall tipo="ver" x="13" y="-1.1"/>
         </primitive>
         <primitive id="wall11">
-            <wall tipo="ver" x="13.4" y="-0.5"/>
+            <wall tipo="ver" x="13.7" y="-1.1"/>
         </primitive>
 
         <primitive id="wall12">
-            <wall tipo="ver" x="14.1" y="-0.5"/>
+            <wall tipo="ver" x="14.4" y="-1.1"/>
         </primitive>
 
         <primitive id="wall13">
-            <wall tipo="ver" x="14.8" y="-0.5"/>
+            <wall tipo="ver" x="15.1" y="-1.1"/>
         </primitive>
 
         <primitive id="wall14">
-            <wall tipo="ver" x="15.5" y="-0.5"/>
+            <wall tipo="ver" x="15.8" y="-1.1"/>
         </primitive>
 
         <primitive id="wall15">
-            <wall tipo="ver" x="16.2" y="-0.5"/>
+            <wall tipo="ver" x="16.5" y="-1.1"/>
         </primitive>
 
         <primitive id="wall16">
-            <wall tipo="ver" x="16.9" y="-0.5"/>
+            <wall tipo="ver" x="17.2  " y="-1.1"/>
         </primitive>
 
         <primitive id="wall17">
-            <wall tipo="hor" x="0" y="21"/>
+            <wall tipo="hor" x="0.3" y="21.3"/>
         </primitive>
 
         <primitive id="wall18">
-            <wall tipo="hor" x="0" y="23"/>
+            <wall tipo="hor" x="0.3" y="23.3"/>
         </primitive>
 
         <primitive id="wall19">
-            <wall tipo="hor" x="0" y="22"/>
+            <wall tipo="hor" x="0.3" y="22.3"/>
         </primitive>
 
         <primitive id="wall20">
-            <wall tipo="hor" x="4" y="21"/>
+            <wall tipo="hor" x="4.3" y="21.3"/>
         </primitive>
 
         <primitive id="wall21">
-            <wall tipo="hor" x="4" y="23"/>
+            <wall tipo="hor" x="4.3" y="23.3"/>
         </primitive>
 
         <primitive id="wall22">
-            <wall tipo="hor" x="4" y="22"/>
+            <wall tipo="hor" x="4.3" y="22.3"/>
         </primitive>
 
         <primitive id="wall23">
-            <wall tipo="hor" x="8" y="21"/>
+            <wall tipo="hor" x="8.3.3" y="21.3"/>
         </primitive>
 
         <primitive id="wall24">
-            <wall tipo="hor" x="8" y="22"/>
+            <wall tipo="hor" x="8.3" y="22.3"/>
         </primitive>
 
         <primitive id="wall25">
-            <wall tipo="ver" x="12" y="23.5"/>
+            <wall tipo="ver" x="12.3" y="23.9"/>
         </primitive>
         <primitive id="wall26">
-            <wall tipo="ver" x="12.7" y="23.5"/>
+            <wall tipo="ver" x="13" y="23.9"/>
         </primitive>
         <primitive id="wall27">
-            <wall tipo="ver" x="13.4" y="23.5"/>
+            <wall tipo="ver" x="13.7" y="23.9"/>
         </primitive>
 
         <primitive id="wall28">
-            <wall tipo="ver" x="14.1" y="23.5"/>
+            <wall tipo="ver" x="14.4" y="23.9"/>
         </primitive>
 
         <primitive id="wall29">
-            <wall tipo="ver" x="14.8" y="23.5"/>
+            <wall tipo="ver" x="15.1" y="23.9"/>
         </primitive>
 
         <primitive id="wall30">
-            <wall tipo="ver" x="15.5" y="23.5"/>
+            <wall tipo="ver" x="15.8" y="23.9"/>
         </primitive>
 
         <primitive id="wall31">
-            <wall tipo="ver" x="16.2" y="23.5"/>
+            <wall tipo="ver" x="16.5" y="23.9"/>
         </primitive>
 
         <primitive id="wall32">
-            <wall tipo="ver" x="16.9" y="23.5"/>
+            <wall tipo="ver" x="17.2" y="23.9"/>
         </primitive>
 
         <primitive id="peca2">
@@ -506,6 +511,7 @@
             <texture id="none"/>
             <children>
                 <componentref id="paredeDir"/>
+                <componentref id="caseBoard"/>
                 <componentref id="peca1"/>
                 <componentref id="peca2"/>
                 <componentref id="peca3"/>
@@ -560,6 +566,22 @@
 
             <children>
                 <primitiveref id="chessboard"/>
+            </children>
+        </component>
+
+        <component id="caseBoard">
+            <transformation>
+              <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="caseBoard"/>
+
+            <children>
+                <primitiveref id="board"/>
             </children>
         </component>
 

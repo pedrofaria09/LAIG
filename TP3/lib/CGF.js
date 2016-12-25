@@ -2247,7 +2247,7 @@ dat.utils.css = function() {
             var c = document.createElement("style");
             c.type = "text/css";
             c.innerHTML = a;
-            b.getElementsByTagName("head")[0].appendChild(c);
+           b.getElementsByTagName("head")[0].appendChild(c);
         }
     };
 }();
@@ -3354,11 +3354,16 @@ dat.GUI = dat.gui.GUI = function(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) {
         a.autoPlace && (o.isUndefined(a.parent) && (D && (E = document.createElement("div"),
         n.addClass(E, "dg"),
         n.addClass(E, H.CLASS_AUTO_PLACE_CONTAINER),
+
         document.body.appendChild(E),
         D = !1),
         E.appendChild(this.domElement),
         n.addClass(this.domElement, H.CLASS_AUTO_PLACE)),
         this.parent || v(c, a.width));
+        console.log(document.body.children[2]);
+        if(document.body.children[2].children.length>1)
+          document.body.children[2].removeChild(document.body.children[2].children[0]);
+
         n.bind(window, "resize", function() {
             c.onResize();
         });

@@ -65,23 +65,29 @@ Game.prototype.stateMachine = function(pick) {
             this.sendMessage('/move./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']./['+posX+','+posY+']',function (data){
                 if(data.currentTarget.responseText=="ok"){
                   xmlscene.changePosPeca(posY,posX);
-                  if(xmlscene.wallsPlaced==32)
-                    {
-                      xmlscene.changeState(0);
-                      xmlscene.changeTurn();
-                    }else xmlscene.changeState(2);
+
                   xmlscene.SelectedPeca=0;
                   xmlscene.SelectedObj=null;
                   if(xmlscene.turn==1)
                   xmlscene.changePawnPos(pos,[posX,posY],'r');
                   else xmlscene.changePawnPos(pos,[posX,posY],'e');
+
+                  if(xmlscene.hasGameEnded()){
+                    xmlscene.changeState(4);
+                  }
+                  else if(xmlscene.wallsPlaced==32)
+                    {
+                      xmlscene.changeState(0);
+                      xmlscene.changeTurn();
+                    }else xmlscene.changeState(2);
+
                 }
                 xmlscene.SelectedPick=0;
            });
           }
           break;
         case 2:
-            if((pick>158 && pick<176 && this.turn==2)||(pick>175 && this.turn==1)){
+            if((pick>158 && pick<175 && this.turn==2)||(pick>174 && this.turn==1)){
                 this.SelectedWall=this.SelectedObj.childrenPrimitives[0];
                 xmlscene.changeState(3);
             }
@@ -174,7 +180,6 @@ Game.prototype.placeWall = function(Pos,Char) {
      this.board[2*Pos[0]-1][Pos[1]]=Char;
       this.board[2*Pos[0]-1][Pos[1]-1]=Char;
   }
-  console.log(this.board);
 }
 
 Game.prototype.changeSelected = function(ind) {
@@ -185,6 +190,11 @@ Game.prototype.changeState = function(ind) {
   this.State=ind;
 }
 
+Game.prototype.hasGameEnded = function(ind) {
+  if((this.board[6][6]=='e' && this.board[6][14]=='e')||(this.board[20][6]=='r' && this.board[20][14]=='r'))
+    return true;
+  else return false;
+}
 
 Game.prototype.coordsToPosition = function(coords) {
     return [15-Math.ceil(coords[0]/20*14),Math.ceil(coords[1]/20*11)];

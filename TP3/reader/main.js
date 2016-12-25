@@ -42,7 +42,7 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js','primitives/Wall.js','primitives/ChessBoard.js','primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js','Game.js', 'primitives/MyCylinder.js', 'primitives/Circle.js','primitives/Peca.js', 'Animation.js', 'LinearAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js','primitives/Vehicle.js', 'CircularAnimation.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js','primitives/Wall.js','primitives/ChessBoard.js','primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js','Game.js', 'primitives/MyCylinder.js', 'primitives/Circle.js','primitives/Peca.js', 'Animation.js', 'LinearAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js','primitives/Vehicle.js', 'CircularAnimation.js','primitives/Board.js',
 
     main = function() {
         // Standard application, scene and interface setup
@@ -59,12 +59,9 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'M
 
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
-
-        var filename = getUrlVars()['file'] || "demo.xml";
-
         // create and load graph, and associate it to scene.
         // Check console for loading errors
-        var myGraph = new MySceneGraph('tatooine.xml', myScene);
+
 
         // start
         app.run();

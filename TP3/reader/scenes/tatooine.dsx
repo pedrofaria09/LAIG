@@ -249,13 +249,7 @@
             <torus inner="1" outer="1" slices="50" loops="50"/>
         </primitive>
 
-        <primitive id="yolo">
-              <chessboard du="8" dv="8" textureref="corpo" su="5" sv="5">
-                 <c1 r="1" g="0" b="0" a="1" />
-                 <c2 r="0" g="1" b="0" a="1" />
-                 <cs r="0" g="0" b="f1f" a="1" />
-              </chessboard>
-        </primitive>
+        
 
     </primitives>
 
