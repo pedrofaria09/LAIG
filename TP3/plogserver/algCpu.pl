@@ -85,12 +85,12 @@ availableWallVertical(Board,X,Y):-(checkColisionVertical(Board,[X,Y]),P1 is 2*X-
  P1 is 2*X-1,P2 is 2*Y,replaceMatrix(Board,P1,P2,1,q,StackBoard),P3 is 2*X+1,replaceMatrix(StackBoard,P3,P2,1,q,NewBoard),NewVert is Vert-1,NewHor is Hor,retract(availableWallV(_))).
 
 %receives the Board and the Turn and updates The NewBoard with a random movement given a list of movements available to a random pawn
- movePawnRandomly(Board,Turn,NewBoard):-pawn1(Pawn1),pawn2(Pawn2),pawn3(Pawn3),pawn4(Pawn4),random(1,3,RandomPawn),
+ movePawnRandomly(Board,Turn,NewBoard):-getpawnsPath(Board,Pawn1,Pawn2,Pawn3,Pawn4,1),random(1,3,RandomPawn),
  (RandomPawn==1, (Turn==1,availablePositions(Board,Pawn1);Turn==2,availablePositions(Board,Pawn3));
  RandomPawn==2,(Turn==1,availablePositions(Board,Pawn2);Turn==2,availablePositions(Board,Pawn4))),
- availableList(List),retract(availableList(_)),sizeOfList(List,Size), RealSize is Size+1,random(1,RealSize,RandomPos),positionInList(RandomPos,List,1,Choice),
- (RandomPawn==1,(Turn==1,move(Board,Pawn1,Choice,NewPawn,NewBoard,r),retract(pawn1(_)),asserta(pawn1(NewPawn));Turn==2,move(Board,Pawn3,Choice,NewPawn,NewBoard,e),retract(pawn3(_)),asserta(pawn3(NewPawn)));
- RandomPawn==2,(Turn==1,move(Board,Pawn2,Choice,NewPawn,NewBoard,r),retract(pawn2(_)),asserta(pawn2(NewPawn));Turn==2,move(Board,Pawn4,Choice,NewPawn,NewBoard,e),retract(pawn4(_)),asserta(pawn4(NewPawn)))).
+ availableList(List),write(List),nl,retract(availableList(_)),sizeOfList(List,Size), RealSize is Size+1,random(1,RealSize,RandomPos),positionInList(RandomPos,List,1,Choice),
+ (RandomPawn==1,(Turn==1,move(Board,Pawn1,Choice,NewPawn,NewBoard,r),(retract(pawn1(_)),!;true,!),asserta(pawn1(NewPawn));Turn==2,move(Board,Pawn3,Choice,NewPawn,NewBoard,e),(retract(pawn3(_)),!;true,!),asserta(pawn3(NewPawn)));
+ RandomPawn==2,(Turn==1,move(Board,Pawn2,Choice,NewPawn,NewBoard,r),(retract(pawn2(_)),!;true,!),asserta(pawn2(NewPawn));Turn==2,move(Board,Pawn4,Choice,NewPawn,NewBoard,e),(retract(pawn4(_)),!;true,!),asserta(pawn4(NewPawn)))).
 
 %returns the size of a list in Size
  sizeOfList([],0).

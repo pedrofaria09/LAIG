@@ -2,11 +2,13 @@
  * Peca
  * @constructor
  */
-function Peca(scene, id, x,y) {
+function Peca(scene, id, x,y,realx,realy) {
     CGFobject.call(this, scene);
     this.id = id;
     this.x=x;
     this.y=y;
+    this.realx=realx;
+    this.realy=realy;
     this.pecaId=id.split('a')[1];
     this.cil = new MyCylinder(scene,null, 0.5,0.5,1, 20,20);
 

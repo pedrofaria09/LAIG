@@ -68,8 +68,9 @@ handle_request(syntax_error, 'Syntax Error', '400 Bad Request') :- !.
 handle_request(_, 'Bad Request', '400 Bad Request').
 
 translateInput(['checkChosenPawn',Turn,Board,Pos,_],'ok'):-write('suag '),write(Pos),nl,checkChosenPawn(Turn,Board,Pos),!.
-translateInput(['move',Turn,Board,PosI,PosF],'ok'):-write('suag '),(retract(availableList(_));true),posToMov(PosI,PosF,Result),write(Result),nl,availablePositions(Board,PosI),availableList(List),write(List),nl,member(Result,List),!.
+translateInput(['move',Turn,Board,PosI,PosF],'ok'):-write('suag '),(retract(availableList(_));true),posToMov(PosI,PosF,Result),availablePositions(Board,PosI),availableList(List),write(List),nl,member(Result,List),!.
 translateInput(['placeWall',_,Board,Choice,Pos],'ok'):-write('suag '),write(Pos),nl,placeWall(Choice,Board,_,Pos),!.
+translateInput(['moveRandom',Turn,Board,Choice,Pos],NewBoard):-write('suag '),nl,movePawnRandomly(Board,Turn,NewBoard),!.
 
 translateInput([_,_,_,_,_],'no'):-!.
 

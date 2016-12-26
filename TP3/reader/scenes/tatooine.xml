@@ -263,7 +263,7 @@
         </primitive>
 
         <primitive id="peca1">
-            <peca x="6.5" y="15"/>
+            <peca x="6.5" y="15" realx="4" realy="4"/>
         </primitive>
 
         <primitive id="wall1">
@@ -390,15 +390,15 @@
         </primitive>
 
         <primitive id="peca2">
-            <peca x="13.5" y="15"/>
+            <peca x="13.5" y="15" realx="4" realy="8"/>
         </primitive>
 
         <primitive id="peca3">
-            <peca x="6.5" y="5"/>
+            <peca x="6.5" y="5" realx="11" realy="4"/>
         </primitive>
 
         <primitive id="peca4">
-            <peca x="13.5" y="5"/>
+            <peca x="13.5" y="5" realx="11" realy="8"/>
         </primitive>
 
         <primitive id="quadradoTeste">

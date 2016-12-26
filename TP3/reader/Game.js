@@ -37,6 +37,99 @@ function Game(scene) {
 }
 
 Game.prototype.stateMachine = function(pick) {
+  if(this.scene.typeOfGame=="Human vs Human")
+    this.stateMachineHuman(pick);
+  else if(this.scene.typeOfGame=="CPU vs CPU")
+    this.stateMachineCPU();
+}
+
+Game.prototype.stateMachineCPU = function() {
+  var xmlscene=this;
+  console.log(this.board);
+  this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
+    var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+    xmlscene.whoMoved(newBoard);
+ });
+}
+
+Game.prototype.getBoard = function(board) {
+  var realBoard=[];
+  var array=[];
+  for(var i=0;i<board.length;i++){
+    if(board[i]!='[' && board[i]!=']'&& board[i]!=',')
+      array.push(board[i]);
+    else if(board[i]==']'){
+      realBoard.push(array);
+      array=[];
+    }
+  }
+  return realBoard;
+}
+
+Game.prototype.whoMoved = function(board) {
+  var peca;
+  for(var i=0;i<this.scene.pecas.length;i++){
+    var posx=2*this.scene.pecas[i].realx-2;
+    var posy=2*this.scene.pecas[i].realy-2;
+      if(i<2 && board[posx][posy]!='r'){
+        console.log([posx,posy]);
+
+        peca=this.scene.pecas[i];
+        console.log(peca);
+      }
+      else if(i>2 && board[posx][posy]!='e'){
+        peca=this.scene.pecas[i];
+      }
+  }
+  this.board=board;
+  var posMoved;
+  if(peca.pecaId<3)
+    posMoved= this.findPositionMoved(board,'r',[peca.realy,peca.realx]);
+  else posMoved = this.findPositionMoved(board,'e',[peca.realy,peca.realx]);
+    peca.realx=posMoved[0];
+    peca.realy=posMoved[1];
+    this.changePosPeca(posMoved[1],posMoved[0],peca);
+}
+
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+Game.prototype.findPositionMoved = function(board,char,pos) {
+  console.log(pos);
+  var array=[];
+  for(var i=0;i<board.length;i++){
+    for(var j=0;j<board[i].length;j++){
+      if(board[i][j]==char){
+          if(char=='r'){
+            console.log([this.scene.pecas[1].realx,this.scene.pecas[1].realy]);
+            console.log([this.scene.pecas[0].realx,this.scene.pecas[0].realy]);
+            console.log([(i+2)/2,(j+2)/2]);
+            if(!arraysEqual([(i+2)/2,(j+2)/2], [this.scene.pecas[0].realx,this.scene.pecas[0].realy]) && !arraysEqual([(i+2)/2,(j+2)/2] ,[this.scene.pecas[1].realx,this.scene.pecas[1].realy])){
+              console.log([this.scene.pecas[0].realx,this.scene.pecas[0].realy]);
+              console.log([(i+2)/2,(j+2)/2]);
+              return [(i+2)/2,(j+2)/2];
+            }
+
+          }else if(char=='e'){
+            if([(i+2)/2,(j+2)/2] !=[this.scene.pecas[02].realx,this.scene.pecas[2].realy] && [(i+2)/2,(j+2)/2] !=[this.scene.pecas[3].realx,this.scene.pecas[3].realy])
+                          return [(i+2)/2,(j+2)/2];
+          }}
+
+
+
+    }
+  }
+  return null;
+}
+
+Game.prototype.stateMachineHuman = function(pick) {
   var xmlscene=this;
   console.log(this.State);
     switch(this.State){
@@ -131,9 +224,12 @@ Game.prototype.stateMachine = function(pick) {
     }
 }
 
-Game.prototype.changePosPeca = function(posY,posX) {
-  this.SelectedObj.childrenPrimitives[0].changeY((14-posX+0.5)/14*20);
-  this.SelectedObj.childrenPrimitives[0].changeX((posY-0.5)/11*20);
+Game.prototype.changePosPeca = function(posY,posX,updatePeca) {
+  console.log(posY);
+  console.log(posX);
+  var peca=updatePeca || this.SelectedObj.childrenPrimitives[0];
+  peca.changeY((14-posX+0.5)/14*20);
+  peca.changeX((posY-0.5)/11*20);
 }
 
 Game.prototype.changeTurn = function() {

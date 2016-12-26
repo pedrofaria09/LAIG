@@ -772,7 +772,10 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                 case "peca":
                   var x = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
                   var y = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                  this.priList[i] = new Peca(this.scene, elem[0].children[i].attributes[0].nodeValue, x,y);
+                  var realx = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                  var realy = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                  this.priList[i] = new Peca(this.scene, elem[0].children[i].attributes[0].nodeValue, x,y,realx,realy);
+                  this.scene.pecas.push(this.priList[i]);
                   break;
                 case "wall":
                   var tipo = elem[0].children[i].children[0].attributes[0].nodeValue;

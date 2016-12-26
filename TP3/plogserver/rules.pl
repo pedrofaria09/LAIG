@@ -1,5 +1,5 @@
 %given a board, after placing a wall it calls predicates to check if all the pawns can get to it's opponent's initial positions
-checkPawnsPath(Board):- write(Board),nl,getpawnsPath(Board,Pawn1,Pawn2,Pawn3,Pawn4,1),write(Pawn1),nl,write(Pawn2),nl,write(Pawn3),nl,write(Pawn4),nl,checkPawnPath(Board,Pawn1,1),checkPawnPath(Board,Pawn2,1),checkPawnPath(Board,Pawn3,2),checkPawnPath(Board,Pawn4,2).
+checkPawnsPath(Board):- getpawnsPath(Board,Pawn1,Pawn2,Pawn3,Pawn4,1),checkPawnPath(Board,Pawn1,1),checkPawnPath(Board,Pawn2,1),checkPawnPath(Board,Pawn3,2),checkPawnPath(Board,Pawn4,2).
 
 getpawnsPath([L1|L2],Pawn1,Pawn2,Pawn3,Pawn4,Counter):-getpawnsPathAux(L1,Pawn1,Pawn2,Pawn3,Pawn4,Counter,1),Counter1 is Counter+1,getpawnsPath(L2,Pawn1,Pawn2,Pawn3,Pawn4,Counter1).
 getpawnsPath([],_,_,_,_,_).
@@ -8,7 +8,7 @@ getpawnsPathAux([],_,_,_,_,_,_).
 %given a Board, and a player, checks if for the pawn (X,Y) can arrive to its opponent's final position.
 checkPawnPath(Board,[X,Y],Player):-(Player==2,X1 is 2*X-1,Y1 is 2*Y-1,assert(visited([[X1,Y1]])),checkPath(Board,X1,Y1,[7,7],[7,15]),
 retract(visited(_));
-Player==1,X1 is 2*X-1,Y1 is 2*Y-1,write(X1),write(' '),write(Y1),nl,assert(visited([[X1,Y1]])),checkPath(Board,X1,Y1,[21,7],[21,15]),
+Player==1,X1 is 2*X-1,Y1 is 2*Y-1,assert(visited([[X1,Y1]])),checkPath(Board,X1,Y1,[21,7],[21,15]),
 retract(visited(_)))
 ;retract(visited(_)),fail.
 
@@ -22,7 +22,7 @@ checkPawnColision(Board,[X,Y]):-getElementFromMatrix(Board,X,Y,1,1,Value),Value=
 
 %given a Board, a position and the kind of movement, checks if it is able to get there, whithout crossing any walls
 canPassWalls(Board,[P1,P2],Char):-Char=='NN',P1-2>0,P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1-4,getElementFromMatrix(Board,P4,P2,1,1,Value2),Value2\=w;
-Char=='N',P1-1>0,P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),write(Value1),nl,Value1\=w,write('yolo');
+Char=='N',P1-1>0,P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w;
 Char=='SS',P1+2<15,P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1+2,getElementFromMatrix(Board,P4,P2,1,1,Value2),Value2\=w;
 Char=='S',P1+1<15,P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w;
 Char=='OO',P2-2>0,P3 is 2*P1-1,P4 is 2*P2-2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P2-4,getElementFromMatrix(Board,P3,P5,1,1,Value2),Value2\=q;
