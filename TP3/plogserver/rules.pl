@@ -26,17 +26,17 @@ Char=='N',P1-1>0,P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value
 Char=='SS',P1+2<15,P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1+2,getElementFromMatrix(Board,P4,P2,1,1,Value2),Value2\=w;
 Char=='S',P1+1<15,P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w;
 Char=='OO',P2-2>0,P3 is 2*P1-1,P4 is 2*P2-2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P2-4,getElementFromMatrix(Board,P3,P5,1,1,Value2),Value2\=q;
-Char=='O',P2-1>0,P3 is 2*P1-1, P4 is 2*P2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q;
+Char=='O',P2-1>0,P3 is 2*P1-1, P4 is 2*P2-2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q;
 Char=='EE',P2+2<12,P3 is 2*P1-1,P4 is 2*P2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P2-2,getElementFromMatrix(Board,P3,P5,1,1,Value2),Value2\=q;
 Char=='E',P2+1<12,P3 is 2*P1-1, P4 is 2*P2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q;
 Char=='SE',P2+1<12,P1+1<15,(P3 is 2*P1-1,P4 is 2*P2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P1 ,P6 is P2 +1,getElementFromMatrix(Board,P5,P6,1,1,Value2),Value2\=w;
-                            P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1+1,P5 is 2*P2,getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=w) ;
-Char=='NE',P1-1>0,P2+1<12,(P3 is 2*P1-1,P4 is 2*P2,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P1-2 ,P6 is P2 +1,getElementFromMatrix(Board,P5,P6,1,1,Value2),Value2\=w;
-                           P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1-3,P5 is 2*P2,getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=w);
+                            P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1+1,P5 is 2*P2,getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=q) ;
+Char=='NE',P1-1>0,P2+1<12,(P3 is 2*P1-1,P4 is 2*P2,write(P3),nl,getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P1-2 ,P6 is P2 +1,getElementFromMatrix(Board,P5,P6,1,1,Value2),Value2\=w;
+                           P3 is 2*P1-2,write(P3),nl,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1-3,P5 is 2*P2,getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=q);
 Char=='NO',P2-1>0,P1-1>0,(P3 is 2*P1-1,P4 is 2*(P2-1),getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*(P1-1) ,P6 is P2 -1,getElementFromMatrix(Board,P5,P6,1,1,Value2),Value2\=w;
-                           P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1-3,P5 is 2*(P2-1),getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=w);
+                           P3 is 2*P1-2,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1-3,P5 is 2*(P2-1),getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=q);
 Char=='SO',P2-1>0,P1+1<15,(P3 is 2*P1-1,P4 is 2*(P2-1),getElementFromMatrix(Board,P3,P4,1,1,Value1),Value1\=q,P5 is 2*P1 ,P6 is P2 -1,getElementFromMatrix(Board,P5,P6,1,1,Value2),Value2\=w;
-                           P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1+1,P5 is 2*(P2-1),getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=w).
+                           P3 is 2*P1,getElementFromMatrix(Board,P3,P2,1,1,Value1),Value1\=w,P4 is 2*P1+1,P5 is 2*(P2-1),getElementFromMatrix(Board,P4,P5,1,1,Value2),Value2\=q).
 
 %given a Board, an initial position (X,Y) and two final positions ([C1,C2] and [C3,C4]), checks if from the initial position, the pawn can arrive to the two final positions
 checkPath(Board,X,Y,[C1,C2],[C3,C4]):-
