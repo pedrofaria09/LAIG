@@ -425,6 +425,10 @@
             <sphere radius="1" slices="50" stacks="50"/>
         </primitive>
 
+        <primitive id="basetable">
+            <cylinder base="1" top="2" height="4" slices="50" stacks="50"/>
+        </primitive>
+
         <primitive id="cilindroBB2">
             <cylinder base="0.3" top="0.52" height="0.5" slices="50" stacks="50"/>
         </primitive>
@@ -510,44 +514,138 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="paredeDir"/>
-                <componentref id="caseBoard"/>
-                <componentref id="peca1"/>
-                <componentref id="peca2"/>
-                <componentref id="peca3"/>
-                <componentref id="peca4"/>
-                <componentref id="wall1"/>
-                <componentref id="wall2"/>
-                <componentref id="wall3"/>
-                <componentref id="wall4"/>
-                <componentref id="wall5"/>
-                <componentref id="wall6"/>
-                <componentref id="wall7"/>
-                <componentref id="wall8"/>
-                <componentref id="wall9"/>
-                <componentref id="wall10"/>
-                <componentref id="wall11"/>
-                <componentref id="wall12"/>
-                <componentref id="wall13"/>
-                <componentref id="wall14"/>
-                <componentref id="wall15"/>
-                <componentref id="wall16"/>
-                <componentref id="wall17"/>
-                <componentref id="wall18"/>
-                <componentref id="wall19"/>
-                <componentref id="wall20"/>
-                <componentref id="wall21"/>
-                <componentref id="wall22"/>
-                <componentref id="wall23"/>
-                <componentref id="wall24"/>
-                <componentref id="wall25"/>
-                <componentref id="wall26"/>
-                <componentref id="wall27"/>
-                <componentref id="wall28"/>
-                <componentref id="wall29"/>
-                <componentref id="wall30"/>
-                <componentref id="wall31"/>
-                <componentref id="wall32"/>
+                <componentref id="table"/>
+                <componentref id="allGame"/>
+            </children>
+        </component>
+
+        <component id="table">
+            <transformation>
+              <translate x="10" y="10" z="10"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="torusTop"/>
+                <componentref id="torusMed"/>
+                <componentref id="torusBot"/>
+                <componentref id="basetable"/>
+            </children>
+        </component>
+
+        <component id="allGame">
+            <transformation>
+              <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+              <componentref id="caseBoard"/>
+              <componentref id="paredeDir"/>
+              <componentref id="peca1"/>
+              <componentref id="peca2"/>
+              <componentref id="peca3"/>
+              <componentref id="peca4"/>
+              <componentref id="wall1"/>
+              <componentref id="wall2"/>
+              <componentref id="wall3"/>
+              <componentref id="wall4"/>
+              <componentref id="wall5"/>
+              <componentref id="wall6"/>
+              <componentref id="wall7"/>
+              <componentref id="wall8"/>
+              <componentref id="wall9"/>
+              <componentref id="wall10"/>
+              <componentref id="wall11"/>
+              <componentref id="wall12"/>
+              <componentref id="wall13"/>
+              <componentref id="wall14"/>
+              <componentref id="wall15"/>
+              <componentref id="wall16"/>
+              <componentref id="wall17"/>
+              <componentref id="wall18"/>
+              <componentref id="wall19"/>
+              <componentref id="wall20"/>
+              <componentref id="wall21"/>
+              <componentref id="wall22"/>
+              <componentref id="wall23"/>
+              <componentref id="wall24"/>
+              <componentref id="wall25"/>
+              <componentref id="wall26"/>
+              <componentref id="wall27"/>
+              <componentref id="wall28"/>
+              <componentref id="wall29"/>
+              <componentref id="wall30"/>
+              <componentref id="wall31"/>
+              <componentref id="wall32"/>
+            </children>
+        </component>
+        <component id="basetable">
+            <transformation>
+              <scale x="5" y="2" z="5"/>
+              <translate x="0" y="-8" z="-4"/>
+              <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="basetable"/>
+            </children>
+        </component>
+
+        <component id="torusTop">
+            <transformation>
+              <scale x="5" y="2" z="5"/>
+              <translate x="0" y="-6" z="-4"/>
+              <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+
+        <component id="torusMed">
+            <transformation>
+              <scale x="3.5" y="2" z="3.5"/>
+              <translate x="0" y="-7" z="-6"/>
+              <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+        <component id="torusBot">
+            <transformation>
+              <scale x="2" y="2" z="2"/>
+              <translate x="0" y="-8" z="-10"/>
+              <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="torus"/>
             </children>
         </component>
 

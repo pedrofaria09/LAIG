@@ -28,7 +28,6 @@ MyInterface.prototype.init = function(application) {
     this.gui = new dat.GUI();
 
     var group = this.gui.addFolder("Options");
-    group.open();
 
     // add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
     // e.g. this.option1=true; this.option2=false;
@@ -36,13 +35,9 @@ MyInterface.prototype.init = function(application) {
         this.nomeLuz = ("luz" + i);
         group.add(this.scene, this.nomeLuz);
     }
-    //group.add(this.scene, 'option1');
-    //group.add(this.scene, 'option2');
-
-    // add a slider
-    // must be a numeric variable of the scene, initialized in scene.init e.g.
-    // this.speed=3;
-    // min and max values can be specified as parameters
+    //this.gui.add(this.scene, 'speed', -5, 5);
+    this.gui.add(this.scene, "typeOfGame", ['Human vs Human','Human vs CPU','CPU vs CPU']);
+    this.gui.add(this.scene, "dificulty", ['Hard','Impossible']);
 
     return true;
 };
