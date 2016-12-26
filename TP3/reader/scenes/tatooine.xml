@@ -521,7 +521,7 @@
 
         <component id="table">
             <transformation>
-              <translate x="10" y="10" z="10"/>
+              <translate x="10" y="9.9" z="10"/>
             </transformation>
 
             <materials>

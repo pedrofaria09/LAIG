@@ -36,10 +36,10 @@ function Game(scene) {
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c']];
 }
 
-Game.prototype.stateMachine = function(pick) {
+Game.prototype.stateMachine = function(pick) {  console.log(this.dificulty);
   if(this.scene.typeOfGame=="Human vs Human")
     this.stateMachineHuman(pick);
-  else if(this.scene.typeOfGame=="CPU vs CPU")
+  else if(this.scene.typeOfGame=="CPU vs CPU" && this.scene.dificulty!=null)
     this.stateMachineCPU();
 }
 
@@ -48,23 +48,43 @@ Game.prototype.stateMachineCPU = function() {
   console.log(this.State);
   switch(this.State){
     case 0:
-    this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
-      var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
-      xmlscene.whoMoved(newBoard);
-      if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
-        xmlscene.changeState(1);
-      else xmlscene.changeTurn();
-    });
-
+    if(this.scene.dificulty=="Random"){
+      this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.whoMoved(newBoard);
+        if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+          xmlscene.changeState(1);
+        else xmlscene.changeTurn();
+      });
+    }else if(this.scene.dificulty=="Impossible"){
+      this.sendMessage('/moveSmart./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
+        console.log(data.currentTarget.responseText);
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.whoMoved(newBoard);
+        if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+          xmlscene.changeState(1);
+        else xmlscene.changeTurn();
+      });
+    }
     break;
     case 1:
     var walls=this.findNumberWalls();
-    this.sendMessage('/placeRandom./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
-      var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
-      xmlscene.placeRandomWall(newBoard);
-      xmlscene.changeState(0);
-      xmlscene.changeTurn();
-    });
+    if(this.scene.dificulty=="Random"){
+      this.sendMessage('/placeRandom./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.placeRandomWall(newBoard);
+        xmlscene.changeState(0);
+        xmlscene.changeTurn();
+      });
+    }else if(this.scene.dificulty=="Impossible"){
+      this.sendMessage('/placeSmart./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.placeRandomWall(newBoard);
+        xmlscene.changeState(0);
+        xmlscene.changeTurn();
+      });
+    }
+
     break;
   }
 
@@ -290,7 +310,6 @@ Game.prototype.stateMachineHuman = function(pick) {
                  xmlscene.changeState(2);
                  this.SelectedObj=null;
              }
-
             }
           break;
     }
