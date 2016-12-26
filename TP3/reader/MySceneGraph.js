@@ -782,6 +782,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                   var x = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
                   var y = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
                   this.priList[i] = new Wall(this.scene, elem[0].children[i].attributes[0].nodeValue,tipo, x,y);
+                  this.scene.walls.push(this.priList[i]);
                   break;
                 case "board":
                   this.priList[i] = new Board(this.scene, elem[0].children[i].attributes[0].nodeValue);

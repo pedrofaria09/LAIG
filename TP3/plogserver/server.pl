@@ -70,7 +70,8 @@ handle_request(_, 'Bad Request', '400 Bad Request').
 translateInput(['checkChosenPawn',Turn,Board,Pos,_],'ok'):-write('suag '),write(Pos),nl,checkChosenPawn(Turn,Board,Pos),!.
 translateInput(['move',Turn,Board,PosI,PosF],'ok'):-write('suag '),(retract(availableList(_));true),posToMov(PosI,PosF,Result),availablePositions(Board,PosI),availableList(List),write(List),nl,member(Result,List),!.
 translateInput(['placeWall',_,Board,Choice,Pos],'ok'):-write('suag '),write(Pos),nl,placeWall(Choice,Board,_,Pos),!.
-translateInput(['moveRandom',Turn,Board,Choice,Pos],NewBoard):-write('suag '),nl,movePawnRandomly(Board,Turn,NewBoard),!.
+translateInput(['moveRandom',Turn,Board,Choice,Pos],NewBoard):-write('suag '),nl,(retract(availableList(_));true),movePawnRandomly(Board,Turn,NewBoard),!.
+translateInput(['placeRandom',Turn,Board,H1,V1],NewBoard):-write('suag '),nl,placeRandomWall(V1,H1,Board,NewBoard,NewVert,NewHor),write(NewVert),nl,write(NewHor),nl,!.
 
 translateInput([_,_,_,_,_],'no'):-!.
 

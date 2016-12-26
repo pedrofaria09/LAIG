@@ -6,6 +6,7 @@ function XMLscene(app) {
     this.cameraTarget=null;
     this.typeOfGame=null;
     this.pecas=new Array();
+    this.walls=new Array();
     this.dificulty=null;
     var myGraph = new MySceneGraph('tatooine.xml', this);
 }

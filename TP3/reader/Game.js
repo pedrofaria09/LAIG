@@ -45,11 +45,29 @@ Game.prototype.stateMachine = function(pick) {
 
 Game.prototype.stateMachineCPU = function() {
   var xmlscene=this;
-  console.log(this.board);
-  this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
-    var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
-    xmlscene.whoMoved(newBoard);
- });
+  console.log(this.State);
+  switch(this.State){
+    case 0:
+    this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
+      var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+      xmlscene.whoMoved(newBoard);
+      if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+        xmlscene.changeState(1);
+      else xmlscene.changeTurn();
+    });
+
+    break;
+    case 1:
+    var walls=this.findNumberWalls();
+    this.sendMessage('/placeRandom./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
+      var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+      xmlscene.placeRandomWall(newBoard);
+      xmlscene.changeState(0);
+      xmlscene.changeTurn();
+    });
+    break;
+  }
+
 }
 
 Game.prototype.getBoard = function(board) {
@@ -58,7 +76,7 @@ Game.prototype.getBoard = function(board) {
   for(var i=0;i<board.length;i++){
     if(board[i]!='[' && board[i]!=']'&& board[i]!=',')
       array.push(board[i]);
-    else if(board[i]==']'){
+    else if(board[i]==']'&& array.length>0){
       realBoard.push(array);
       array=[];
     }
@@ -66,18 +84,59 @@ Game.prototype.getBoard = function(board) {
   return realBoard;
 }
 
+Game.prototype.placeRandomWall = function(board){
+  //char, x, y = array
+  var array = this.findWallPlaced(board);
+  var wall=this.find1stPlaced(array[0]);
+  wall.place();
+  if(array[0]=='w')
+    this.changePosPeca((array[2]+1)-0.5,(1+array[1])/2+0.6,wall);
+  else this.changePosPeca((array[2]+1)/2+0.4,(array[1]+1)/2,wall);
+  this.board=board;
+}
+
+Game.prototype.find1stPlaced = function(char){
+  var max,min;
+  if(this.turn==2){
+    min=0;
+    max=16;
+  }else if(this.turn==1){
+    min=16;
+    max=32;
+  }
+  console.log(char);
+  console.log(this.scene.walls);
+  for(var i=min;i<max;i++){
+    if(!this.scene.walls[i].placed){
+      if(this.scene.walls[i].tipo=='hor' && char=='w')
+        return this.scene.walls[i];
+      else if(this.scene.walls[i].tipo=='ver' && char=='q'){
+        return this.scene.walls[i];
+      }
+    }
+  }
+}
+
+Game.prototype.findWallPlaced = function(board) {
+  for(var i=0;i<board.length;i++){
+    for(var j=0;j<board[i].length;j++){
+      if(board[i][j]!=this.board[i][j]){
+        return [board[i][j],i,j];
+      }
+    }
+  }
+}
+
 Game.prototype.whoMoved = function(board) {
   var peca;
+  console.log(board);
   for(var i=0;i<this.scene.pecas.length;i++){
     var posx=2*this.scene.pecas[i].realx-2;
     var posy=2*this.scene.pecas[i].realy-2;
       if(i<2 && board[posx][posy]!='r'){
-        console.log([posx,posy]);
-
         peca=this.scene.pecas[i];
-        console.log(peca);
       }
-      else if(i>2 && board[posx][posy]!='e'){
+      else if(i>1 && board[posx][posy]!='e'){
         peca=this.scene.pecas[i];
       }
   }
@@ -86,6 +145,9 @@ Game.prototype.whoMoved = function(board) {
   if(peca.pecaId<3)
     posMoved= this.findPositionMoved(board,'r',[peca.realy,peca.realx]);
   else posMoved = this.findPositionMoved(board,'e',[peca.realy,peca.realx]);
+  console.log(peca);
+  console.log(posMoved[0]);
+  console.log(posMoved[1]);
     peca.realx=posMoved[0];
     peca.realy=posMoved[1];
     this.changePosPeca(posMoved[1],posMoved[0],peca);
@@ -101,29 +163,40 @@ function arraysEqual(a, b) {
   return true;
 }
 
+Game.prototype.findNumberWalls = function() {
+  var max,min;
+  if(this.turn==1){
+    min=0;
+    max=16;
+  }else if(this.turn==2){
+    min=16;
+    max=32;
+  }
+  var Hor=0,Ver=0;
+  for(var i=min;i<max;i++){
+    if(!this.scene.walls[i].placed){
+      if(this.scene.walls[i].tipo=='hor')
+        Hor++;
+      else Ver++;
+    }
+  }
+  return [Hor,Ver];
+}
+
 Game.prototype.findPositionMoved = function(board,char,pos) {
-  console.log(pos);
   var array=[];
   for(var i=0;i<board.length;i++){
     for(var j=0;j<board[i].length;j++){
       if(board[i][j]==char){
           if(char=='r'){
-            console.log([this.scene.pecas[1].realx,this.scene.pecas[1].realy]);
-            console.log([this.scene.pecas[0].realx,this.scene.pecas[0].realy]);
-            console.log([(i+2)/2,(j+2)/2]);
             if(!arraysEqual([(i+2)/2,(j+2)/2], [this.scene.pecas[0].realx,this.scene.pecas[0].realy]) && !arraysEqual([(i+2)/2,(j+2)/2] ,[this.scene.pecas[1].realx,this.scene.pecas[1].realy])){
-              console.log([this.scene.pecas[0].realx,this.scene.pecas[0].realy]);
-              console.log([(i+2)/2,(j+2)/2]);
               return [(i+2)/2,(j+2)/2];
             }
 
           }else if(char=='e'){
-            if([(i+2)/2,(j+2)/2] !=[this.scene.pecas[02].realx,this.scene.pecas[2].realy] && [(i+2)/2,(j+2)/2] !=[this.scene.pecas[3].realx,this.scene.pecas[3].realy])
+            if(!arraysEqual([(i+2)/2,(j+2)/2],[this.scene.pecas[2].realx,this.scene.pecas[2].realy]) && !arraysEqual([(i+2)/2,(j+2)/2],[this.scene.pecas[3].realx,this.scene.pecas[3].realy]))
                           return [(i+2)/2,(j+2)/2];
           }}
-
-
-
     }
   }
   return null;
@@ -131,7 +204,6 @@ Game.prototype.findPositionMoved = function(board,char,pos) {
 
 Game.prototype.stateMachineHuman = function(pick) {
   var xmlscene=this;
-  console.log(this.State);
     switch(this.State){
       case 0:
             if(pick>154 && pick<159)
@@ -225,8 +297,6 @@ Game.prototype.stateMachineHuman = function(pick) {
 }
 
 Game.prototype.changePosPeca = function(posY,posX,updatePeca) {
-  console.log(posY);
-  console.log(posX);
   var peca=updatePeca || this.SelectedObj.childrenPrimitives[0];
   peca.changeY((14-posX+0.5)/14*20);
   peca.changeX((posY-0.5)/11*20);
