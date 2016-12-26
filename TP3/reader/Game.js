@@ -52,7 +52,9 @@ Game.prototype.stateMachineCPU = function() {
       this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
         var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
         xmlscene.whoMoved(newBoard);
-        if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+        if(xmlscene.hasGameEnded())
+          xmlscene.changeState(4);
+        else if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
           xmlscene.changeState(1);
         else xmlscene.changeTurn();
       });
@@ -61,7 +63,9 @@ Game.prototype.stateMachineCPU = function() {
         console.log(data.currentTarget.responseText);
         var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
         xmlscene.whoMoved(newBoard);
-        if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+        if(xmlscene.hasGameEnded())
+          xmlscene.changeState(4);
+        else if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
           xmlscene.changeState(1);
         else xmlscene.changeTurn();
       });
@@ -124,8 +128,6 @@ Game.prototype.find1stPlaced = function(char){
     min=16;
     max=32;
   }
-  console.log(char);
-  console.log(this.scene.walls);
   for(var i=min;i<max;i++){
     if(!this.scene.walls[i].placed){
       if(this.scene.walls[i].tipo=='hor' && char=='w')
@@ -149,7 +151,6 @@ Game.prototype.findWallPlaced = function(board) {
 
 Game.prototype.whoMoved = function(board) {
   var peca;
-  console.log(board);
   for(var i=0;i<this.scene.pecas.length;i++){
     var posx=2*this.scene.pecas[i].realx-2;
     var posy=2*this.scene.pecas[i].realy-2;
@@ -165,9 +166,6 @@ Game.prototype.whoMoved = function(board) {
   if(peca.pecaId<3)
     posMoved= this.findPositionMoved(board,'r',[peca.realy,peca.realx]);
   else posMoved = this.findPositionMoved(board,'e',[peca.realy,peca.realx]);
-  console.log(peca);
-  console.log(posMoved[0]);
-  console.log(posMoved[1]);
     peca.realx=posMoved[0];
     peca.realy=posMoved[1];
     this.changePosPeca(posMoved[1],posMoved[0],peca);
