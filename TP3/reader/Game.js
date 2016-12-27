@@ -40,7 +40,6 @@ this.stack=new Array();
 }
 
 Game.prototype.stateMachine = function(pick) {
-  console.log(this.scene.pecas);
   if(this.scene.typeOfGame=="Human vs Human")
     this.stateMachineHuman(pick);
   else if(this.scene.typeOfGame=="CPU vs CPU" && this.scene.dificulty!=null)
@@ -127,10 +126,18 @@ Game.prototype.placeRandomWall = function(board){
   //char, x, y = array
   var array = this.findWallPlaced(board);
   var wall=this.find1stPlaced(array[0]);
+
   wall.place();
   if(array[0]=='w')
-    this.changePosPeca((array[2]+1)-0.5,(1+array[1])/2+0.6,wall);
-  else this.changePosPeca((array[2]+1)/2+0.4,(array[1]+1)/2,wall);
+    {
+      this.stack.push([wall,[wall.x,wall.y],[array[2]+1-0.5,(1+array[1])/2+0.6],[array[2]+1,(1+array[1])/2]]);
+      this.changePosPeca((array[2]+1)-0.5,(1+array[1])/2+0.6,wall);
+    }
+  else{
+    this.stack.push([wall,[wall.x,wall.y],[(array[2]+1)/2+0.4,(array[1]+1)/2],[(array[2]+1)/2,(1+array[1])/2]]);
+    this.changePosPeca((array[2]+1)/2+0.4,(array[1]+1)/2,wall);
+  }
+
   this.board=board;
 }
 
@@ -183,6 +190,7 @@ Game.prototype.whoMoved = function(board) {
   else posMoved = this.findPositionMoved(board,'e',[peca.realy,peca.realx]);
     peca.realx=posMoved[0];
     peca.realy=posMoved[1];
+    this.stack.push([peca,[peca.x,peca.y],[peca.realx,peca.realy]]);
     this.changePosPeca(posMoved[1],posMoved[0],peca);
 }
 
@@ -236,19 +244,48 @@ Game.prototype.findPositionMoved = function(board,char,pos) {
 }
 
 Game.prototype.undo= function(){
-  ////////////////////////////base para o undo
-  var array=this.stack[this.stack.length-1];
-  array[0].x=array[1][0];
-  array[0].y=array[1][1];
-  var posI=this.coordsToPosition([array[1][1],array[1][0]]);
-  //this.changePawnPos(array[2],posI,'r');
-  //array[0].unplace();
-  if(array[0].tipo=="hor")
-    this.placeWall(array[3],'w','b');
-  else if(array[0].tipo=="ver")
-    this.placeWall(array[3],'q','a');
-  console.log(this.board);
-
+  if(this.scene.typeOfGame=="Human vs Human" || (this.scene.typeOfGame=="Human vs CPU" && this.turn==1)){
+    if(this.stack.length>=4){
+      //1a peca
+      var array=this.stack[this.stack.length-4];
+      array[0].x=array[1][0];
+      array[0].y=array[1][1];
+      var posI=this.coordsToPosition([array[1][1],array[1][0]]);
+      array[0].realx=posI[0];
+      array[0].realy=posI[1];
+      if(array[0].pecaId<3)
+        this.changePawnPos(array[2],posI,'r');
+      else this.changePawnPos(array[2],posI,'e');
+      //1a parede
+      array=this.stack[this.stack.length-3];
+      array[0].x=array[1][0];
+      array[0].y=array[1][1];
+      array[0].unplace();
+      if(array[0].tipo=="hor")
+        this.placeWall(array[3],'w','b');
+      else if(array[0].tipo=="ver")
+        this.placeWall(array[3],'q','a');
+      //2a peca
+      array=this.stack[this.stack.length-2];
+      array[0].x=array[1][0];
+      array[0].y=array[1][1];
+      var posI=this.coordsToPosition([array[1][1],array[1][0]]);
+      array[0].realx=posI[0];
+      array[0].realy=posI[1];
+      if(array[0].pecaId<3)
+        this.changePawnPos(array[2],posI,'r');
+      else this.changePawnPos(array[2],posI,'e');
+      //2a parede
+      array=this.stack[this.stack.length-1];
+      array[0].x=array[1][0];
+      array[0].y=array[1][1];
+      array[0].unplace();
+      if(array[0].tipo=="hor")
+        this.placeWall(array[3],'w','b');
+      else if(array[0].tipo=="ver")
+        this.placeWall(array[3],'q','a');
+    }
+  }
 }
 
 Game.prototype.stateMachineHuman = function(pick) {

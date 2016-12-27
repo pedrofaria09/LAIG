@@ -41,6 +41,10 @@ function Wall(scene, id,tipo,x,y) {
     this.placed=true;
   };
 
+  Wall.prototype.unplace = function() {
+    this.placed=false;
+  };
+
   Wall.prototype.display = function() {
     if(this.scene.game.SelectedWall!=null && this.scene.game.SelectedWall==this)
       this.material.apply();
