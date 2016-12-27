@@ -38,6 +38,7 @@ function Peca(scene, id, x,y,realx,realy) {
   };
 
   Peca.prototype.display = function() {
+
       this.scene.pushMatrix();
         this.scene.translate(this.x,this.y,0);
         if(this.pecaId<3)

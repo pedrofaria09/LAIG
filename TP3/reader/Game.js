@@ -37,6 +37,7 @@ function Game(scene) {
 }
 
 Game.prototype.stateMachine = function(pick) {
+  console.log(this.scene.pecas);
   if(this.scene.typeOfGame=="Human vs Human")
     this.stateMachineHuman(pick);
   else if(this.scene.typeOfGame=="CPU vs CPU" && this.scene.dificulty!=null)
@@ -45,7 +46,6 @@ Game.prototype.stateMachine = function(pick) {
 
 Game.prototype.stateMachineCPU = function() {
   var xmlscene=this;
-  console.log(this.State);
   switch(this.State){
     case 0:
     if(this.scene.dificulty=="Random"){
