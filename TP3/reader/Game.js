@@ -41,6 +41,19 @@ Game.prototype.stateMachine = function(pick) {
     this.stateMachineHuman(pick);
   else if(this.scene.typeOfGame=="CPU vs CPU" && this.scene.dificulty!=null)
     this.stateMachineCPU();
+  else if(this.scene.typeOfGame=="Human vs CPU" && this.scene.dificulty!=null)
+    this.stateMachineHumanVsCPU(pick);
+}
+
+Game.prototype.stateMachineHumanVsCPU = function(pick){
+    switch (this.turn) {
+      case 1:
+        this.stateMachineHuman(pick);
+        break;
+      case 2:
+        this.stateMachineCPU();
+        break;
+    }
 }
 
 Game.prototype.stateMachineCPU = function() {
