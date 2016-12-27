@@ -520,12 +520,13 @@
             </materials>
             <texture id="none"/>
             <children>
+              <componentref id="cadeiras"/>
+              <componentref id="chao"/>
+              <componentref id="arvore"/>
+              <componentref id="paredes"/>
                 <componentref id="table"/>
                 <componentref id="allGame"/>
-                <componentref id="cadeiras"/>
-                <componentref id="chao"/>
-                <componentref id="arvore"/>
-                <componentref id="paredes"/>
+
             </children>
         </component>
 

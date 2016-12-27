@@ -18,7 +18,6 @@ XMLscene.prototype.changeScene = function() {
   this.xmlFile++;
   if(this.xmlFile>2)
     this.xmlFile=1;
-  console.log(this.xmlFile);
   switch(this.xmlFile){
     case 1:
       var myGraph = new MySceneGraph('sceneone.xml', this);
@@ -76,6 +75,25 @@ XMLscene.prototype.setDefaultAppearance = function() {
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function() {
+
+  if(this.pecas.length>4){
+    for(var i=4;i<8;i++){
+
+      this.pecas[i].x=this.pecas[i-4].x;
+      this.pecas[i].y=this.pecas[i-4].y;
+      this.pecas[i].realx=this.pecas[i-4].realx;
+      this.pecas[i].realy=this.pecas[i-4].realy;
+    }
+    this.pecas.splice(0,4);
+  }
+  console.log(this.walls);
+  if(this.walls.length>32){
+    for(var i=32;i<64;i++){
+      this.walls[i].x=this.walls[i-32].x;
+      this.walls[i].y=this.walls[i-32].y;
+    }
+    this.walls.splice(0,32);
+  }
 
 
 

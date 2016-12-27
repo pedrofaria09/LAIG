@@ -522,13 +522,14 @@
             </materials>
             <texture id="none"/>
             <children>
+              <componentref id="cadeiras"/>
+              <componentref id="chao"/>
+              <componentref id="paredes"/>
+              <componentref id="movel"/>
+              <componentref id="snowMen"/>
                 <componentref id="table"/>
                 <componentref id="allGame"/>
-                <componentref id="cadeiras"/>
-                <componentref id="chao"/>
-                <componentref id="paredes"/>
-                <componentref id="movel"/>
-                <componentref id="snowMen"/>
+
             </children>
         </component>
 
@@ -599,13 +600,13 @@
                 <translate x="4.8" y="6" z="0"/>
                 <scale x="2" y="5" z="15"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -636,13 +637,13 @@
                 <translate x="4.8" y="-1" z="0"/>
                 <scale x="2" y="5" z="15"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -673,13 +674,13 @@
                 <translate x="4.8" y="-7" z="0"/>
                 <scale x="2" y="5" z="15"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -710,13 +711,13 @@
                 <translate x="0" y="0" z="0"/>
                 <scale x="10" y="20" z="20"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -882,13 +883,13 @@
                 <translate x="0" y="5" z="-5"/>
                 <scale x="12" y="2" z="12"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -904,13 +905,13 @@
                 <translate x="5" y="0" z="-10"/>
                 <scale x="2" y="9" z="2"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -920,19 +921,19 @@
                 <componentref id="cuboDir"/>
             </children>
         </component>
-        
+
         <component id="pernaTrasEsque">
             <transformation>
                 <translate x="-5" y="0" z="-10"/>
                 <scale x="2" y="9" z="2"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -948,13 +949,13 @@
                 <translate x="5" y="0" z="0"/>
                 <scale x="2" y="9" z="2"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -964,19 +965,19 @@
                 <componentref id="cuboDir"/>
             </children>
         </component>
-        
+
         <component id="pernaFrenteEsque">
             <transformation>
                 <translate x="-5" y="0" z="0"/>
                 <scale x="2" y="9" z="2"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <componentref id="cuboCima"/>
                 <componentref id="cuboBaixo"/>
@@ -986,109 +987,109 @@
                 <componentref id="cuboDir"/>
             </children>
         </component>
-        
+
         <!-- Cubo Esquerdo -->
         <component id="cuboEsq">
             <transformation>
                 <translate x="0.5" y="-0.5" z="0.5"/>
                 <rotate axis="y" angle="90"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        
+
         <!-- Cubo Direito -->
         <component id="cuboDir">
             <transformation>
                 <translate x="-0.5" y="-0.5" z="-0.5"/>
                 <rotate axis="y" angle="-90"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        
+
         <!-- Cubo Cima -->
         <component id="cuboCima">
             <transformation>
                 <translate x="-0.5" y="0.5" z="0.5"/>
                 <rotate axis="x" angle="-90"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        
+
         <!-- Cubo Baixo -->
         <component id="cuboBaixo">
             <transformation>
                 <translate x="-0.5" y="-0.5" z="-0.5"/>
                 <rotate axis="x" angle="90"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        
+
         <!-- Cubo Frente -->
         <component id="cuboFrente">
             <transformation>
                 <translate x="-0.5" y="-0.5" z="0.5"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <primitiveref id="quadrado"/>
             </children>
         </component>
-        
+
         <!-- Cubo Tras -->
         <component id="cuboTras">
             <transformation>
                 <translate x="0.5" y="-0.5" z="-0.5"/>
                 <rotate axis="y" angle="180"/>
             </transformation>
-            
+
             <materials>
                 <material id="inherit"/>
             </materials>
-            
+
             <texture id="woodTXT"/>
-            
+
             <children>
                 <primitiveref id="quadrado"/>
             </children>
@@ -1096,7 +1097,7 @@
 
         <component id="table">
             <transformation>
-                <translate x="10" y="10" z="10"/>
+                <translate x="10" y="9.9" z="10"/>
             </transformation>
 
             <materials>
