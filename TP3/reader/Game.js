@@ -36,7 +36,7 @@ function Game(scene) {
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c']];
 }
 
-Game.prototype.stateMachine = function(pick) {  console.log(this.dificulty);
+Game.prototype.stateMachine = function(pick) {
   if(this.scene.typeOfGame=="Human vs Human")
     this.stateMachineHuman(pick);
   else if(this.scene.typeOfGame=="CPU vs CPU" && this.scene.dificulty!=null)
@@ -60,7 +60,6 @@ Game.prototype.stateMachineCPU = function() {
       });
     }else if(this.scene.dificulty=="Impossible"){
       this.sendMessage('/moveSmart./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
-        console.log(data.currentTarget.responseText);
         var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
         xmlscene.whoMoved(newBoard);
         if(xmlscene.hasGameEnded())
