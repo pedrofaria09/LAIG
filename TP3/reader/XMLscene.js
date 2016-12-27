@@ -92,17 +92,14 @@ XMLscene.prototype.onGraphLoaded = function() {
     }
     this.pecas.splice(0,4);
   }
-  console.log(this.walls);
   if(this.walls.length>32){
     for(var i=32;i<64;i++){
       this.walls[i].x=this.walls[i-32].x;
       this.walls[i].y=this.walls[i-32].y;
+      this.walls[i].placed=this.walls[i-32].placed;
     }
     this.walls.splice(0,32);
   }
-
-
-
     this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
     this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
@@ -123,7 +120,6 @@ XMLscene.prototype.onGraphLoaded = function() {
     //if(this.app.interface==null){
       var myInterface = new MyInterface();
       this.app.setInterface(myInterface);
-      console.log(this.app);
       myInterface.setActiveCamera(this.camera);
 
 
