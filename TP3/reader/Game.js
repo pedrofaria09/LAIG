@@ -36,10 +36,10 @@ function Game(scene) {
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c']];
 }
 
-Game.prototype.stateMachine = function(pick) {
+Game.prototype.stateMachine = function(pick) {  console.log(this.dificulty);
   if(this.scene.typeOfGame=="Human vs Human")
     this.stateMachineHuman(pick);
-  else if(this.scene.typeOfGame=="CPU vs CPU")
+  else if(this.scene.typeOfGame=="CPU vs CPU" && this.scene.dificulty!=null)
     this.stateMachineCPU();
 }
 
@@ -48,23 +48,47 @@ Game.prototype.stateMachineCPU = function() {
   console.log(this.State);
   switch(this.State){
     case 0:
-    this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
-      var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
-      xmlscene.whoMoved(newBoard);
-      if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
-        xmlscene.changeState(1);
-      else xmlscene.changeTurn();
-    });
-
+    if(this.scene.dificulty=="Random"){
+      this.sendMessage('/moveRandom./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.whoMoved(newBoard);
+        if(xmlscene.hasGameEnded())
+          xmlscene.changeState(4);
+        else if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+          xmlscene.changeState(1);
+        else xmlscene.changeTurn();
+      });
+    }else if(this.scene.dificulty=="Impossible"){
+      this.sendMessage('/moveSmart./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
+        console.log(data.currentTarget.responseText);
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.whoMoved(newBoard);
+        if(xmlscene.hasGameEnded())
+          xmlscene.changeState(4);
+        else if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
+          xmlscene.changeState(1);
+        else xmlscene.changeTurn();
+      });
+    }
     break;
     case 1:
     var walls=this.findNumberWalls();
-    this.sendMessage('/placeRandom./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
-      var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
-      xmlscene.placeRandomWall(newBoard);
-      xmlscene.changeState(0);
-      xmlscene.changeTurn();
-    });
+    if(this.scene.dificulty=="Random"){
+      this.sendMessage('/placeRandom./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.placeRandomWall(newBoard);
+        xmlscene.changeState(0);
+        xmlscene.changeTurn();
+      });
+    }else if(this.scene.dificulty=="Impossible"){
+      this.sendMessage('/placeSmart./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
+        var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
+        xmlscene.placeRandomWall(newBoard);
+        xmlscene.changeState(0);
+        xmlscene.changeTurn();
+      });
+    }
+
     break;
   }
 
@@ -104,8 +128,6 @@ Game.prototype.find1stPlaced = function(char){
     min=16;
     max=32;
   }
-  console.log(char);
-  console.log(this.scene.walls);
   for(var i=min;i<max;i++){
     if(!this.scene.walls[i].placed){
       if(this.scene.walls[i].tipo=='hor' && char=='w')
@@ -129,7 +151,6 @@ Game.prototype.findWallPlaced = function(board) {
 
 Game.prototype.whoMoved = function(board) {
   var peca;
-  console.log(board);
   for(var i=0;i<this.scene.pecas.length;i++){
     var posx=2*this.scene.pecas[i].realx-2;
     var posy=2*this.scene.pecas[i].realy-2;
@@ -145,9 +166,6 @@ Game.prototype.whoMoved = function(board) {
   if(peca.pecaId<3)
     posMoved= this.findPositionMoved(board,'r',[peca.realy,peca.realx]);
   else posMoved = this.findPositionMoved(board,'e',[peca.realy,peca.realx]);
-  console.log(peca);
-  console.log(posMoved[0]);
-  console.log(posMoved[1]);
     peca.realx=posMoved[0];
     peca.realy=posMoved[1];
     this.changePosPeca(posMoved[1],posMoved[0],peca);
@@ -290,7 +308,6 @@ Game.prototype.stateMachineHuman = function(pick) {
                  xmlscene.changeState(2);
                  this.SelectedObj=null;
              }
-
             }
           break;
     }

@@ -1,21 +1,21 @@
 %given a Board and a position (X,Y), it determines the fastest way to reach every position of the board from the initial position, using the flood fill algorithm
 floodFill(Board,X,Y):-(XC1 is round((X+1)/2),XC2 is round((Y+1)/2), calcBoard(CalcBoard),getElementFromMatrix(CalcBoard,XC1,XC2,1,1,Value),
-X1 is X+2,checkPawnColision(X1,Y),XWall is X+1,YWall is round((Y+1)/2),X1<28,getElementFromMatrix(Board,XWall,YWall,1,1,WallH),WallH\=w,
+X1 is X+2,checkPawnColision(Board,[X1,Y]),XWall is X+1,YWall is round((Y+1)/2),X1<28,getElementFromMatrix(Board,XWall,YWall,1,1,WallH),WallH\=w,
 XC3 is round((X1+1)/2),getElementFromMatrix(CalcBoard,XC3,XC2,1,1,DestValue),(Value+1<DestValue;DestValue==(-1)),NewValue is Value+1,replaceMatrix(CalcBoard,XC3,XC2,1,NewValue,NewCalcBoard),
 retract(calcBoard(_)),asserta(calcBoard(NewCalcBoard)),floodFill(Board,X1,Y),false;
 
 XC1 is round((X+1)/2),XC2 is round((Y+1)/2), calcBoard(CalcBoard),getElementFromMatrix(CalcBoard,XC1,XC2,1,1,Value),
-X1 is X-2,X1>0,checkPawnColision(X1,Y), XWall is X-1,YWall is round((Y+1)/2),getElementFromMatrix(Board,XWall,YWall,1,1,WallH),WallH\=w,
+X1 is X-2,X1>0,checkPawnColision(Board,[X1,Y]), XWall is X-1,YWall is round((Y+1)/2),getElementFromMatrix(Board,XWall,YWall,1,1,WallH),WallH\=w,
 XC3 is round((X1+1)/2),getElementFromMatrix(CalcBoard,XC3,XC2,1,1,DestValue),(Value+1<DestValue;DestValue==(-1)),NewValue is Value+1,replaceMatrix(CalcBoard,XC3,XC2,1,NewValue,NewCalcBoard),
 retract(calcBoard(_)),asserta(calcBoard(NewCalcBoard)),floodFill(Board,X1,Y),false;
 
 XC1 is round((X+1)/2),XC2 is round((Y+1)/2), calcBoard(CalcBoard),getElementFromMatrix(CalcBoard,XC1,XC2,1,1,Value),
-Y1 is Y+2,Y1<22,checkPawnColision(X,Y1), YWall is Y+1,getElementFromMatrix(Board,X,YWall,1,1,WallV),WallV\=q,
+Y1 is Y+2,Y1<22,checkPawnColision(Board,[X,Y1]), YWall is Y+1,getElementFromMatrix(Board,X,YWall,1,1,WallV),WallV\=q,
 XC3 is round((Y1+1)/2),getElementFromMatrix(CalcBoard,XC1,XC3,1,1,DestValue),(Value+1<DestValue;DestValue==(-1)),NewValue is Value+1,replaceMatrix(CalcBoard,XC1,XC3,1,NewValue,NewCalcBoard),
 retract(calcBoard(_)),asserta(calcBoard(NewCalcBoard)),floodFill(Board,X,Y1),false;
 
 XC1 is round((X+1)/2),XC2 is round((Y+1)/2), calcBoard(CalcBoard),getElementFromMatrix(CalcBoard,XC1,XC2,1,1,Value),
-Y1 is Y-2,Y1>0,checkPawnColision(X,Y1), YWall is Y-1,getElementFromMatrix(Board,X,YWall,1,1,WallV),WallV\=q,
+Y1 is Y-2,Y1>0,checkPawnColision(Board,[X,Y1]), YWall is Y-1,getElementFromMatrix(Board,X,YWall,1,1,WallV),WallV\=q,
 XC3 is round((Y1+1)/2),getElementFromMatrix(CalcBoard,XC1,XC3,1,1,DestValue),(Value+1<DestValue;DestValue==(-1)),NewValue is Value+1,replaceMatrix(CalcBoard,XC1,XC3,1,NewValue,NewCalcBoard),
 retract(calcBoard(_)),asserta(calcBoard(NewCalcBoard)),floodFill(Board,X,Y1),false
 
@@ -26,7 +26,7 @@ compareAvg( [P1x,P1y],[P2x,P2y], [X1,Y1],[X2,Y2]) :-Value1 is (abs(P1x-X1)+abs(P
 min(Value1,Value3)<min(Value2,Value4).
 
 %given a Board, the turn and the number os horizontal and vertical walls to be placed, it places a wall next to one of the opponents pawns, updating the NewBoard and NewVert and NewHor with the number of walls left after placement
-smartWallCPU(Board,Turn,NewBoard,Vert,Hor,NewVert,NewHor):-(Turn==2,pawn1(Pawn1),pawn2(Pawn2);Turn==1,pawn3(Pawn1),pawn4(Pawn2)),
+smartWallCPU(Board,Turn,NewBoard,Vert,Hor,NewVert,NewHor):-(Turn==2,getpawnsPath(Board,Pawn1,Pawn2,_,_,1);Turn==1,getpawnsPath(Board,_,_,Pawn1,Pawn2,1)),
 random(1,3,RandomWall),((RandomWall==1;Vert==0),availableWallHorizontal(Board,1,1),availableWallH(List),samsort(compareAvg(Pawn1,Pawn2),List,OrderedList),positionInList(1,OrderedList,1,[X,Y]),
 P1 is 2*X,replaceMatrix(Board,P1,Y,1,w,StackBoard),P2 is Y+1,replaceMatrix(StackBoard,P1,P2,1,w,NewBoard),NewVert is Vert,NewHor is Hor-1,retract(availableWallH(_));
 (RandomWall==2;Hor==0),availableWallVertical(Board,1,1),availableWallV(List),samsort(compareAvg(Pawn1,Pawn2),List,OrderedList),positionInList(1,OrderedList,1,[X,Y]),
@@ -34,7 +34,7 @@ P1 is 2*X-1,P2 is 2*Y,replaceMatrix(Board,P1,P2,1,q,StackBoard),P3 is 2*(X+1)-1,
 
 
 %receives a Board and a turn, and it moves the closest pawn to the opponent's base through the closest path updating it to NewBoard
-smartMovementCPU(Board,Turn,NewBoard):-(Turn==1,pawn1([Pawn1V,Pawn1H]),pawn2([Pawn2V,Pawn2H]);Turn ==2,pawn3([Pawn1V,Pawn1H]),pawn4([Pawn2V,Pawn2H])),
+smartMovementCPU(Board,Turn,NewBoard):-(Turn==1,getpawnsPath(Board,Posicao1,Posicao2,_,_,1),nth1(1,Posicao1,Pawn1V),nth1(2,Posicao1,Pawn1H),nth1(1,Posicao2,Pawn2V),nth1(2,Posicao2,Pawn2H);Turn ==2,getpawnsPath(Board,_,_,Posicao1,Posicao2,1),nth1(1,Posicao1,Pawn1V),nth1(2,Posicao1,Pawn1H),nth1(1,Posicao2,Pawn2V),nth1(2,Posicao2,Pawn2H)),
 calcboard(CalcBoard),replaceMatrix(CalcBoard,Pawn1V,Pawn1H,1,0,NewCalcBoard),Pawn1Vff is 2*Pawn1V-1,Pawn1Hff is 2* Pawn1H-1,asserta(calcBoard(NewCalcBoard)),floodFill(Board,Pawn1Vff,Pawn1Hff),
 calcBoard(CalcPawn1),retract(calcBoard(_)),
 replaceMatrix(CalcBoard,Pawn2V,Pawn2H,1,0,NewCalcBoard2),asserta(calcBoard(NewCalcBoard2)),Pawn2Vff is 2*Pawn2V-1,Pawn2Hff is 2* Pawn2H-1,floodFill(Board,Pawn2Vff,Pawn2Hff),calcBoard(CalcPawn2),retract(calcBoard(_)),
@@ -43,20 +43,20 @@ getElementFromMatrix(CalcPawn1,11,8,1,1,RealValue2),(getElementFromMatrix(CalcPa
 getElementFromMatrix(CalcPawn2,11,4,1,1,RealValue3),(getElementFromMatrix(CalcPawn2,11,4,1,1,Value3),Value3\=(-1),Pos3x=11,Pos3y=4;getElementFromMatrix(CalcPawn2,11,5,1,1,Value3),Value3\=(-1),Pos3x=11,Pos3y=5;getElementFromMatrix(CalcPawn2,11,3,1,1,Value3),Value3\=(-1),Pos3x=11,Pos3y=3;getElementFromMatrix(CalcPawn2,10,4,1,1,Value3),Value3\=(-1),Pos3x=10,Pos3y=4;getElementFromMatrix(CalcPawn2,12,4,1,1,Value3),Value3\=(-1),Pos3x=12,Pos3y=4),
 getElementFromMatrix(CalcPawn2,11,8,1,1,RealValue4),(getElementFromMatrix(CalcPawn2,11,8,1,1,Value4),Value4\=(-1),Pos4x=11,Pos4y=8;getElementFromMatrix(CalcPawn2,11,7,1,1,Value4),Value4\=(-1),Pos4x=11,Pos4y=7;getElementFromMatrix(CalcPawn2,11,9,1,1,Value4),Value4\=(-1),Pos4x=11,Pos4y=9;getElementFromMatrix(CalcPawn2,10,8,1,1,Value4),Value4\=(-1),Pos4x=10,Pos4y=8;getElementFromMatrix(CalcPawn2,12,8,1,1,Value4),Value4\=(-1),Pos4x=12,Pos4y=8),
 P1 is min(Value1,Value2),P2 is min(Value3,Value4),(PFinal is min(P1,P2),RealValue1\=0,RealValue2\=0,RealValue3\=0,RealValue4\=0;RealValue1==0,PFinal is Value4;RealValue2==0,PFinal is Value3;RealValue3==0,PFinal is Value2;RealValue4==0,PFinal is Value1),
-(PFinal=:=Value1,RealValue3\=0,Mov is Value1-2,getPath(Board,CalcPawn1,[Pos1x,Pos1y],Value1,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,r),retract(pawn1(_)),assert(pawn1(NewPawn));
-PFinal=:=Value2,RealValue4\=0,Mov is Value2-2,getPath(Board,CalcPawn1,[Pos2x,Pos2y],Value2,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,r),retract(pawn1(_)),assert(pawn1(NewPawn));
-PFinal=:=Value3,RealValue1\=0,Mov is Value3-2,getPath(Board,CalcPawn2,[Pos3x,Pos3y],Value3,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,r),retract(pawn2(_)),assert(pawn2(NewPawn));
-PFinal=:=Value4,RealValue2\=0,Mov is Value4-2,getPath(Board,CalcPawn2,[Pos4x,Pos4y],Value4,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,r),retract(pawn2(_)),assert(pawn2(NewPawn)))
+(PFinal=:=Value1,RealValue3\=0,Mov is Value1-2,getPath(Board,CalcPawn1,[Pos1x,Pos1y],Value1,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,r);
+PFinal=:=Value2,RealValue4\=0,Mov is Value2-2,getPath(Board,CalcPawn1,[Pos2x,Pos2y],Value2,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,r);
+PFinal=:=Value3,RealValue1\=0,Mov is Value3-2,getPath(Board,CalcPawn2,[Pos3x,Pos3y],Value3,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,r);
+PFinal=:=Value4,RealValue2\=0,Mov is Value4-2,getPath(Board,CalcPawn2,[Pos4x,Pos4y],Value4,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,r))
 ;
 Turn==2,getElementFromMatrix(CalcPawn1,4,4,1,1,RealValue1),(getElementFromMatrix(CalcPawn1,4,4,1,1,Value1),Value1\=(-1),Pos1x=4,Pos1y=4;getElementFromMatrix(CalcPawn1,4,5,1,1,Value1),Value1\=(-1),Pos1x=4,Pos1y=5;getElementFromMatrix(CalcPawn1,4,3,1,1,Value1),Value1\=(-1),Pos1x=4,Pos1y=3;getElementFromMatrix(CalcPawn1,3,4,1,1,Value1),Value1\=(-1),Pos1x=3,Pos1y=4;getElementFromMatrix(CalcPawn1,5,4,1,1,Value1),Value1\=(-1),Pos1x=5,Pos1y=4),
 getElementFromMatrix(CalcPawn1,4,8,1,1,RealValue2),(getElementFromMatrix(CalcPawn1,4,8,1,1,Value2),Value2\=(-1),Pos2x=4,Pos2y=8;getElementFromMatrix(CalcPawn1,4,7,1,1,Value2),Value2\=(-1),Pos2x=4,Pos2y=7;getElementFromMatrix(CalcPawn1,4,9,1,1,Value2),Value2\=(-1),Pos2x=4,Pos2y=9;getElementFromMatrix(CalcPawn1,3,8,1,1,Value2),Value2\=(-1),Pos2x=3,Pos2y=8;getElementFromMatrix(CalcPawn1,5,8,1,1,Value2),Value2\=(-1),Pos2x=5,Pos2y=8),
 getElementFromMatrix(CalcPawn2,4,4,1,1,RealValue3),(getElementFromMatrix(CalcPawn2,4,4,1,1,Value3),Value3\=(-1),Pos3x=4,Pos3y=4;getElementFromMatrix(CalcPawn2,4,3,1,1,Value3),Value3\=(-1),Pos3x=4,Pos3y=3;getElementFromMatrix(CalcPawn2,4,5,1,1,Value3),Value3\=(-1),Pos3x=4,Pos3y=5;getElementFromMatrix(CalcPawn2,3,4,1,1,Value3),Value3\=(-1),Pos3x=3,Pos3y=4;getElementFromMatrix(CalcPawn2,5,4,1,1,Value3),Value3\=(-1),Pos3x=5,Pos3y=4),
 getElementFromMatrix(CalcPawn2,4,8,1,1,RealValue4),(getElementFromMatrix(CalcPawn2,4,8,1,1,Value4),Value4\=(-1),Pos4x=4,Pos4y=8;getElementFromMatrix(CalcPawn2,4,7,1,1,Value4),Value4\=(-1),Pos4x=4,Pos4y=7;getElementFromMatrix(CalcPawn2,4,9,1,1,Value4),Value4\=(-1),Pos4x=4,Pos4y=9;getElementFromMatrix(CalcPawn2,3,8,1,1,Value4),Value4\=(-1),Pos4x=3,Pos4y=8;getElementFromMatrix(CalcPawn2,5,8,1,1,Value4),Value4\=(-1),Pos4x=5,Pos4y=8),
-P1 is min(Value1,Value2),P2 is min(Value3,Value4),(PFinal is min(P1,P2),RealValue1\=0,RealValue2\=0,RealValue3\=0,RealValue4\=0;RealValue1==0,PFinal is Value4;RealValue2==0,PFinal is Value3;RealValue3==0,PFinal is Value2;RealValue4==0,PFinal is Value1),
-(PFinal=:=Value1,RealValue3\=0,Mov is Value1-2,getPath(Board,CalcPawn1,[Pos1x,Pos1y],Value1,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,e),retract(pawn3(_)),assert(pawn3(NewPawn));
-PFinal=:=Value2,RealValue4\=0,Mov is Value2-2,getPath(Board,CalcPawn1,[Pos2x,Pos2y],Value2,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,e),retract(pawn3(_)),assert(pawn3(NewPawn));
-PFinal=:=Value3,RealValue1\=0,Mov is Value3-2,getPath(Board,CalcPawn2,[Pos3x,Pos3y],Value3,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,e),retract(pawn4(_)),assert(pawn4(NewPawn));
-PFinal=:=Value4,RealValue2\=0,Mov is Value4-2,getPath(Board,CalcPawn2,[Pos4x,Pos4y],Value4,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,e),retract(pawn4(_)),assert(pawn4(NewPawn)))
+write('Cheguei aqui'),nl,P1 is min(Value1,Value2),P2 is min(Value3,Value4),(PFinal is min(P1,P2),RealValue1\=0,RealValue2\=0,RealValue3\=0,RealValue4\=0;RealValue1==0,PFinal is Value4;RealValue2==0,PFinal is Value3;RealValue3==0,PFinal is Value2;RealValue4==0,PFinal is Value1),
+(PFinal=:=Value1,RealValue3\=0,Mov is Value1-2,getPath(Board,CalcPawn1,[Pos1x,Pos1y],Value1,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,e);
+PFinal=:=Value2,RealValue4\=0,Mov is Value2-2,getPath(Board,CalcPawn1,[Pos2x,Pos2y],Value2,[FinalX,FinalY],Mov),posToMov([Pawn1V,Pawn1H],[FinalX,FinalY],Result),move(Board,[Pawn1V,Pawn1H],Result,NewPawn,NewBoard,e);
+PFinal=:=Value3,RealValue1\=0,Mov is Value3-2,getPath(Board,CalcPawn2,[Pos3x,Pos3y],Value3,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,e);
+PFinal=:=Value4,RealValue2\=0,Mov is Value4-2,getPath(Board,CalcPawn2,[Pos4x,Pos4y],Value4,[FinalX,FinalY],Mov),posToMov([Pawn2V,Pawn2H],[FinalX,FinalY],Result),move(Board,[Pawn2V,Pawn2H],Result,NewPawn,NewBoard,e))
 ).
 
 %given the game's board (Board) and the floodfill board (Board), the final position (X,Y), calculates the path to the position of the pawn, stoping when it reaches the position the pawn will move to, returning it [Posx,Posy]

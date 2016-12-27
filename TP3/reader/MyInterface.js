@@ -37,7 +37,7 @@ MyInterface.prototype.init = function(application) {
     }
     //this.gui.add(this.scene, 'speed', -5, 5);
     this.gui.add(this.scene, "typeOfGame", ['Human vs Human','Human vs CPU','CPU vs CPU']);
-    this.gui.add(this.scene, "dificulty", ['Hard','Impossible']);
+    this.gui.add(this.scene, "dificulty", ['Random','Impossible']);
 
     return true;
 };
