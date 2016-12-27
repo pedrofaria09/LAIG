@@ -60,7 +60,7 @@ XMLscene.prototype.init = function(application) {
     this.materialsComponents = new Array();
 
 
-
+    this.hud = new Hud(this);
     this.pickmeId = 1;
 };
 
@@ -259,6 +259,9 @@ XMLscene.prototype.display = function() {
     this.updateProjectionMatrix();
     this.loadIdentity();
 
+    //HUD
+    this.updateHUD();
+
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
@@ -276,6 +279,20 @@ XMLscene.prototype.display = function() {
 
     }
 };
+
+XMLscene.prototype.updateHUD = function(){
+  var timePlayed = "Time:_" + parseInt(this.time);
+  
+  var player1 = "Player_1";
+  var player1Pieces = "-Walls:_" + this.game.player1WallsLeft;
+  var player1Vitories = "-Score:_" + this.game.player1Vitories;
+  
+  var player2 = "Player_2";
+  var player2Pieces = "-Walls:_" + this.game.player2WallsLeft;
+  var player2Vitories = "-Score:_" + this.game.player2Vitories;
+  
+  this.hud.display([timePlayed, "", player1, player1Pieces, player1Vitories, "", player2, player2Pieces, player2Vitories]);
+}
 
 XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
     var material = null;
