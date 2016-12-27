@@ -8,11 +8,17 @@ function XMLscene(app) {
     this.pecas=new Array();
     this.walls=new Array();
     this.dificulty=null;
+    //this.doSomething="oi ";
     var myGraph = new MySceneGraph('sceneone.xml', this);
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
+
+XMLscene.prototype.undo = function(){
+  this.game.undo();
+	console.log('oi');
+}
 
 XMLscene.prototype.changeScene = function() {
   this.xmlFile++;

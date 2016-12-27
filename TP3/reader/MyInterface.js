@@ -5,9 +5,7 @@
 
 
 function MyInterface() {
-    //call CGFinterface constructor
     CGFinterface.call(this);
-    console.log(this);
     this.cameraIndice = 0;
 };
 
@@ -38,7 +36,7 @@ MyInterface.prototype.init = function(application) {
     //this.gui.add(this.scene, 'speed', -5, 5);
     this.gui.add(this.scene, "typeOfGame", ['Human vs Human','Human vs CPU','CPU vs CPU']);
     this.gui.add(this.scene, "dificulty", ['Random','Impossible']);
-
+    this.gui.add(this.scene, "undo");
     return true;
 };
 

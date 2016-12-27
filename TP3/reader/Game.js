@@ -34,6 +34,9 @@ function Game(scene) {
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
 ['b','b','b','b','b','b','b','b','b','b','b'],
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c']];
+
+this.stack=new Array();
+
 }
 
 Game.prototype.stateMachine = function(pick) {
@@ -232,6 +235,22 @@ Game.prototype.findPositionMoved = function(board,char,pos) {
   return null;
 }
 
+Game.prototype.undo= function(){
+  ////////////////////////////base para o undo
+  var array=this.stack[this.stack.length-1];
+  array[0].x=array[1][0];
+  array[0].y=array[1][1];
+  var posI=this.coordsToPosition([array[1][1],array[1][0]]);
+  //this.changePawnPos(array[2],posI,'r');
+  //array[0].unplace();
+  if(array[0].tipo=="hor")
+    this.placeWall(array[3],'w','b');
+  else if(array[0].tipo=="ver")
+    this.placeWall(array[3],'q','a');
+  console.log(this.board);
+
+}
+
 Game.prototype.stateMachineHuman = function(pick) {
   var xmlscene=this;
     switch(this.State){
@@ -259,8 +278,8 @@ Game.prototype.stateMachineHuman = function(pick) {
             var pos=this.coordsToPosition([this.SelectedObj.childrenPrimitives[0].y,this.SelectedObj.childrenPrimitives[0].x]);
             this.sendMessage('/move./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']./['+posX+','+posY+']',function (data){
                 if(data.currentTarget.responseText=="ok"){
+                  xmlscene.stack.push([xmlscene.SelectedObj.childrenPrimitives[0],[xmlscene.SelectedObj.childrenPrimitives[0].x,xmlscene.SelectedObj.childrenPrimitives[0].y],[posX,posY]]);
                   xmlscene.changePosPeca(posY,posX);
-
                   xmlscene.SelectedPeca=0;
                   xmlscene.SelectedObj=null;
                   if(xmlscene.turn==1)
@@ -301,9 +320,14 @@ Game.prototype.stateMachineHuman = function(pick) {
                 else choice =1;
                 this.sendMessage('/placeWall./'+this.turn+'./'+this.boardToString()+'./'+choice+'./['+posX+','+posY+']',function (data){
                     if(data.currentTarget.responseText=="ok"){
-                      if(choice==2)
+                      if(choice==2){
+                        xmlscene.stack.push([xmlscene.SelectedObj.childrenPrimitives[0],[xmlscene.SelectedObj.childrenPrimitives[0].x,xmlscene.SelectedObj.childrenPrimitives[0].y],[posY-0.5,posX+0.6],[posY,posX]]);
                         xmlscene.changePosPeca(posY-0.5,posX+0.6);
-                      else xmlscene.changePosPeca(posY+0.4,posX-0.6);
+                      }
+                      else {
+                        xmlscene.stack.push([xmlscene.SelectedObj.childrenPrimitives[0],[xmlscene.SelectedObj.childrenPrimitives[0].x,xmlscene.SelectedObj.childrenPrimitives[0].y],[posY+0.4,posX-0.6],[posY,posX]]);
+                        xmlscene.changePosPeca(posY+0.4,posX-0.6);
+                      }
                       xmlscene.changeState(0);
                       xmlscene.changeTurn();
                       xmlscene.SelectedWall.place();
@@ -366,14 +390,17 @@ Game.prototype.changePawnPos = function(PosI,PosF,Char) {
   this.board[2*PosF[0]-2][2*PosF[1]-2]=Char;
 }
 
-Game.prototype.placeWall = function(Pos,Char) {
+Game.prototype.placeWall = function(Pos,Char,Char2) {
+  charToPlace=Char2||Char;
+  console.log(Pos);
+  console.log(charToPlace);
   if(Char=='q'){
-    this.board[2*Pos[0]-2][2*Pos[1]-1]=Char;
-    this.board[2*Pos[0]][2*Pos[1]-1]=Char;
+    this.board[2*Pos[0]-2][2*Pos[1]-1]=charToPlace;
+    this.board[2*Pos[0]][2*Pos[1]-1]=charToPlace;
   }
   else{
-     this.board[2*Pos[0]-1][Pos[1]]=Char;
-      this.board[2*Pos[0]-1][Pos[1]-1]=Char;
+     this.board[2*Pos[0]-1][Pos[1]]=charToPlace;
+      this.board[2*Pos[0]-1][Pos[1]-1]=charToPlace;
   }
 }
 
