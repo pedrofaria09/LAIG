@@ -8,7 +8,7 @@ function XMLscene(app) {
     this.pecas=new Array();
     this.walls=new Array();
     this.dificulty=null;
-    var myGraph = new MySceneGraph('tatooine.xml', this);
+    var myGraph = new MySceneGraph('sceneone.xml', this);
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -21,10 +21,10 @@ XMLscene.prototype.changeScene = function() {
   console.log(this.xmlFile);
   switch(this.xmlFile){
     case 1:
-      var myGraph = new MySceneGraph('tatooine.xml', this);
+      var myGraph = new MySceneGraph('sceneone.xml', this);
       break;
     case 2:
-      var myGraph = new MySceneGraph('tatooine.dsx', this);
+      var myGraph = new MySceneGraph('scenetwo.xml', this);
       break;
   }
 }

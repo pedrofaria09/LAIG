@@ -24,9 +24,9 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="Boavista" near="0.1" far="500" angle="0.4">
-            <from x="30" y="30" z="30"/>
-            <to x="0" y="0" z="0"/>
+        <perspective id="Boavista" near="0.1" far="500" angle="0.3">
+            <from x="0" y="110" z="200"/>
+            <to x="10" y="0" z="0"/>
         </perspective>
 
         <perspective id="segundaVista" near="0.1" far="500" angle="0.4">
@@ -111,12 +111,16 @@
         <texture id="cabeca" file="./images/cabeca.jpg" length_s="1" length_t="1"/>
         <texture id="paredeEsq" file="./images/lalala.png" length_s="1" length_t="1"/>
         <texture id="paredeDir" file="./images/paredeDir.jpg" length_s="1" length_t="1"/>
-        <texture id="chao" file="./images/chao.jpg" length_s="0.05" length_t="0.05"/>
+        <texture id="chao" file="./images/floorTexture2.jpg" length_s="0.05" length_t="0.05"/>
         <texture id="cabecaBB8TXT" file="./images/cabecaBB8.png" length_s="1" length_t="1"/>
         <texture id="corpoBB8TXT" file="./images/corpoBB8.png" length_s="1" length_t="1"/>
         <texture id="pescocoBB8TXT" file="./images/pescocoBB8.png" length_s="1" length_t="1"/>
         <texture id="sandTXT" file="./images/sand.jpg" length_s="1" length_t="1"/>
         <texture id="board" file="./images/board.jpg" length_s="1" length_t="1"/>
+        <texture id="greenTXT" file="./images/greenTexture.jpg" length_s="1" length_t="1"/>
+        <texture id="paredeTXT" file="./images/wallTexture2.jpg" length_s="1" length_t="1"/>
+        <texture id="woodTXT" file="./images/woodTexture.jpg" length_s="1" length_t="1"/>
+        <texture id="snowTXT" file="./images/snowTexture.jpg" length_s="1" length_t="1"/>
     </textures>
 
     <materials>
@@ -437,6 +441,10 @@
             <cylinder base="3" top="2.5" height="0.5" slices="50" stacks="50"/>
         </primitive>
 
+        <primitive id="parteArvore">
+            <cylinder base="3" top="0.1" height="0.5" slices="50" stacks="50"/>
+        </primitive>
+
         <primitive id="esferaCabeca">
             <sphere radius="0.9" slices="50" stacks="50"/>
         </primitive>
@@ -516,142 +524,679 @@
             <children>
                 <componentref id="table"/>
                 <componentref id="allGame"/>
+                <componentref id="cadeiras"/>
+                <componentref id="chao"/>
+                <componentref id="paredes"/>
+                <componentref id="movel"/>
+                <componentref id="snowMen"/>
+            </children>
+        </component>
+
+
+        <component id="snowMen">
+            <transformation>
+                <translate x="-35" y="8" z="-10"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="snowTXT"/>
+            <children>
+                <componentref id="baixo"/>
+                <componentref id="cima"/>
+            </children>
+        </component>
+
+        <component id="cima">
+            <transformation>
+                <scale x="1" y="1.3" z="1"/>
+                <translate x="0" y="2" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="snowTXT"/>
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <component id="baixo">
+            <transformation>
+                <scale x="1.8" y="2" z="1.8"/>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="snowTXT"/>
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <component id="movel">
+            <transformation>
+                <translate x="-35" y="-4" z="-10"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="woodTXT"/>
+            <children>
+                <componentref id="moveltodo"/>
+                <componentref id="gaveta1"/>
+                <componentref id="puxador1"/>
+                <componentref id="gaveta2"/>
+                <componentref id="puxador2"/>
+                <componentref id="gaveta3"/>
+                <componentref id="puxador3"/>
+            </children>
+        </component>
+
+        <component id="gaveta1">
+            <transformation>
+                <translate x="4.8" y="6" z="0"/>
+                <scale x="2" y="5" z="15"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+
+        <component id="puxador1">
+            <transformation>
+                <scale x="1" y="1" z="1"/>
+                <translate x="6" y="6" z="0"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="gaveta2">
+            <transformation>
+                <translate x="4.8" y="-1" z="0"/>
+                <scale x="2" y="5" z="15"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+
+        <component id="puxador2">
+            <transformation>
+                <scale x="1" y="1" z="1"/>
+                <translate x="6" y="-1" z="0"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="gaveta3">
+            <transformation>
+                <translate x="4.8" y="-7" z="0"/>
+                <scale x="2" y="5" z="15"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+
+        <component id="puxador3">
+            <transformation>
+                <scale x="1" y="1" z="1"/>
+                <translate x="6" y="-7" z="0"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="moveltodo">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+                <scale x="10" y="20" z="20"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+
+        <component id="paredes">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="paredeFrente"/>
+                <componentref id="paredeLadoDireto"/>
+                <componentref id="paredeLadoEsquerdo"/>
+                <componentref id="paredeTras"/>
+            </children>
+        </component>
+
+        <component id="paredeTras">
+            <transformation>
+                <translate x="60" y="-14" z="40"/>
+                <scale x="100" y="50" z="1"/>
+                <rotate axis="y" angle="-180"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="paredeLadoEsquerdo">
+            <transformation>
+                <rotate axis="y" angle="90"/>
+                <translate x="-40" y="-14" z="-40"/>
+                <scale x="100" y="50" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="paredeLadoDireto">
+            <transformation>
+                <rotate axis="y" angle="-90"/>
+                <translate x="-60" y="-14" z="-60"/>
+                <scale x="100" y="50" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="paredeFrente">
+            <transformation>
+                <translate x="-40" y="-14" z="-60"/>
+                <scale x="100" y="50" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+
+        <component id="chao">
+            <transformation>
+                <translate x="-40" y="-14" z="40"/>
+                <scale x="100" y="1" z="100"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="chao"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="cadeiras">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <componentref id="cadeira1"/>
+                <componentref id="cadeira2"/>
+            </children>
+        </component>
+
+        <component id="cadeira2">
+            <transformation>
+                <translate x="0" y="0" z="59"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <componentref id="cadeira1"/>
+            </children>
+        </component>
+
+        <component id="cadeira1">
+            <transformation>
+                <translate x="10" y="-9" z="-35"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <componentref id="pernaFrenteEsque"/>
+                <componentref id="pernaFrenteDire"/>
+                <componentref id="pernaTrasEsque"/>
+                <componentref id="pernaTrasDire"/>
+                <componentref id="tampo"/>
+            </children>
+        </component>
+
+        <component id="tampo">
+            <transformation>
+                <translate x="0" y="5" z="-5"/>
+                <scale x="12" y="2" z="12"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+
+        <component id="pernaTrasDire">
+            <transformation>
+                <translate x="5" y="0" z="-10"/>
+                <scale x="2" y="9" z="2"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+        
+        <component id="pernaTrasEsque">
+            <transformation>
+                <translate x="-5" y="0" z="-10"/>
+                <scale x="2" y="9" z="2"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+
+        <component id="pernaFrenteDire">
+            <transformation>
+                <translate x="5" y="0" z="0"/>
+                <scale x="2" y="9" z="2"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+        
+        <component id="pernaFrenteEsque">
+            <transformation>
+                <translate x="-5" y="0" z="0"/>
+                <scale x="2" y="9" z="2"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <componentref id="cuboCima"/>
+                <componentref id="cuboBaixo"/>
+                <componentref id="cuboFrente"/>
+                <componentref id="cuboTras"/>
+                <componentref id="cuboEsq"/>
+                <componentref id="cuboDir"/>
+            </children>
+        </component>
+        
+        <!-- Cubo Esquerdo -->
+        <component id="cuboEsq">
+            <transformation>
+                <translate x="0.5" y="-0.5" z="0.5"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        
+        <!-- Cubo Direito -->
+        <component id="cuboDir">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="-0.5"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        
+        <!-- Cubo Cima -->
+        <component id="cuboCima">
+            <transformation>
+                <translate x="-0.5" y="0.5" z="0.5"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        
+        <!-- Cubo Baixo -->
+        <component id="cuboBaixo">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="-0.5"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        
+        <!-- Cubo Frente -->
+        <component id="cuboFrente">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="0.5"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+        
+        <!-- Cubo Tras -->
+        <component id="cuboTras">
+            <transformation>
+                <translate x="0.5" y="-0.5" z="-0.5"/>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+            
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            
+            <texture id="woodTXT"/>
+            
+            <children>
+                <primitiveref id="quadrado"/>
             </children>
         </component>
 
         <component id="table">
             <transformation>
-              <translate x="10" y="10" z="10"/>
+                <translate x="10" y="10" z="10"/>
             </transformation>
 
             <materials>
                 <material id="inherit"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="woodTXT"/>
 
             <children>
-                <componentref id="torusTop"/>
-                <componentref id="torusMed"/>
-                <componentref id="torusBot"/>
                 <componentref id="basetable"/>
+                <componentref id="toptable"/>
             </children>
         </component>
 
-        <component id="allGame">
+        <component id="toptable">
             <transformation>
-              <rotate axis="x" angle="-90"/>
-            </transformation>
-
-            <materials>
-                <material id="inherit"/>
-            </materials>
-
-            <texture id="none"/>
-
-            <children>
-              <componentref id="caseBoard"/>
-              <componentref id="paredeDir"/>
-              <componentref id="peca1"/>
-              <componentref id="peca2"/>
-              <componentref id="peca3"/>
-              <componentref id="peca4"/>
-              <componentref id="wall1"/>
-              <componentref id="wall2"/>
-              <componentref id="wall3"/>
-              <componentref id="wall4"/>
-              <componentref id="wall5"/>
-              <componentref id="wall6"/>
-              <componentref id="wall7"/>
-              <componentref id="wall8"/>
-              <componentref id="wall9"/>
-              <componentref id="wall10"/>
-              <componentref id="wall11"/>
-              <componentref id="wall12"/>
-              <componentref id="wall13"/>
-              <componentref id="wall14"/>
-              <componentref id="wall15"/>
-              <componentref id="wall16"/>
-              <componentref id="wall17"/>
-              <componentref id="wall18"/>
-              <componentref id="wall19"/>
-              <componentref id="wall20"/>
-              <componentref id="wall21"/>
-              <componentref id="wall22"/>
-              <componentref id="wall23"/>
-              <componentref id="wall24"/>
-              <componentref id="wall25"/>
-              <componentref id="wall26"/>
-              <componentref id="wall27"/>
-              <componentref id="wall28"/>
-              <componentref id="wall29"/>
-              <componentref id="wall30"/>
-              <componentref id="wall31"/>
-              <componentref id="wall32"/>
-            </children>
-        </component>
-        <component id="basetable">
-            <transformation>
-              <scale x="5" y="2" z="5"/>
-              <translate x="0" y="-8" z="-4"/>
-              <rotate axis="x" angle="90"/>
+                <scale x="5" y="2" z="7"/>
+                <translate x="0" y="-9.01" z="-2.9"/>
+                <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
                 <material id="inherit"/>
             </materials>
-            <texture id="none"/>
+            <texture id="woodTXT"/>
             <children>
                 <primitiveref id="basetable"/>
             </children>
         </component>
 
-        <component id="torusTop">
+        <component id="basetable">
             <transformation>
-              <scale x="5" y="2" z="5"/>
-              <translate x="0" y="-6" z="-4"/>
-              <rotate axis="x" angle="90"/>
+                <scale x="5" y="2" z="5"/>
+                <translate x="0" y="-8" z="-4"/>
+                <rotate axis="x" angle="90"/>
             </transformation>
             <materials>
                 <material id="inherit"/>
             </materials>
-            <texture id="none"/>
+            <texture id="woodTXT"/>
             <children>
-                <primitiveref id="torus"/>
+                <primitiveref id="basetable"/>
             </children>
         </component>
 
-        <component id="torusMed">
+        <component id="allGame">
             <transformation>
-              <scale x="3.5" y="2" z="3.5"/>
-              <translate x="0" y="-7" z="-6"/>
-              <rotate axis="x" angle="90"/>
+                <rotate axis="x" angle="-90"/>
             </transformation>
+
             <materials>
                 <material id="inherit"/>
             </materials>
+
             <texture id="none"/>
+
             <children>
-                <primitiveref id="torus"/>
-            </children>
-        </component>
-        <component id="torusBot">
-            <transformation>
-              <scale x="2" y="2" z="2"/>
-              <translate x="0" y="-8" z="-10"/>
-              <rotate axis="x" angle="90"/>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="torus"/>
+                <componentref id="caseBoard"/>
+                <componentref id="paredeDir"/>
+                <componentref id="peca1"/>
+                <componentref id="peca2"/>
+                <componentref id="peca3"/>
+                <componentref id="peca4"/>
+                <componentref id="wall1"/>
+                <componentref id="wall2"/>
+                <componentref id="wall3"/>
+                <componentref id="wall4"/>
+                <componentref id="wall5"/>
+                <componentref id="wall6"/>
+                <componentref id="wall7"/>
+                <componentref id="wall8"/>
+                <componentref id="wall9"/>
+                <componentref id="wall10"/>
+                <componentref id="wall11"/>
+                <componentref id="wall12"/>
+                <componentref id="wall13"/>
+                <componentref id="wall14"/>
+                <componentref id="wall15"/>
+                <componentref id="wall16"/>
+                <componentref id="wall17"/>
+                <componentref id="wall18"/>
+                <componentref id="wall19"/>
+                <componentref id="wall20"/>
+                <componentref id="wall21"/>
+                <componentref id="wall22"/>
+                <componentref id="wall23"/>
+                <componentref id="wall24"/>
+                <componentref id="wall25"/>
+                <componentref id="wall26"/>
+                <componentref id="wall27"/>
+                <componentref id="wall28"/>
+                <componentref id="wall29"/>
+                <componentref id="wall30"/>
+                <componentref id="wall31"/>
+                <componentref id="wall32"/>
             </children>
         </component>
 
         <component id="paredeDir">
             <transformation>
-              <translate x="10" y="10" z="0"/>
+                <translate x="10" y="10" z="0"/>
                 <scale x="20" y="20" z="1"/>
 
             </transformation>
@@ -669,7 +1214,7 @@
 
         <component id="caseBoard">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -685,7 +1230,7 @@
 
         <component id="peca1">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -703,7 +1248,7 @@
 
         <component id="peca2">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -721,7 +1266,7 @@
 
         <component id="peca3">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -739,7 +1284,7 @@
 
         <component id="peca4">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -757,7 +1302,7 @@
 
         <component id="wall1">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -775,7 +1320,7 @@
 
         <component id="wall2">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -793,7 +1338,7 @@
 
         <component id="wall3">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -811,7 +1356,7 @@
 
         <component id="wall4">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -829,7 +1374,7 @@
 
         <component id="wall5">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -847,7 +1392,7 @@
 
         <component id="wall6">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -865,7 +1410,7 @@
 
         <component id="wall7">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -883,7 +1428,7 @@
 
         <component id="wall8">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -901,7 +1446,7 @@
 
         <component id="wall9">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -918,7 +1463,7 @@
         </component>
         <component id="wall10">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -936,7 +1481,7 @@
 
         <component id="wall11">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -953,7 +1498,7 @@
         </component>
         <component id="wall12">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -970,7 +1515,7 @@
         </component>
         <component id="wall13">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -987,7 +1532,7 @@
         </component>
         <component id="wall14">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1004,7 +1549,7 @@
         </component>
         <component id="wall15">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1021,7 +1566,7 @@
         </component>
         <component id="wall16">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1038,7 +1583,7 @@
         </component>
         <component id="wall17">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1055,7 +1600,7 @@
         </component>
         <component id="wall18">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1072,7 +1617,7 @@
         </component>
         <component id="wall19">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1089,7 +1634,7 @@
         </component>
         <component id="wall20">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1106,7 +1651,7 @@
         </component>
         <component id="wall21">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1123,7 +1668,7 @@
         </component>
         <component id="wall22">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1140,7 +1685,7 @@
         </component>
         <component id="wall23">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1157,7 +1702,7 @@
         </component>
         <component id="wall24">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1174,7 +1719,7 @@
         </component>
         <component id="wall25">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1191,7 +1736,7 @@
         </component>
         <component id="wall26">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1208,7 +1753,7 @@
         </component>
         <component id="wall27">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1225,7 +1770,7 @@
         </component>
         <component id="wall28">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1242,7 +1787,7 @@
         </component>
         <component id="wall29">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1259,7 +1804,7 @@
         </component>
         <component id="wall30">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1276,7 +1821,7 @@
         </component>
         <component id="wall31">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1293,7 +1838,7 @@
         </component>
         <component id="wall32">
             <transformation>
-              <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1308,8 +1853,6 @@
 
             <pickme/>
         </component>
-
-
 
     </components>
 </dsx>

@@ -1,0 +1,1581 @@
+<!-- Os comentarios devem ter espacos no inicio e no fim, a -->
+<!-- separar dos hifens -->
+<!-- Nao devem ser usados caracteres especiais (p.ex. acentos) -->
+<!-- Todas as tags e atributos sao obrigatorios, exceto onde for -->
+<!-- referido o contrario -->
+
+<!-- Na descricao abaixo, os simbolos utilizados tem o seguinte significado: -->
+<!-- ii: integer value -->
+<!-- ff: float value -->
+<!-- ss: string value -->
+<!-- cc: character "x" or "y" or "z" -->
+<!-- tt: "0" or "1" with Boolean significance -->
+
+<dsx>
+
+    <!-- deve definir-se um objeto para raiz do grafo , assim -->
+    <!-- como o comprimento dos tres eixos (cilindros) -->
+    <scene root="root" axis_length="1"/>
+
+    <views default="Boavista">
+
+        <!-- declaracao obrigatoria de pelo menos uma vista; -->
+        <!-- se varias vistas declaradas, o default e' a -->
+        <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
+        <!-- a vista muda para a proxima da lista; da -->
+        <!-- ultima vista da lista volta 'a primeira -->
+        <perspective id="Boavista" near="0.1" far="500" angle="0.4">
+            <from x="0" y="100" z="200"/>
+            <to x="2" y="0" z="0"/>
+        </perspective>
+
+        <perspective id="segundaVista" near="0.1" far="500" angle="0.4">
+            <from x="40" y="40" z="40"/>
+            <to x="20" y="20" z="0"/>
+        </perspective>
+
+        <perspective id="terceiraVista" near="0.5" far="400" angle="0.3">
+            <from x="-40" y="30" z="0"/>
+            <to x="10" y="0" z="5"/>
+        </perspective>
+
+    </views>
+
+    <illumination doublesided="1" local="1">
+
+        <ambient r="0" g="0" b="0" a="0"/>
+        <background r="0" g="0" b="0" a="1"/>
+
+    </illumination>
+
+    <lights>
+
+        <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <omni id="uma" enabled="1">
+            <location x="6" y="20" z="10" w="1"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="0.7" g="0.5" b="0" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+        </omni>
+
+        <spot id="duas" enabled="1" angle="10" exponent="0">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="0" y="0" z="0"/>
+            <location x="5" y="5" z="5"/>
+            <ambient r="0.5" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.5" g="0.3" b="0.3" a="1"/>
+            <specular r="0.5" g="0.3" b="0.3" a="1"/>
+        </spot>
+
+        <spot id="tres" enabled="1" angle="0" exponent="2">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="5" y="0" z="5"/>
+            <location x="30" y="30" z="30"/>
+            <ambient r="1" g="0" b="0" a="1"/>
+            <diffuse r="1" g="0" b="0" a="1"/>
+            <specular r="1" g="0" b="0" a="1"/>
+        </spot>
+
+        <spot id="quatro" enabled="1" angle="25" exponent="10">
+            <target x="8" y="0" z="8"/>
+            <location x="10" y="12" z="0.01"/>
+            <ambient r="1" g="1" b="0" a="1"/>
+            <diffuse r="1" g="1" b="0" a="1"/>
+            <specular r="1" g="1" b="0" a="1"/>
+        </spot>
+
+    </lights>
+
+    <textures>
+
+        <!-- Deve existir um ou mais blocos "texture" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <!-- length_s e length_t sao fatores de escala de textura:-->
+        <!-- Exemplo length_s=3.0: uma ocorrencia da textura, em -->
+        <!-- comprimento, deve cobrir um comprimento igual -->
+        <!-- a 3 unidades;  -->
+        <!-- Exemplo length_t=0.4, uma ocorrencia da textura, em -->
+        <!-- largura, deve cobrir uma largura igual a 0.4 unidades.  -->
+        <!-- Transf. Geometr. do tipo escalamento sobre os -->
+        <!-- objetos respetivos podem a violar esta regra.         -->
+        <!-- Nao necessario aplicar fatores de escala em  -->
+        <!-- quadricas (esfera, ciclindro...) -->
+        <texture id="corpo" file="./images/corpo.jpg" length_s="1" length_t="1"/>
+        <texture id="caseBoard" file="./images/caseBoard.jpg" length_s="1" length_t="1"/>
+        <texture id="pe" file="./images/pe.png" length_s="1" length_t="1"/>
+        <texture id="pefrente" file="./images/pefrente.jpg" length_s="1" length_t="1"/>
+        <texture id="ombrofora" file="./images/ombrofora.jpg" length_s="1" length_t="1"/>
+        <texture id="ombrofrente" file="./images/ombrofrente.jpg" length_s="1" length_t="1"/>
+        <texture id="braco" file="./images/braco.jpg" length_s="1" length_t="1"/>
+        <texture id="cabeca" file="./images/cabeca.jpg" length_s="1" length_t="1"/>
+        <texture id="paredeEsq" file="./images/lalala.png" length_s="1" length_t="1"/>
+        <texture id="paredeDir" file="./images/paredeDir.jpg" length_s="1" length_t="1"/>
+        <texture id="chao" file="./images/chao.jpg" length_s="0.05" length_t="0.05"/>
+        <texture id="cabecaBB8TXT" file="./images/cabecaBB8.png" length_s="1" length_t="1"/>
+        <texture id="corpoBB8TXT" file="./images/corpoBB8.png" length_s="1" length_t="1"/>
+        <texture id="pescocoBB8TXT" file="./images/pescocoBB8.png" length_s="1" length_t="1"/>
+        <texture id="sandTXT" file="./images/sand.jpg" length_s="1" length_t="1"/>
+        <texture id="board" file="./images/board.jpg" length_s="1" length_t="1"/>
+        <texture id="greenTXT" file="./images/greenTexture.jpg" length_s="1" length_t="1"/>
+        <texture id="paredeTXT" file="./images/wallTexture.jpg" length_s="1" length_t="1"/>
+    </textures>
+
+    <materials>
+
+        <!-- Deve existir um ou mais blocos "material" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <material id="orange">
+            <emission r="0" g="0" b="0" a="0.3"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="1" g="1" b="0" a="1"/>
+            <specular r="1" g="1" b="0" a="1"/>
+            <shininess value="10"/>
+        </material>
+        <material id="red">
+            <emission r="0" g="0" b="0" a="0.3"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="1" g="0" b="0" a="1"/>
+            <specular r="1" g="0" b="0" a="1"/>
+            <shininess value="10"/>
+        </material>
+        <material id="yellow">
+            <emission r="0" g="0" b="0" a="0.3"/>
+            <ambient r="0" g="0" b="0" a="1"/>
+            <diffuse r="0.5" g="0.5" b="0" a="1"/>
+            <specular r="1" g="1" b="0" a="1"/>
+            <shininess value="1"/>
+        </material>
+        <material id="white">
+            <emission r="0" g="0" b="0" a="1"/>
+            <ambient r="0.2" g="0.2" b="0.2" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+            <shininess value="1"/>
+        </material>
+        <material id="gray">
+            <emission r="0" g="0" b="0" a="1"/>
+            <ambient r="0.2" g="0.2" b="0.2" a="1"/>
+            <diffuse r="0.45" g="0.5" b="0.55" a="1"/>
+            <specular r="0.45" g="0.5" b="0.55" a="1"/>
+            <shininess value="1"/>
+        </material>
+        <material id="liveWhite">
+            <emission r="0" g="0" b="0" a="1"/>
+            <ambient r="0.2" g="0.2" b="0.2" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+            <shininess value="1"/>
+        </material>
+
+    </materials>
+
+    <transformations>
+
+        <!-- Deve existir um ou mais blocos "transformation" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <transformation id="centroQuadrante">
+            <!-- instrucoes a usar sem limite nem ordem -->
+            <!-- deve existir pelo menos uma transformacao -->
+            <translate x="0" y="0.5" z="0"/>
+            <scale x="1" y="1" z="1"/>
+            <rotate axis="y" angle="90"/>
+            <rotate axis="x" angle="-90"/>
+        </transformation>
+        <transformation id="segunda">
+            <!-- instrucoes a usar sem limite nem ordem -->
+            <!-- deve existir pelo menos uma transformacao -->
+            <translate x="0" y="0" z="0"/>
+            <rotate axis="z" angle="30"/>
+            <scale x="1" y="1" z="1"/>
+        </transformation>
+
+    </transformations>
+
+    <animations>
+        <!-- podem existir zero ou mais nós "animation" -->
+        <!-- span é o tempo, em segundos, que a animação deve -->
+        <!-- demorar. Nesta versão do formato DSX, type pode ter -->
+        <!-- o valor "linear" ou "circular"; na animacao circular -->
+        <!-- os angulos sao expressos em graus  -->
+        <animation id="linV1" span="10.87" type="linear">
+            <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="5" yy="0" zz="5"/>
+            <controlpoint xx="0" yy="0" zz="5"/>
+            <controlpoint xx="0" yy="0" zz="0"/>
+        </animation>
+        <animation id="linV2" span="5" type="linear">
+            <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="1" yy="0" zz="7"/>
+        </animation>
+        <animation id="linV3" span="15" type="linear">
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+        </animation>
+        <animation id="linV4" span="20" type="linear">
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+            <controlpoint xx="0" yy="0.1" zz="0"/>
+            <controlpoint xx="0" yy="-0.1" zz="0"/>
+        </animation>
+        <animation id="linV5" span="1" type="linear">
+            <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="1" yy="-0.1" zz="7"/>
+        </animation>
+        <animation id="circV1" span="20" type="circular" centerx="5" centery="0" centerz="5" radius="5" startang="-45" rotang="360"/>
+        <animation id="circV2" span="9.77" type="circular" centerx="-2.5" centery="0" centerz="-2.2" radius="3.11" startang="-30" rotang="-180"/>
+        <animation id="circV3" span="10" type="circular" centerx="0.1" centery="0" centerz="0.1" radius="0.1" startang="0" rotang="-340"/>
+        <animation id="circV4" span="13" type="circular" centerx="4.5" centery="0" centerz="1.5" radius="-5" startang="-20" rotang="180"/>
+    </animations>
+
+    <primitives>
+
+        <primitive id="quadrado">
+            <rectangle x1="0" y1="0" x2="1" y2="1"/>
+        </primitive>
+
+        <primitive id="board">
+            <board/>
+        </primitive>
+
+        <primitive id="peca1">
+            <peca x="6.5" y="15" realx="4" realy="4"/>
+        </primitive>
+
+        <primitive id="wall1">
+            <wall tipo="hor" x="0.3" y="-1.7"/>
+        </primitive>
+
+        <primitive id="wall2">
+            <wall tipo="hor" x="0.3" y="-2.7"/>
+        </primitive>
+
+        <primitive id="wall3">
+            <wall tipo="hor" x="0.3" y="-3.7"/>
+        </primitive>
+
+        <primitive id="wall4">
+            <wall tipo="hor" x="4.3" y="-1.7"/>
+        </primitive>
+
+        <primitive id="wall5">
+            <wall tipo="hor" x="4.3" y="-2.7"/>
+        </primitive>
+
+        <primitive id="wall6">
+            <wall tipo="hor" x="4.3" y="-3.7"/>
+        </primitive>
+
+        <primitive id="wall7">
+            <wall tipo="hor" x="8.3" y="-1.7"/>
+        </primitive>
+
+        <primitive id="wall8">
+            <wall tipo="hor" x="8.3" y="-2.7"/>
+        </primitive>
+        <primitive id="wall9">
+            <wall tipo="ver" x="12.3" y="-1.1"/>
+        </primitive>
+        <primitive id="wall10">
+            <wall tipo="ver" x="13" y="-1.1"/>
+        </primitive>
+        <primitive id="wall11">
+            <wall tipo="ver" x="13.7" y="-1.1"/>
+        </primitive>
+
+        <primitive id="wall12">
+            <wall tipo="ver" x="14.4" y="-1.1"/>
+        </primitive>
+
+        <primitive id="wall13">
+            <wall tipo="ver" x="15.1" y="-1.1"/>
+        </primitive>
+
+        <primitive id="wall14">
+            <wall tipo="ver" x="15.8" y="-1.1"/>
+        </primitive>
+
+        <primitive id="wall15">
+            <wall tipo="ver" x="16.5" y="-1.1"/>
+        </primitive>
+
+        <primitive id="wall16">
+            <wall tipo="ver" x="17.2  " y="-1.1"/>
+        </primitive>
+
+        <primitive id="wall17">
+            <wall tipo="hor" x="0.3" y="21.3"/>
+        </primitive>
+
+        <primitive id="wall18">
+            <wall tipo="hor" x="0.3" y="23.3"/>
+        </primitive>
+
+        <primitive id="wall19">
+            <wall tipo="hor" x="0.3" y="22.3"/>
+        </primitive>
+
+        <primitive id="wall20">
+            <wall tipo="hor" x="4.3" y="21.3"/>
+        </primitive>
+
+        <primitive id="wall21">
+            <wall tipo="hor" x="4.3" y="23.3"/>
+        </primitive>
+
+        <primitive id="wall22">
+            <wall tipo="hor" x="4.3" y="22.3"/>
+        </primitive>
+
+        <primitive id="wall23">
+            <wall tipo="hor" x="8.3.3" y="21.3"/>
+        </primitive>
+
+        <primitive id="wall24">
+            <wall tipo="hor" x="8.3" y="22.3"/>
+        </primitive>
+
+        <primitive id="wall25">
+            <wall tipo="ver" x="12.3" y="23.9"/>
+        </primitive>
+        <primitive id="wall26">
+            <wall tipo="ver" x="13" y="23.9"/>
+        </primitive>
+        <primitive id="wall27">
+            <wall tipo="ver" x="13.7" y="23.9"/>
+        </primitive>
+
+        <primitive id="wall28">
+            <wall tipo="ver" x="14.4" y="23.9"/>
+        </primitive>
+
+        <primitive id="wall29">
+            <wall tipo="ver" x="15.1" y="23.9"/>
+        </primitive>
+
+        <primitive id="wall30">
+            <wall tipo="ver" x="15.8" y="23.9"/>
+        </primitive>
+
+        <primitive id="wall31">
+            <wall tipo="ver" x="16.5" y="23.9"/>
+        </primitive>
+
+        <primitive id="wall32">
+            <wall tipo="ver" x="17.2" y="23.9"/>
+        </primitive>
+
+        <primitive id="peca2">
+            <peca x="13.5" y="15" realx="4" realy="8"/>
+        </primitive>
+
+        <primitive id="peca3">
+            <peca x="6.5" y="5" realx="11" realy="4"/>
+        </primitive>
+
+        <primitive id="peca4">
+            <peca x="13.5" y="5" realx="11" realy="8"/>
+        </primitive>
+
+        <primitive id="quadradoTeste">
+            <rectangle x1="0" y1="0" x2="5" y2="3"/>
+        </primitive>
+
+        <primitive id="triangulo">
+            <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0.5" y3="1" z3="0"/>
+        </primitive>
+
+        <primitive id="uniCilindro">
+            <cylinder base="0.5" top="0.5" height="1" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="cilindroCorpo">
+            <cylinder base="0.9" top="0.9" height="3.5" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="cilindroBraco">
+            <cylinder base="0.4" top="0.4" height="2.5" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="esfera">
+            <sphere radius="1" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="basetable">
+            <cylinder base="1" top="2" height="4" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="cilindroBB2">
+            <cylinder base="0.3" top="0.52" height="0.5" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="cilindroTrono">
+            <cylinder base="3" top="2.5" height="0.5" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="parteArvore">
+            <cylinder base="3" top="0.1" height="0.5" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="esferaCabeca">
+            <sphere radius="0.9" slices="50" stacks="50"/>
+        </primitive>
+
+        <primitive id="torus">
+            <torus inner="1" outer="1" slices="50" loops="50"/>
+        </primitive>
+
+        <primitive id="vehicle">
+            <vehicle/>
+        </primitive>
+
+        <primitive id="chessboard">
+            <chessboard du="11" dv="14" textureref="board">
+                <c1 r="1" g="1" b="0" a="1"/>
+                <c2 r="0" g="1" b="1" a="1"/>
+                <cs r="0.4" g="0" b="0.4" a="1"/>
+                <cs r="0" g="0" b="1" a="1"/>
+            </chessboard>
+        </primitive>
+
+        <primitive id="plane">
+            <!-- Nova primitiva: plano, discretizado em grelha -->
+            <!-- exemplo:                                -->
+            <!-- <plane dimX="3" dimY="2" partsX="10" partsY="7"/> -->
+            <!-- gera um plano de dimensões 3 x 2 unidades -->
+            <!-- assente em XY, centrado na origem, com a -->
+            <!-- face visível apontando para +Z e discretizado -->
+            <!-- em 10 partes no eixo XX e 7 partes no YY  -->
+            <plane dimX="1" dimY="1" partsX="11" partsY="14"/>
+        </primitive>
+
+        <primitive id="patch">
+            <!-- Nova primitiva: patch, discretizado em grelha -->
+            <!-- Exemplo:                                   -->
+            <!-- <patch orderU="2" orderV="3" partsU="7" partsV="9" > -->
+            <!--     <controlpoint x=0.0 y=0.0 z=0.0 />   -->
+            <!--     <controlpoint x=2.0 y=1.0 z=0.0 />   -->
+            <!--     etc, total de 12 pontos              -->
+            <!-- O exemplo gera um patch com              -->
+            <!--     Direcao U: ordem=2 (3 pontos por curva), -->
+            <!--                discretizacao em 7 partes -->
+            <!--     Direcao V: ordem=3 (4 pontos por curva), -->
+            <!--                discretizacao em 9 partes. -->
+            <!-- O numero total de pontos a fornecer e' -->
+            <!--      (2+1)*(3+1)=12 pontos              -->
+            <patch orderU="2" orderV="3" partsU="20" partsV="20">
+                <controlpoint x="-2" y="-2" z="1"/>
+                <controlpoint x="-2" y="-1" z="-2"/>
+                <controlpoint x="-2" y="1" z="5"/>
+                <controlpoint x="-2" y="2" z="-1"/>
+
+                <controlpoint x="0" y="-2" z="0"/>
+                <controlpoint x="0" y="-1" z="-1"/>
+                <controlpoint x="0" y="1" z="1.5"/>
+                <controlpoint x="0" y="2" z="0"/>
+
+                <controlpoint x="2" y="-2" z="-1"/>
+                <controlpoint x="2" y="-1" z="2"/>
+                <controlpoint x="2" y="1" z="-5"/>
+                <controlpoint x="2" y="2" z="1"/>
+
+            </patch>
+        </primitive>
+
+    </primitives>
+
+    <components>
+        <component id="root">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="white"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="table"/>
+                <componentref id="allGame"/>
+                <componentref id="cadeiras"/>
+                <componentref id="chao"/>
+                <componentref id="arvore"/>
+                <componentref id="paredes"/>
+            </children>
+        </component>
+
+        <component id="paredes">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="paredeFrente"/>
+                <componentref id="paredeLadoDireto"/>
+                <componentref id="paredeLadoEsquerdo"/>
+                <componentref id="paredeTras"/>
+            </children>
+        </component>
+
+        <component id="paredeTras">
+            <transformation>
+                <translate x="60" y="-14" z="40"/>
+                <scale x="100" y="50" z="1"/>
+                <rotate axis="y" angle="-180"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="paredeLadoEsquerdo">
+            <transformation>
+                <rotate axis="y" angle="90"/>
+                <translate x="-40" y="-14" z="-40"/>
+                <scale x="100" y="50" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="paredeLadoDireto">
+            <transformation>
+                <rotate axis="y" angle="-90"/>
+                <translate x="-60" y="-14" z="-60"/>
+                <scale x="100" y="50" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="paredeFrente">
+            <transformation>
+                <translate x="-40" y="-14" z="-60"/>
+                <scale x="100" y="50" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="paredeTXT"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="arvore">
+            <transformation>
+                <translate x="-20" y="-14" z="-10"/>
+                <scale x="1" y="1.7" z="1"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="base"/>
+                <componentref id="parte1"/>
+                <componentref id="parte2"/>
+                <componentref id="parte3"/>
+                <componentref id="parte4"/>
+                <componentref id="parte5"/>
+            </children>
+        </component>
+
+        <component id="parte5">
+            <transformation>
+                <translate x="0" y="15" z="0"/>
+                <scale x="1.5" y="6" z="1.5"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="greenTXT"/>
+            <children>
+                <primitiveref id="parteArvore"/>
+            </children>
+        </component>
+
+        <component id="parte4">
+            <transformation>
+                <translate x="0" y="12.5" z="0"/>
+                <scale x="2" y="6" z="2"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="greenTXT"/>
+            <children>
+                <primitiveref id="parteArvore"/>
+            </children>
+        </component>
+
+        <component id="parte3">
+            <transformation>
+                <translate x="0" y="10" z="0"/>
+                <scale x="2.5" y="6" z="2.5"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="greenTXT"/>
+            <children>
+                <primitiveref id="parteArvore"/>
+            </children>
+        </component>
+
+        <component id="parte2">
+            <transformation>
+                <translate x="0" y="7.5" z="0"/>
+                <scale x="3" y="6" z="3"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="greenTXT"/>
+            <children>
+                <primitiveref id="parteArvore"/>
+            </children>
+        </component>
+
+        <component id="parte1">
+            <transformation>
+                <translate x="0" y="5" z="0"/>
+                <scale x="3.5" y="6" z="3.5"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="greenTXT"/>
+            <children>
+                <primitiveref id="parteArvore"/>
+            </children>
+        </component>
+
+        <component id="base">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+                <scale x="5" y="5" z="5"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="chao">
+            <transformation>
+                <translate x="-40" y="-14" z="40"/>
+                <scale x="100" y="1" z="100"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="chao"/>
+
+            <children>
+                <primitiveref id="quadrado"/>
+            </children>
+        </component>
+
+        <component id="cadeiras">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <componentref id="cadeira1"/>
+                <componentref id="cadeira2"/>
+            </children>
+        </component>
+
+        <component id="cadeira1">
+            <transformation>
+                <translate x="10" y="-5" z="-35"/>
+                <scale x="10" y="9" z="10"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="cadeira2">
+            <transformation>
+                <translate x="10" y="-5" z="15"/>
+                <scale x="10" y="9" z="10"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="sandTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="table">
+            <transformation>
+                <translate x="10" y="10" z="10"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="torusTop"/>
+                <componentref id="torusMed"/>
+                <componentref id="torusBot"/>
+                <componentref id="basetable"/>
+            </children>
+        </component>
+
+        <component id="allGame">
+            <transformation>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="caseBoard"/>
+                <componentref id="paredeDir"/>
+                <componentref id="peca1"/>
+                <componentref id="peca2"/>
+                <componentref id="peca3"/>
+                <componentref id="peca4"/>
+                <componentref id="wall1"/>
+                <componentref id="wall2"/>
+                <componentref id="wall3"/>
+                <componentref id="wall4"/>
+                <componentref id="wall5"/>
+                <componentref id="wall6"/>
+                <componentref id="wall7"/>
+                <componentref id="wall8"/>
+                <componentref id="wall9"/>
+                <componentref id="wall10"/>
+                <componentref id="wall11"/>
+                <componentref id="wall12"/>
+                <componentref id="wall13"/>
+                <componentref id="wall14"/>
+                <componentref id="wall15"/>
+                <componentref id="wall16"/>
+                <componentref id="wall17"/>
+                <componentref id="wall18"/>
+                <componentref id="wall19"/>
+                <componentref id="wall20"/>
+                <componentref id="wall21"/>
+                <componentref id="wall22"/>
+                <componentref id="wall23"/>
+                <componentref id="wall24"/>
+                <componentref id="wall25"/>
+                <componentref id="wall26"/>
+                <componentref id="wall27"/>
+                <componentref id="wall28"/>
+                <componentref id="wall29"/>
+                <componentref id="wall30"/>
+                <componentref id="wall31"/>
+                <componentref id="wall32"/>
+            </children>
+        </component>
+        <component id="basetable">
+            <transformation>
+                <scale x="5" y="2" z="5"/>
+                <translate x="0" y="-8" z="-4"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="basetable"/>
+            </children>
+        </component>
+
+        <component id="torusTop">
+            <transformation>
+                <scale x="5" y="2" z="5"/>
+                <translate x="0" y="-6" z="-4"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+
+        <component id="torusMed">
+            <transformation>
+                <scale x="3.5" y="2" z="3.5"/>
+                <translate x="0" y="-7" z="-6"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+        <component id="torusBot">
+            <transformation>
+                <scale x="2" y="2" z="2"/>
+                <translate x="0" y="-8" z="-10"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+
+        <component id="paredeDir">
+            <transformation>
+                <translate x="10" y="10" z="0"/>
+                <scale x="20" y="20" z="1"/>
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="chessboard"/>
+            </children>
+        </component>
+
+        <component id="caseBoard">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="caseBoard"/>
+
+            <children>
+                <primitiveref id="board"/>
+            </children>
+        </component>
+
+        <component id="peca1">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca1"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="peca2">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca2"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="peca3">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca3"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="peca4">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="board"/>
+
+            <children>
+                <primitiveref id="peca4"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall1">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall1"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall2">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall2"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall3">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall3"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall4">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall4"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall5">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall5"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall6">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall6"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall7">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall7"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall8">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall8"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall9">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall9"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall10">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall10"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+        <component id="wall11">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall11"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall12">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall12"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall13">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall13"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall14">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall14"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall15">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall15"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall16">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall16"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall17">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall17"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall18">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall18"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall19">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall19"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall20">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall20"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall21">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall21"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall22">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall22"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall23">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall23"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall24">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall24"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall25">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall25"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall26">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall26"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall27">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall27"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall28">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall28"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall29">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall29"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall30">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall30"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall31">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall31"/>
+            </children>
+
+            <pickme/>
+        </component>
+        <component id="wall32">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="wall32"/>
+            </children>
+
+            <pickme/>
+        </component>
+
+    </components>
+</dsx>
