@@ -32,7 +32,7 @@ MySceneGraph.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-   this.loadedOk = true;
+    this.loadedOk = true;
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
     this.scene.onGraphLoaded();
 };
@@ -78,7 +78,7 @@ MySceneGraph.prototype.parseGlobals = function(rootElement) {
         console.warn("You should have 2 attributes on scene");
         return -1;
     }
-      this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
+    this.axis = new CGFaxis(this.scene, elem[0].attributes[1].nodeValue);
     this.root = elem[0].attributes[0].nodeValue;
 }
 
@@ -763,73 +763,73 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
                     this.priList[i] = new Torus(this.scene, elem[0].children[i].attributes[0].nodeValue, inner, outer, slices, loops);
                     break;
                 case "plane":
-                  dimX = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
-                  dimY = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                  partsX = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
-                  partsY = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
-                  this.priList[i] = new Plane(this.scene, elem[0].children[i].attributes[0].nodeValue, dimX, dimY, partsX, partsY);
-                  break;
+                    dimX = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    dimY = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    partsX = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    partsY = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    this.priList[i] = new Plane(this.scene, elem[0].children[i].attributes[0].nodeValue, dimX, dimY, partsX, partsY);
+                    break;
                 case "peca":
-                  var x = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
-                  var y = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                  var realx = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
-                  var realy = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
-                  this.priList[i] = new Peca(this.scene, elem[0].children[i].attributes[0].nodeValue, x,y,realx,realy);
-                  this.scene.pecas.push(this.priList[i]);
-                  break;
+                    var x = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    var y = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    var realx = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    var realy = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    this.priList[i] = new Peca(this.scene, elem[0].children[i].attributes[0].nodeValue, x, y, realx, realy);
+                    this.scene.pecas.push(this.priList[i]);
+                    break;
                 case "wall":
-                  var tipo = elem[0].children[i].children[0].attributes[0].nodeValue;
-                  var x = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                  var y = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
-                  this.priList[i] = new Wall(this.scene, elem[0].children[i].attributes[0].nodeValue,tipo, x,y);
-                  this.scene.walls.push(this.priList[i]);
-                  break;
+                    var tipo = elem[0].children[i].children[0].attributes[0].nodeValue;
+                    var x = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    var y = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    this.priList[i] = new Wall(this.scene, elem[0].children[i].attributes[0].nodeValue, tipo, x, y);
+                    this.scene.walls.push(this.priList[i]);
+                    break;
                 case "board":
-                  this.priList[i] = new Board(this.scene, elem[0].children[i].attributes[0].nodeValue);
-                  break;
+                    this.priList[i] = new Board(this.scene, elem[0].children[i].attributes[0].nodeValue);
+                    break;
                 case "patch":
-                if (elem[0].children[i].children[0].attributes.length != 4) {
-                    console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
-                    return -1;
-                }
-
-                for (var j = 0; j < elem[0].children[i].children[0].children.length; j++) {
-                    if(elem[0].children[i].children[0].children[j].attributes.length != 3) {
-                        console.warn("You must have 3 attributes on patch->" + elem[0].children[i].id + "->controlpoint Nr:"+ (j+1));
+                    if (elem[0].children[i].children[0].attributes.length != 4) {
+                        console.warn("You must have 4 attributes on patch->" + elem[0].children[i].id);
                         return -1;
                     }
-                    matrixLinear[j] = [];
-                    for (var k = 0; k < elem[0].children[i].children[0].children[j].attributes.length; k++) {
-                        if (!isNumber(elem[0].children[i].children[0].children[j].attributes[k].nodeValue)) {
-                            console.warn("You must have a number on patch->id" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[j].attributes[k].nodeName);
+
+                    for (var j = 0; j < elem[0].children[i].children[0].children.length; j++) {
+                        if (elem[0].children[i].children[0].children[j].attributes.length != 3) {
+                            console.warn("You must have 3 attributes on patch->" + elem[0].children[i].id + "->controlpoint Nr:" + (j + 1));
                             return -1;
                         }
-                        matrixLinear[j].push(parseFloat(elem[0].children[i].children[0].children[j].attributes[k].nodeValue));
+                        matrixLinear[j] = [];
+                        for (var k = 0; k < elem[0].children[i].children[0].children[j].attributes.length; k++) {
+                            if (!isNumber(elem[0].children[i].children[0].children[j].attributes[k].nodeValue)) {
+                                console.warn("You must have a number on patch->id" + elem[0].children[x].id + "->" + elem[0].children[x].children[0].children[j].attributes[k].nodeName);
+                                return -1;
+                            }
+                            matrixLinear[j].push(parseFloat(elem[0].children[i].children[0].children[j].attributes[k].nodeValue));
+                        }
+                        matrixLinear[j].push(1);
                     }
-                    matrixLinear[j].push(1);
-                }
-                orderU = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
-                orderV = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
-                partsU = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
-                partsV = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
+                    orderU = parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue);
+                    orderV = parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue);
+                    partsU = parseFloat(elem[0].children[i].children[0].attributes[2].nodeValue);
+                    partsV = parseFloat(elem[0].children[i].children[0].attributes[3].nodeValue);
 
-                this.priList[i] = new Patch(this.scene, elem[0].children[i].attributes[0].nodeValue, orderU, orderV, partsU, partsV, matrixLinear);
-                //console.log(matrixLinear);
-                break;
+                    this.priList[i] = new Patch(this.scene, elem[0].children[i].attributes[0].nodeValue, orderU, orderV, partsU, partsV, matrixLinear);
+                    //console.log(matrixLinear);
+                    break;
                 case 'chessboard':
                     var colors = new Array();
-                    for(var h=0;h<4;h++){
-                      colors[h]=[];
-                      for(var j=0;j<4;j++){
-                        colors[h][j]=parseFloat(elem[0].children[i].children[0].children[h].attributes[j].nodeValue);
+                    for (var h = 0; h < 4; h++) {
+                        colors[h] = [];
+                        for (var j = 0; j < 4; j++) {
+                            colors[h][j] = parseFloat(elem[0].children[i].children[0].children[h].attributes[j].nodeValue);
 
-                      }
+                        }
                     }
 
-                    this.priList[i] = new ChessBoard(this.scene,elem[0].children[i].attributes[0].nodeValue,parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue),parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue),this.getCGFTextureById(elem[0].children[i].children[0].attributes[2].nodeValue),colors);
+                    this.priList[i] = new ChessBoard(this.scene, elem[0].children[i].attributes[0].nodeValue, parseFloat(elem[0].children[i].children[0].attributes[0].nodeValue), parseFloat(elem[0].children[i].children[0].attributes[1].nodeValue), this.getCGFTextureById(elem[0].children[i].children[0].attributes[2].nodeValue), colors);
                     break;
                 case 'vehicle':
-                    this.priList[i] = new Vehicle(this.scene,elem[0].children[i].attributes[0].nodeValue);
+                    this.priList[i] = new Vehicle(this.scene, elem[0].children[i].attributes[0].nodeValue);
                     break;
                 default:
             }
@@ -848,7 +848,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     temp = new Array();
 
     this.componentsList = new Array();
-   var index = 0;
+    var index = 0;
 
 
     isNotEqual = true;
@@ -1042,11 +1042,11 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
             this.componentsList[x].setAnimations(animations);
         }
 
-        if(elem[0].children[x].getElementsByTagName('pickme').length>0){
-            this.componentsList[x].pickme=true;
+        if (elem[0].children[x].getElementsByTagName('pickme').length > 0) {
+            this.componentsList[x].pickme = true;
         }
 
-        if(elem[0].children[x].getElementsByTagName('objectVisible').length>0){
+        if (elem[0].children[x].getElementsByTagName('objectVisible').length > 0) {
             this.scene.componentesObjetos[index] = this.getComponentById(elem[0].children[x].id);
             this.scene.componentesObjetos[index].objectVisible = false;
             index++;

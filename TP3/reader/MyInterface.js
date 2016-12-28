@@ -34,8 +34,8 @@ MyInterface.prototype.init = function(application) {
         group.add(this.scene, this.nomeLuz);
     }
     //this.gui.add(this.scene, 'speed', -5, 5);
-    this.gui.add(this.scene, "typeOfGame", ['Human vs Human','Human vs CPU','CPU vs CPU']);
-    this.gui.add(this.scene, "dificulty", ['Random','Impossible']);
+    this.gui.add(this.scene, "typeOfGame", ['Human vs Human', 'Human vs CPU', 'CPU vs CPU']);
+    this.gui.add(this.scene, "dificulty", ['Random', 'Impossible']);
     this.gui.add(this.scene, "undo");
     return true;
 };
@@ -75,16 +75,18 @@ MyInterface.prototype.processKeyDown = function(event) {
                 this.scene.updateMaterials();
                 break;
             }
-        case(27):{
-                if(this.scene.game.SelectedWall!=null || this.scene.game.SelectedPeca!=0)
-                  this.scene.game.State--;
-                this.scene.game.SelectedObj=null;
-                this.scene.game.SelectedWall=null;
-                this.scene.game.SelectedPeca=0;
+        case (27):
+            {
+                if (this.scene.game.SelectedWall != null || this.scene.game.SelectedPeca != 0)
+                    this.scene.game.State--;
+                this.scene.game.SelectedObj = null;
+                this.scene.game.SelectedWall = null;
+                this.scene.game.SelectedPeca = 0;
 
                 break;
             }
-        case(9):{
+        case (9):
+            {
                 this.scene.changeScene();
                 break;
             }

@@ -1,8 +1,7 @@
-function Animation(id,span,type) {
+function Animation(id, span, type) {
     this.id = id;
-    this.span=span;
-    this.type=type;
+    this.span = span;
+    this.type = type;
 }
 
-Animation.prototype.constructor=Animation;
-
+Animation.prototype.constructor = Animation;
