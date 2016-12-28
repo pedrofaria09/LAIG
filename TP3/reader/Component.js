@@ -19,6 +19,10 @@ Component.prototype.setMaterials = function(materials) {
     this.materials = materials;
 };
 
+Component.prototype.resetAnimation = function() {
+    this.animations.splice(1,this.animations.length-1);
+};
+
 Component.prototype.setCGFTextures = function(textures) {
     this.textures = textures;
 };

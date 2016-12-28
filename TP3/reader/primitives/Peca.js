@@ -11,6 +11,12 @@ function Peca(scene, id, x,y,realx,realy) {
     this.realy=realy;
     this.pecaId=id.split('a')[1];
 
+    this.initX=x;
+    this.initY=y;
+
+    this.initRealX=realx;
+    this.initRealY=realy;
+
     this.component=null;
 
     this.cil = new MyCylinder(scene,null, 0.5,0.5,1, 20,20);
@@ -58,15 +64,22 @@ function Peca(scene, id, x,y,realx,realy) {
     this.y=int;
   };
 
+  Peca.prototype.reset = function() {
+    this.x=this.initX;
+    this.y=this.initY;
+    this.realx=this.initRealX;
+    this.realy=this.initRealY;
+    this.component.resetAnimation();
+  };
+
   Peca.prototype.display = function() {
 
       this.scene.pushMatrix();
-      //  this.scene.translate(this.x,this.y,0);
         if(this.pecaId<3)
           this.color1.apply();
         else this.color2.apply();
         this.cil.display();
-        if(this.scene.game.SelectedPeca==this.pecaId){
+        if(this.scene.game!=null && this.scene.game.SelectedPeca==this.pecaId){
           this.material.apply();
           this.replaceCil.display();
         }

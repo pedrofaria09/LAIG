@@ -34,9 +34,11 @@ MyInterface.prototype.init = function(application) {
         group.add(this.scene, this.nomeLuz);
     }
     //this.gui.add(this.scene, 'speed', -5, 5);
-    this.gui.add(this.scene, "typeOfGame", ['Human vs Human', 'Human vs CPU', 'CPU vs CPU']);
-    this.gui.add(this.scene, "dificulty", ['Random', 'Impossible']);
+    this.gui.add(this.scene, "typeOfGameParser", ['Human vs Human', 'Human vs CPU', 'CPU vs CPU']).name('Type of Game');
+    this.gui.add(this.scene, "dificultyParser", ['Random', 'Impossible']).name('Difuculty');
     this.gui.add(this.scene, "undo");
+    this.gui.add(this.scene, "startGame").name('Play Game');
+    this.gui.add(this.scene, "playMovie").name('Play Movie');
     return true;
 };
 

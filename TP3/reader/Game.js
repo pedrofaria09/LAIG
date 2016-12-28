@@ -43,6 +43,8 @@ function Game(scene) {
 
     this.stack = new Array();
 
+    this.movieIndex=0;
+
 }
 
 Game.prototype.stateMachine = function(pick) {
@@ -52,6 +54,57 @@ Game.prototype.stateMachine = function(pick) {
         this.stateMachineCPU();
     else if (this.scene.typeOfGame == "Human vs CPU" && this.scene.dificulty != null)
         this.stateMachineHumanVsCPU(pick);
+}
+
+Game.prototype.showMovie = function(myGame) {
+  if(myGame.movieIndex<myGame.stack.length){
+    var array=myGame.stack[this.movieIndex];
+    if(array[0] instanceof Peca){
+      myGame.changePosPeca(array[2][1], array[2][0],array[0]);
+      var pos = myGame.coordsToPosition([array[1][1], array[1][0]]);
+      if (array[0].pecaId < 3)
+          myGame.changePawnPos(pos, [array[2][0], array[2][1]], 'r');
+      else myGame.changePawnPos(pos, [ array[2][0], array[2][1]], 'e');
+    }else if(array[0] instanceof Wall){
+      myGame.changePosPeca(array[2][0], array[2][1],array[0]);
+    }
+    myGame.movieIndex++;
+  }else{
+    clearInterval(myGame.movieTime);
+  }
+
+}
+
+Game.prototype.resetBoard = function() {
+  this.board = [
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'r', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'r', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'e', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'e', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c']
+  ];
 }
 
 Game.prototype.stateMachineHumanVsCPU = function(pick) {
@@ -122,7 +175,6 @@ Game.prototype.stateMachineCPU = function() {
 Game.prototype.updateNumberOfPecies = function() {
     this.player1WallsLeft = 0;
     this.player2WallsLeft = 0;
-    console.log(this.scene.walls);
     for (var i = 0; i < 32; i++) {
         if (!this.scene.walls[i].placed) {
             if (i < 16)
