@@ -120,7 +120,9 @@
         <texture id="greenTXT" file="./images/greenTexture.jpg" length_s="1" length_t="1"/>
         <texture id="paredeTXT" file="./images/wallTexture2.jpg" length_s="1" length_t="1"/>
         <texture id="woodTXT" file="./images/woodTexture.jpg" length_s="1" length_t="1"/>
-        <texture id="snowTXT" file="./images/snowTexture.jpg" length_s="1" length_t="1"/>
+        <texture id="whiteTXT" file="./images/snowTexture.jpg" length_s="1" length_t="1"/>
+        <texture id="redTXT" file="./images/redTexture.jpg" length_s="1" length_t="1"/>
+        <texture id="skinTXT" file="./images/skinTexture.jpg" length_s="1" length_t="1"/>
     </textures>
 
     <materials>
@@ -522,17 +524,272 @@
             </materials>
             <texture id="none"/>
             <children>
-              <componentref id="cadeiras"/>
-              <componentref id="chao"/>
-              <componentref id="paredes"/>
-              <componentref id="movel"/>
-              <componentref id="snowMen"/>
+                <componentref id="cadeiras"/>
+                <componentref id="chao"/>
+                <componentref id="paredes"/>
+                <componentref id="movel"/>
+                <componentref id="snowMen"/>
+                <componentref id="easyRobot1"/>
+                <componentref id="easyRobot2"/>
+                <componentref id="hardRobot2"/>
+                <componentref id="hardRobot1"/>
+                <componentref id="human2"/>
+                <componentref id="human1"/>
                 <componentref id="table"/>
                 <componentref id="allGame"/>
-
             </children>
         </component>
 
+        <component id="human1">
+            <transformation>
+                <translate x="10" y="-1.5" z="-35"/>
+                <scale x="4" y="4" z="4"/>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <componentref id="baixohuman2"/>
+                <componentref id="cimahuman2"/>
+                <componentref id="bracoDirhuman2"/>
+                <componentref id="bracoEsqhuman2"/>
+                <componentref id="pernaDirhuman2"/>
+                <componentref id="pernaEsqhuman2"/>
+            </children>
+            <objectVisible/>
+        </component>
+
+        <component id="human2">
+            <transformation>
+                <translate x="10" y="-1.5" z="15.3"/>
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <componentref id="baixohuman2"/>
+                <componentref id="cimahuman2"/>
+                <componentref id="bracoDirhuman2"/>
+                <componentref id="bracoEsqhuman2"/>
+                <componentref id="pernaDirhuman2"/>
+                <componentref id="pernaEsqhuman2"/>
+            </children>
+            <objectVisible/>
+        </component>
+
+        <component id="pernaEsqhuman2">
+            <transformation>
+                <rotate axis="y" angle="0"/>
+                <scale x="0.5" y="0.5" z="2"/>
+                <translate x="-1" y="-0.5" z="-1"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="pernaDirhuman2">
+            <transformation>
+                <rotate axis="y" angle="0"/>
+                <scale x="0.5" y="0.5" z="2"/>
+                <translate x="1" y="-0.5" z="-1"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="bracoEsqhuman2">
+            <transformation>
+                <rotate axis="y" angle="20"/>
+                <scale x="0.5" y="0.5" z="2"/>
+                <translate x="-1" y="2" z="-1"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="bracoDirhuman2">
+            <transformation>
+                <rotate axis="y" angle="-20"/>
+                <scale x="0.5" y="0.5" z="2"/>
+                <translate x="1" y="2" z="-1"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="cimahuman2">
+            <transformation>
+                <scale x="0.8" y="1" z="1"/>
+                <translate x="0" y="2.5" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <component id="baixohuman2">
+            <transformation>
+                <scale x="2" y="2" z="1"/>
+                <translate x="0" y="0.8" z="0"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="skinTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="hardRobot1">
+            <transformation>
+                <translate x="10" y="-3" z="-35"/>
+                <scale x="3.5" y="3.5" z="3.5"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="redTXT"/>
+            <children>
+                <componentref id="baixohardRobot2"/>
+                <componentref id="cimahardRobot2"/>
+            </children>
+            <objectVisible/>
+        </component>
+
+        <component id="hardRobot2">
+            <transformation>
+                <translate x="10" y="-3" z="15"/>
+                <scale x="3.5" y="3.5" z="3.5"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="redTXT"/>
+            <children>
+                <componentref id="baixohardRobot2"/>
+                <componentref id="cimahardRobot2"/>
+            </children>
+            <objectVisible/>
+        </component>
+
+        <component id="cimahardRobot2">
+            <transformation>
+                <scale x="1" y="1" z="1"/>
+                <translate x="0" y="2" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="redTXT"/>
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <component id="baixohardRobot2">
+            <transformation>
+                <scale x="1.8" y="2" z="1.8"/>
+                <translate x="0" y="0.8" z="0"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="redTXT"/>
+            <children>
+                <primitiveref id="uniCilindro"/>
+            </children>
+        </component>
+
+        <component id="easyRobot1">
+            <transformation>
+                <translate x="10" y="0" z="-35"/>
+                <scale x="1.5" y="1.7" z="1.5"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="whiteTXT"/>
+            <children>
+                <componentref id="baixoEasyRobot"/>
+                <componentref id="cimaEasyRobot"/>
+            </children>
+            <objectVisible/>
+        </component>
+
+        <component id="easyRobot2">
+            <transformation>
+                <translate x="10" y="0" z="15"/>
+                <scale x="1.5" y="1.7" z="1.5"/>
+            </transformation>
+            <materials>
+                <material id="liveWhite"/>
+            </materials>
+            <texture id="whiteTXT"/>
+            <children>
+                <componentref id="baixoEasyRobot"/>
+                <componentref id="cimaEasyRobot"/>
+            </children>
+            <objectVisible/>
+        </component>
+
+        <component id="cimaEasyRobot">
+            <transformation>
+                <scale x="1" y="1.3" z="1"/>
+                <translate x="0" y="2" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="whiteTXT"/>
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
+
+        <component id="baixoEasyRobot">
+            <transformation>
+                <scale x="1.8" y="2" z="1.8"/>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="whiteTXT"/>
+            <children>
+                <primitiveref id="esfera"/>
+            </children>
+        </component>
 
         <component id="snowMen">
             <transformation>
@@ -541,7 +798,7 @@
             <materials>
                 <material id="liveWhite"/>
             </materials>
-            <texture id="snowTXT"/>
+            <texture id="whiteTXT"/>
             <children>
                 <componentref id="baixo"/>
                 <componentref id="cima"/>
@@ -556,7 +813,7 @@
             <materials>
                 <material id="inherit"/>
             </materials>
-            <texture id="snowTXT"/>
+            <texture id="whiteTXT"/>
             <children>
                 <primitiveref id="esfera"/>
             </children>
@@ -570,7 +827,7 @@
             <materials>
                 <material id="inherit"/>
             </materials>
-            <texture id="snowTXT"/>
+            <texture id="whiteTXT"/>
             <children>
                 <primitiveref id="esfera"/>
             </children>
@@ -815,7 +1072,6 @@
             </children>
         </component>
 
-
         <component id="chao">
             <transformation>
                 <translate x="-40" y="-14" z="40"/>
@@ -850,7 +1106,7 @@
 
         <component id="cadeira2">
             <transformation>
-                <translate x="0" y="0" z="59"/>
+                <translate x="0" y="0" z="50"/>
             </transformation>
             <materials>
                 <material id="liveWhite"/>
@@ -863,7 +1119,7 @@
 
         <component id="cadeira1">
             <transformation>
-                <translate x="10" y="-9" z="-35"/>
+                <translate x="10" y="-9" z="-30"/>
             </transformation>
             <materials>
                 <material id="liveWhite"/>

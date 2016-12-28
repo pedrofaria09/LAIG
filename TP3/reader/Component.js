@@ -6,7 +6,8 @@ function Component(id) {
     this.childrenComponents = null;
     this.childrenPrimitives = null;
     this.texture = null;
-    this.pickme=false;
+    this.pickme = false;
+    this.objectVisible = true;
 	this.animations = new Array();
 }
 

@@ -1,13 +1,14 @@
 function XMLscene(app) {
-    this.xmlFile=1;
+    this.xmlFile = 1;
     CGFscene.call(this);
     this.app = app;
     this.app.setInterface(null);
-    this.cameraTarget=null;
-    this.typeOfGame=null;
-    this.pecas=new Array();
-    this.walls=new Array();
-    this.dificulty=null;
+    this.cameraTarget = null;
+    this.typeOfGame = null;
+    this.pecas = new Array();
+    this.walls = new Array();
+    this.dificulty = null;
+    this.componentesObjetos = new Array();
     //this.doSomething="oi ";
     var myGraph = new MySceneGraph('sceneone.xml', this);
 }
@@ -15,23 +16,23 @@ function XMLscene(app) {
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
-XMLscene.prototype.undo = function(){
-  this.game.undo();
-	console.log('oi');
+XMLscene.prototype.undo = function() {
+    this.game.undo();
+    console.log('oi');
 }
 
 XMLscene.prototype.changeScene = function() {
-  this.xmlFile++;
-  if(this.xmlFile>2)
-    this.xmlFile=1;
-  switch(this.xmlFile){
-    case 1:
-      var myGraph = new MySceneGraph('sceneone.xml', this);
-      break;
-    case 2:
-      var myGraph = new MySceneGraph('scenetwo.xml', this);
-      break;
-  }
+    this.xmlFile++;
+    if (this.xmlFile > 2)
+        this.xmlFile = 1;
+    switch (this.xmlFile) {
+        case 1:
+            var myGraph = new MySceneGraph('sceneone.xml', this);
+            break;
+        case 2:
+            var myGraph = new MySceneGraph('scenetwo.xml', this);
+            break;
+    }
 }
 
 XMLscene.prototype.init = function(application) {
@@ -40,7 +41,7 @@ XMLscene.prototype.init = function(application) {
 
     this.initCameras();
 
-    this.game= new Game(this);
+    this.game = new Game(this);
 
     this.initLights();
     this.enableTextures(true);
@@ -64,8 +65,7 @@ XMLscene.prototype.init = function(application) {
     this.pickmeId = 1;
 };
 
-XMLscene.prototype.initLights = function() {
-};
+XMLscene.prototype.initLights = function() {};
 
 XMLscene.prototype.initCameras = function() {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
@@ -82,24 +82,24 @@ XMLscene.prototype.setDefaultAppearance = function() {
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function() {
 
-  if(this.pecas.length>4){
-    for(var i=4;i<8;i++){
+    if (this.pecas.length > 4) {
+        for (var i = 4; i < 8; i++) {
 
-      this.pecas[i].x=this.pecas[i-4].x;
-      this.pecas[i].y=this.pecas[i-4].y;
-      this.pecas[i].realx=this.pecas[i-4].realx;
-      this.pecas[i].realy=this.pecas[i-4].realy;
+            this.pecas[i].x = this.pecas[i - 4].x;
+            this.pecas[i].y = this.pecas[i - 4].y;
+            this.pecas[i].realx = this.pecas[i - 4].realx;
+            this.pecas[i].realy = this.pecas[i - 4].realy;
+        }
+        this.pecas.splice(0, 4);
     }
-    this.pecas.splice(0,4);
-  }
-  if(this.walls.length>32){
-    for(var i=32;i<64;i++){
-      this.walls[i].x=this.walls[i-32].x;
-      this.walls[i].y=this.walls[i-32].y;
-      this.walls[i].placed=this.walls[i-32].placed;
+    if (this.walls.length > 32) {
+        for (var i = 32; i < 64; i++) {
+            this.walls[i].x = this.walls[i - 32].x;
+            this.walls[i].y = this.walls[i - 32].y;
+            this.walls[i].placed = this.walls[i - 32].placed;
+        }
+        this.walls.splice(0, 32);
     }
-    this.walls.splice(0,32);
-  }
     this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
     this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
@@ -118,9 +118,9 @@ XMLscene.prototype.onGraphLoaded = function() {
     }
 
     //if(this.app.interface==null){
-      var myInterface = new MyInterface();
-      this.app.setInterface(myInterface);
-      myInterface.setActiveCamera(this.camera);
+    var myInterface = new MyInterface();
+    this.app.setInterface(myInterface);
+    myInterface.setActiveCamera(this.camera);
 
 
 };
@@ -133,16 +133,16 @@ XMLscene.prototype.initiateMaterials = function(i) {
 }
 
 XMLscene.prototype.pickingBoard = function(i) {
-var material= new Material(this,null,null);
+    var material = new Material(this, null, null);
     for (var i = 0; i < 11; i++) {
-        for(var j=0;j<14;j++){
-          var ret = new Rectangle(this,null,i/11,j/14,(i+1)/11,(j+1)/14);
-          if(this.pickMode){
-              this.registerForPick(this.pickmeId, ret);
-              this.pickmeId++;
-          }
-          material.apply();
-          ret.display();
+        for (var j = 0; j < 14; j++) {
+            var ret = new Rectangle(this, null, i / 11, j / 14, (i + 1) / 11, (j + 1) / 14);
+            if (this.pickMode) {
+                this.registerForPick(this.pickmeId, ret);
+                this.pickmeId++;
+            }
+            material.apply();
+            ret.display();
         }
     }
 }
@@ -151,34 +151,33 @@ XMLscene.prototype.updateCamera = function(i) {
     if (i >= this.graph.viewsList.length) {
         i = 0;
     }
-    if(i!=null){
-      this.cameraTarget={
-        'position':this.graph.viewsList[i].position,
-        'target':this.graph.viewsList[i].target,
-        'times':1
-      };
-      this.camera.far = this.graph.viewsList[i].far;
-      this.camera.near = this.graph.viewsList[i].near;
-      this.camera.fov = this.graph.viewsList[i].fov;
-    }else if(  this.cameraTarget!=null){
-      var array=vec4.create();
-      vec4.subtract(array, this.cameraTarget['position'],this.camera.position)
-      vec4.multiply(array, array,vec4.fromValues(this.cameraTarget['times']/100,this.cameraTarget['times']/100,this.cameraTarget['times']/100,1))
-      vec4.add(array, array,this.camera.position);
-      this.camera.setPosition(array);
+    if (i != null) {
+        this.cameraTarget = {
+            'position': this.graph.viewsList[i].position,
+            'target': this.graph.viewsList[i].target,
+            'times': 1
+        };
+        this.camera.far = this.graph.viewsList[i].far;
+        this.camera.near = this.graph.viewsList[i].near;
+        this.camera.fov = this.graph.viewsList[i].fov;
+    } else if (this.cameraTarget != null) {
+        var array = vec4.create();
+        vec4.subtract(array, this.cameraTarget['position'], this.camera.position)
+        vec4.multiply(array, array, vec4.fromValues(this.cameraTarget['times'] / 100, this.cameraTarget['times'] / 100, this.cameraTarget['times'] / 100, 1))
+        vec4.add(array, array, this.camera.position);
+        this.camera.setPosition(array);
 
-      var array=vec4.create();
-      vec4.subtract(array, this.cameraTarget['target'],this.camera.target)
-      vec4.multiply(array, array,vec4.fromValues(this.cameraTarget['times']/100,this.cameraTarget['times']/100,this.cameraTarget['times']/100,1))
-      vec4.add(array, array,this.camera.target);
-      this.camera.setTarget(array);
+        var array = vec4.create();
+        vec4.subtract(array, this.cameraTarget['target'], this.camera.target)
+        vec4.multiply(array, array, vec4.fromValues(this.cameraTarget['times'] / 100, this.cameraTarget['times'] / 100, this.cameraTarget['times'] / 100, 1))
+        vec4.add(array, array, this.camera.target);
+        this.camera.setTarget(array);
 
-      var arrayTeste=vec4.create();
-      vec4.subtract(arrayTeste, this.cameraTarget['position'],this.camera.position);
-      if(JSON.stringify(arrayTeste)==JSON.stringify((vec4.fromValues(0,0,0,0)))){
-        this.cameraTarget=null;
-      }
-      else this.cameraTarget['times']++;
+        var arrayTeste = vec4.create();
+        vec4.subtract(arrayTeste, this.cameraTarget['position'], this.camera.position);
+        if (JSON.stringify(arrayTeste) == JSON.stringify((vec4.fromValues(0, 0, 0, 0)))) {
+            this.cameraTarget = null;
+        } else this.cameraTarget['times']++;
     }
 
 
@@ -217,8 +216,8 @@ XMLscene.prototype.logPicking = function() {
                 if (obj) {
 
                     var customId = this.pickResults[i][1];
-                    if(customId>154 && (this.game.SelectedWall==null && this.game.SelectedPeca==0))
-                      this.game.SelectedObj=obj;
+                    if (customId > 154 && (this.game.SelectedWall == null && this.game.SelectedPeca == 0))
+                        this.game.SelectedObj = obj;
                     this.game.stateMachine(customId);
                     console.log("Picked object: " + obj + ", with pick id " + customId);
                 }
@@ -229,16 +228,16 @@ XMLscene.prototype.logPicking = function() {
 }
 
 XMLscene.prototype.paintSelected = function() {
-  if(this.game.SelectedPick!=154)
-    var ret = new Rectangle(this,null,Math.floor(this.game.SelectedPick/14)/11,(this.game.SelectedPick%14-1)/14,(Math.floor(this.game.SelectedPick/14)+1)/11,(this.game.SelectedPick%14)/14);
-  else  var ret = new Rectangle(this,null,Math.floor((this.game.SelectedPick-1)/14)/11,((this.game.SelectedPick-1)%14)/14,(Math.floor(this.game.SelectedPick/14))/11,((this.game.SelectedPick-1)%14+1)/14);
-  var material= new Material(this,null,null);
-  this.pushMatrix();
-  this.translate(0,0,0.05);
-  this.scale(20,20,1);
-  material.apply();
-  ret.display();
-  this.popMatrix();
+    if (this.game.SelectedPick != 154)
+        var ret = new Rectangle(this, null, Math.floor(this.game.SelectedPick / 14) / 11, (this.game.SelectedPick % 14 - 1) / 14, (Math.floor(this.game.SelectedPick / 14) + 1) / 11, (this.game.SelectedPick % 14) / 14);
+    else var ret = new Rectangle(this, null, Math.floor((this.game.SelectedPick - 1) / 14) / 11, ((this.game.SelectedPick - 1) % 14) / 14, (Math.floor(this.game.SelectedPick / 14)) / 11, ((this.game.SelectedPick - 1) % 14 + 1) / 14);
+    var material = new Material(this, null, null);
+    this.pushMatrix();
+    this.translate(0, 0, 0.05);
+    this.scale(20, 20, 1);
+    material.apply();
+    ret.display();
+    this.popMatrix();
 }
 
 XMLscene.prototype.display = function() {
@@ -258,14 +257,17 @@ XMLscene.prototype.display = function() {
     //HUD
     this.updateHUD();
 
+    //Update components of type of players
+    this.updateVisibilityObjects();
+
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
     if (this.graph.loadedOk) {
-      this.updateCamera(null);
+        this.updateCamera(null);
         this.pickmeId = 1;
-        if(this.game.SelectedPick!=0){
-          this.paintSelected();
+        if (this.game.SelectedPick != 0) {
+            this.paintSelected();
         }
         this.updateLights();
 
@@ -276,18 +278,48 @@ XMLscene.prototype.display = function() {
     }
 };
 
-XMLscene.prototype.updateHUD = function(){
-  var timePlayed = "Time:_" + parseInt(this.time);
-  
-  var player1 = "Player_1";
-  var player1Pieces = "-Walls:_" + this.game.player1WallsLeft;
-  var player1Vitories = "-Score:_" + this.game.player1Vitories;
-  
-  var player2 = "Player_2";
-  var player2Pieces = "-Walls:_" + this.game.player2WallsLeft;
-  var player2Vitories = "-Score:_" + this.game.player2Vitories;
-  
-  this.hud.display([timePlayed, "", player1, player1Pieces, player1Vitories, "", player2, player2Pieces, player2Vitories]);
+XMLscene.prototype.updateVisibilityObjects = function() {
+    for (var i = 0; i < this.componentesObjetos.length; i++) {
+        this.componentesObjetos[i].objectVisible = false;
+    }
+
+    for (var i = 0; i < this.componentesObjetos.length; i++) {
+        if (this.typeOfGame == "Human vs Human") {
+            if (this.componentesObjetos[i].id == "human1" || this.componentesObjetos[i].id == "human2") {
+                this.componentesObjetos[i].objectVisible = true;
+            }
+        } else if (this.typeOfGame == "Human vs CPU") {
+            if (this.componentesObjetos[i].id == "human1")
+                this.componentesObjetos[i].objectVisible = true;
+            if (this.componentesObjetos[i].id == "easyRobot2" && this.dificulty == "Random")
+                this.componentesObjetos[i].objectVisible = true;
+            else if (this.componentesObjetos[i].id == "hardRobot2" && this.dificulty == "Impossible")
+                this.componentesObjetos[i].objectVisible = true;
+        } else if (this.typeOfGame == "CPU vs CPU") {
+            if (this.componentesObjetos[i].id == "easyRobot2" && this.dificulty == "Random")
+                this.componentesObjetos[i].objectVisible = true;
+            else if (this.componentesObjetos[i].id == "hardRobot2" && this.dificulty == "Impossible")
+                this.componentesObjetos[i].objectVisible = true;
+            if (this.componentesObjetos[i].id == "easyRobot1" && this.dificulty == "Random")
+                this.componentesObjetos[i].objectVisible = true;
+            else if (this.componentesObjetos[i].id == "hardRobot1" && this.dificulty == "Impossible")
+                this.componentesObjetos[i].objectVisible = true;
+        }
+    }
+}
+
+XMLscene.prototype.updateHUD = function() {
+    var timePlayed = "Time:_" + parseInt(this.time);
+
+    var player1 = "Player_1";
+    var player1Pieces = "-Walls:_" + this.game.player1WallsLeft;
+    var player1Vitories = "-Score:_" + this.game.player1Vitories;
+
+    var player2 = "Player_2";
+    var player2Pieces = "-Walls:_" + this.game.player2WallsLeft;
+    var player2Vitories = "-Score:_" + this.game.player2Vitories;
+
+    this.hud.display([timePlayed, "", player1, player1Pieces, player1Vitories, "", player2, player2Pieces, player2Vitories]);
 }
 
 XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
@@ -312,9 +344,9 @@ XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
         }
         material.apply();
 
-        if(this.pickMode && node.pickme){
-          this.registerForPick(this.pickmeId, node);
-          this.pickmeId++;
+        if (this.pickMode && node.pickme) {
+            this.registerForPick(this.pickmeId, node);
+            this.pickmeId++;
         }
 
 
@@ -335,7 +367,7 @@ XMLscene.prototype.processaGrafo = function(nodeName, texture, materialFather) {
 
         }
 
-        if (node.childrenComponents != null) {
+        if (node.childrenComponents != null && node.objectVisible == true) {
             for (var i = 0; i < node.childrenComponents.length; i++) {
                 this.pushMatrix();
 

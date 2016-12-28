@@ -848,7 +848,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
     temp = new Array();
 
     this.componentsList = new Array();
-
+   var index = 0;
 
 
     isNotEqual = true;
@@ -1046,6 +1046,11 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
             this.componentsList[x].pickme=true;
         }
 
+        if(elem[0].children[x].getElementsByTagName('objectVisible').length>0){
+            this.scene.componentesObjetos[index] = this.getComponentById(elem[0].children[x].id);
+            this.scene.componentesObjetos[index].objectVisible = false;
+            index++;
+        }
 
         childrenPrimitives = [];
         childrenComponents = [];
@@ -1053,7 +1058,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
 
     }
-    console.log(  this.componentsList);
+    console.log(this.componentsList);
 }
 
 MySceneGraph.prototype.getTransformationById = function(id) {
