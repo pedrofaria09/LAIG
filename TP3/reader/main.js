@@ -42,20 +42,16 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js','primitives/Wall.js','primitives/ChessBoard.js','primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js','Game.js', 'primitives/MyCylinder.js', 'primitives/Circle.js','primitives/Peca.js', 'Animation.js', 'LinearAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js','primitives/Vehicle.js', 'CircularAnimation.js','primitives/Board.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Light.js', 'Material.js', 'Texture.js', 'primitives/Rectangle.js','primitives/Wall.js','primitives/ChessBoard.js','primitives/Triangle.js', 'primitives/Cylinder.js', 'primitives/Sphere.js', 'primitives/Torus.js', 'Component.js', 'MyInterface.js','Game.js', 'primitives/MyCylinder.js', 'primitives/Circle.js','primitives/Peca.js', 'Animation.js', 'LinearAnimation.js', 'UpAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js','primitives/Vehicle.js', 'CircularAnimation.js','primitives/Board.js',
 
     main = function() {
         // Standard application, scene and interface setup
         var app = new CGFapplication(document.body);
         var myScene = new XMLscene(app);
-        //var myInterface = new MyInterface();
 
         app.init();
 
         app.setScene(myScene);
-        //app.setInterface(myInterface);
-
-        //myInterface.setActiveCamera(myScene.camera);
 
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)

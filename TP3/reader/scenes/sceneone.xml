@@ -520,7 +520,7 @@
             </materials>
             <texture id="none"/>
             <children>
-              <componentref id="cadeiras"/>
+            <componentref id="cadeiras"/>
               <componentref id="chao"/>
               <componentref id="arvore"/>
               <componentref id="paredes"/>

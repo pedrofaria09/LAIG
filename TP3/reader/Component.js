@@ -22,6 +22,10 @@ Component.prototype.setCGFTextures = function(textures) {
     this.textures = textures;
 };
 
+Component.prototype.removeLastAnimation = function() {
+    this.animations.pop();
+};
+
 Component.prototype.setTextures = function(texture) {
     this.texture = texture;
 };
@@ -30,8 +34,17 @@ Component.prototype.setChildrenComponents = function(children) {
     this.childrenComponents = children;
 };
 
+Component.prototype.addAnimation = function(ani) {
+    this.animations.push(ani);
+};
+
 Component.prototype.setChildrenPrimitives = function(children) {
     this.childrenPrimitives = children;
+    for(var i=0;i<children.length;i++){
+      if(children[i] instanceof Peca||children[i] instanceof Wall){
+        children[i].setComponent(this);
+      }
+    }
 };
 
 Component.prototype.setAnimations = function(animations) {

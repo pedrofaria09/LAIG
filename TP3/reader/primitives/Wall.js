@@ -30,6 +30,23 @@ function Wall(scene, id,tipo,x,y) {
   Wall.prototype = Object.create(CGFobject.prototype);
   Wall.prototype.constructor = Wall;
 
+  Wall.prototype.setComponent = function(component) {
+    this.component=component;
+    var centerx=this.x/2;
+    var centerz=this.y/2;
+    var radius=Math.sqrt(centerx*centerx+centery*centery);
+    var ani=new UpAnimation(null, 0.1, centerx, 0, centerz, radius, -180);
+    this.addAnimation(ani);
+  };
+
+  Wall.prototype.removeLastAnimation = function() {
+      this.component.removeLastAnimation();
+  };
+
+  Wall.prototype.addAnimation = function(ani) {
+      this.component.addAnimation(ani);
+  };
+
   Wall.prototype.changeX = function(int) {
     this.x=int;
   };
@@ -50,7 +67,7 @@ function Wall(scene, id,tipo,x,y) {
       this.material.apply();
     if(this.tipo=="hor"){
       this.scene.pushMatrix();
-        this.scene.translate(this.x,this.y,0);
+      //  this.scene.translate(this.x,this.y,0);
         this.scene.translate(0,0,1);
         this.lado.display();
         this.scene.pushMatrix();
@@ -81,7 +98,7 @@ function Wall(scene, id,tipo,x,y) {
       this.scene.popMatrix();
     }else{
       this.scene.pushMatrix();
-        this.scene.translate(this.x,this.y,0);
+      //  this.scene.translate(this.x,this.y,0);
         this.scene.translate(0,0,1);
         this.scene.rotate(-Math.PI/2,0,0,1);
         this.lado.display();

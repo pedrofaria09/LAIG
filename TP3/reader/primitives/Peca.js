@@ -10,6 +10,9 @@ function Peca(scene, id, x,y,realx,realy) {
     this.realx=realx;
     this.realy=realy;
     this.pecaId=id.split('a')[1];
+
+    this.component=null;
+
     this.cil = new MyCylinder(scene,null, 0.5,0.5,1, 20,20);
 
     this.material = new Material(this.scene,null,null);
@@ -33,6 +36,24 @@ function Peca(scene, id, x,y,realx,realy) {
   Peca.prototype.changeX = function(int) {
     this.x=int;
   };
+
+  Peca.prototype.setComponent = function(component) {
+    this.component=component;
+    var centerx=this.x/2;
+    var centerz=this.y/2;
+    var radius=Math.sqrt(centerx*centerx+centery*centery);
+    var ani=new UpAnimation(null, 0.1, centerx, 0, centerz, radius, -180);
+    this.addAnimation(ani);
+  };
+
+  Peca.prototype.addAnimation = function(ani) {
+      this.component.addAnimation(ani);
+  };
+
+  Peca.prototype.removeLastAnimation = function() {
+      this.component.removeLastAnimation();
+  };
+
   Peca.prototype.changeY = function(int) {
     this.y=int;
   };
@@ -40,7 +61,7 @@ function Peca(scene, id, x,y,realx,realy) {
   Peca.prototype.display = function() {
 
       this.scene.pushMatrix();
-        this.scene.translate(this.x,this.y,0);
+      //  this.scene.translate(this.x,this.y,0);
         if(this.pecaId<3)
           this.color1.apply();
         else this.color2.apply();

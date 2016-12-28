@@ -256,6 +256,7 @@ Game.prototype.undo= function(){
       if(array[0].pecaId<3)
         this.changePawnPos(array[2],posI,'r');
       else this.changePawnPos(array[2],posI,'e');
+      array[0].removeLastAnimation();
       //1a parede
       array=this.stack[this.stack.length-3];
       array[0].x=array[1][0];
@@ -265,6 +266,7 @@ Game.prototype.undo= function(){
         this.placeWall(array[3],'w','b');
       else if(array[0].tipo=="ver")
         this.placeWall(array[3],'q','a');
+      array[0].removeLastAnimation();
       //2a peca
       array=this.stack[this.stack.length-2];
       array[0].x=array[1][0];
@@ -275,6 +277,7 @@ Game.prototype.undo= function(){
       if(array[0].pecaId<3)
         this.changePawnPos(array[2],posI,'r');
       else this.changePawnPos(array[2],posI,'e');
+      array[0].removeLastAnimation();
       //2a parede
       array=this.stack[this.stack.length-1];
       array[0].x=array[1][0];
@@ -284,6 +287,7 @@ Game.prototype.undo= function(){
         this.placeWall(array[3],'w','b');
       else if(array[0].tipo=="ver")
         this.placeWall(array[3],'q','a');
+      array[0].removeLastAnimation();
     }
   }
 }
@@ -316,6 +320,7 @@ Game.prototype.stateMachineHuman = function(pick) {
             this.sendMessage('/move./'+this.turn+'./'+this.boardToString()+'./['+pos.toString()+']./['+posX+','+posY+']',function (data){
                 if(data.currentTarget.responseText=="ok"){
                   xmlscene.stack.push([xmlscene.SelectedObj.childrenPrimitives[0],[xmlscene.SelectedObj.childrenPrimitives[0].x,xmlscene.SelectedObj.childrenPrimitives[0].y],[posX,posY]]);
+
                   xmlscene.changePosPeca(posY,posX);
                   xmlscene.SelectedPeca=0;
                   xmlscene.SelectedObj=null;
@@ -388,6 +393,12 @@ Game.prototype.stateMachineHuman = function(pick) {
 
 Game.prototype.changePosPeca = function(posY,posX,updatePeca) {
   var peca=updatePeca || this.SelectedObj.childrenPrimitives[0];
+
+  var centerx=((posY-0.5)/11*20-peca.x)/2;
+  var centerz=((14-posX+0.5)/14*20-peca.y)/2;
+  var radius=Math.sqrt(centerx*centerx+centerz*centerz);
+  var ani=new UpAnimation(null, 2, centerx, 0, centerz, radius, -180);
+  peca.addAnimation(ani);
   peca.changeY((14-posX+0.5)/14*20);
   peca.changeX((posY-0.5)/11*20);
 }

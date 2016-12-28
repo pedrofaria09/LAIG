@@ -8,7 +8,6 @@ function XMLscene(app) {
     this.pecas=new Array();
     this.walls=new Array();
     this.dificulty=null;
-    //this.doSomething="oi ";
     var myGraph = new MySceneGraph('sceneone.xml', this);
 }
 
@@ -17,7 +16,6 @@ XMLscene.prototype.constructor = XMLscene;
 
 XMLscene.prototype.undo = function(){
   this.game.undo();
-	console.log('oi');
 }
 
 XMLscene.prototype.changeScene = function() {
@@ -89,6 +87,7 @@ XMLscene.prototype.onGraphLoaded = function() {
       this.pecas[i].y=this.pecas[i-4].y;
       this.pecas[i].realx=this.pecas[i-4].realx;
       this.pecas[i].realy=this.pecas[i-4].realy;
+      this.pecas[i].component.animations=this.pecas[i-4].component.animations;
     }
     this.pecas.splice(0,4);
   }
@@ -97,6 +96,7 @@ XMLscene.prototype.onGraphLoaded = function() {
       this.walls[i].x=this.walls[i-32].x;
       this.walls[i].y=this.walls[i-32].y;
       this.walls[i].placed=this.walls[i-32].placed;
+      this.walls[i].component.animations=this.walls[i-32].component.animations;
     }
     this.walls.splice(0,32);
   }
