@@ -34,7 +34,7 @@
             <to x="20" y="20" z="0"/>
         </perspective>
 
-        <perspective id="terceiraVista" near="0.5" far="400" angle="0.3">
+        <perspective id="terceiraVista" near="0.1" far="500" angle="0.4">
             <from x="-40" y="30" z="0"/>
             <to x="10" y="0" z="5"/>
         </perspective>

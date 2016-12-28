@@ -7,6 +7,10 @@ function Game(scene) {
   this.State=0;
   this.SelectedObj=null;
   this.wallsPlaced=0;
+  this.player1Vitories=0;
+  this.player2Vitories=0;
+  this.player1WallsLeft=16;
+  this.player2WallsLeft=16;
   this.board=[['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
 ['b','b','b','b','b','b','b','b','b','b','b'],
 ['c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c','a','c'],
@@ -71,7 +75,9 @@ Game.prototype.stateMachineCPU = function() {
           xmlscene.changeState(4);
         else if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
           xmlscene.changeState(1);
-        else xmlscene.changeTurn();
+        else{
+          xmlscene.changeTurn();
+        }
       });
     }else if(this.scene.dificulty=="Impossible"){
       this.sendMessage('/moveSmart./'+this.turn+'./'+this.boardToString()+'./[]./[]',function (data){
@@ -81,7 +87,9 @@ Game.prototype.stateMachineCPU = function() {
           xmlscene.changeState(4);
         else if(!arraysEqual([0,0],xmlscene.findNumberWalls()))
           xmlscene.changeState(1);
-        else xmlscene.changeTurn();
+        else{
+          xmlscene.changeTurn();
+        }
       });
     }
     break;
@@ -91,6 +99,7 @@ Game.prototype.stateMachineCPU = function() {
       this.sendMessage('/placeRandom./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
         var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
         xmlscene.placeRandomWall(newBoard);
+        xmlscene.updateNumberOfPecies();
         xmlscene.changeState(0);
         xmlscene.changeTurn();
       });
@@ -98,16 +107,29 @@ Game.prototype.stateMachineCPU = function() {
       this.sendMessage('/placeSmart./'+this.turn+'./'+this.boardToString()+'./'+walls[0]+'./'+walls[1],function (data){
         var newBoard=xmlscene.getBoard(data.currentTarget.responseText);
         xmlscene.placeRandomWall(newBoard);
+        xmlscene.updateNumberOfPecies();
         xmlscene.changeState(0);
         xmlscene.changeTurn();
       });
     }
-
     break;
   }
 
 }
 
+Game.prototype.updateNumberOfPecies = function(){
+  this.player1WallsLeft=0;
+  this.player2WallsLeft=0;
+  console.log(this.scene.walls);
+  for(var i=0;i<32;i++){
+    if(!this.scene.walls[i].placed){
+      if( i < 16 )
+        this.player2WallsLeft++;
+      else
+        this.player1WallsLeft++;
+    }
+  }
+}
 Game.prototype.getBoard = function(board) {
   var realBoard=[];
   var array=[];
@@ -381,12 +403,14 @@ Game.prototype.stateMachineHuman = function(pick) {
                     }
                     xmlscene.wallsPlaced++;
                     xmlscene.SelectedPick=0;
+                    xmlscene.updateNumberOfPecies();
                });
              }else{
                  xmlscene.changeState(2);
                  this.SelectedObj=null;
              }
             }
+          
           break;
     }
 }
@@ -461,8 +485,14 @@ Game.prototype.changeState = function(ind) {
 }
 
 Game.prototype.hasGameEnded = function(ind) {
-  if((this.board[6][6]=='e' && this.board[6][14]=='e')||(this.board[20][6]=='r' && this.board[20][14]=='r'))
+  if((this.board[6][6]=='e' && this.board[6][14]=='e')||(this.board[20][6]=='r' && this.board[20][14]=='r')){
+    if(this.turn == 1)
+      this.player1Vitories++;
+    else
+      this.player2Vitories++;
     return true;
+  }
+
   else return false;
 }
 
