@@ -8,9 +8,6 @@ function UpAnimation(id,span,centerx,centery,centerz,radius,startang) {
   this.startang=-180;
   this.rotang=180;
   this.time=0;
-  console.log(centerx);
-  console.log(centerz);
-  console.log(this.radius);
   this.itsDone=false;
 }
 
