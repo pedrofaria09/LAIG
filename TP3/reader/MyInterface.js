@@ -25,7 +25,7 @@ MyInterface.prototype.init = function(application) {
 
     this.gui = new dat.GUI();
 
-    var group = this.gui.addFolder("Options");
+    var group = this.gui.addFolder("Luzes");
 
     // add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
     // e.g. this.option1=true; this.option2=false;
@@ -34,6 +34,8 @@ MyInterface.prototype.init = function(application) {
         group.add(this.scene, this.nomeLuz);
     }
     //this.gui.add(this.scene, 'speed', -5, 5);
+    this.gui.add(this.scene, "player1Name").name('Player 1 Name');
+    this.gui.add(this.scene, "player2Name").name('Player 2 Name');
     this.gui.add(this.scene, "typeOfGameParser", ['Human vs Human', 'Human vs CPU', 'CPU vs CPU']).name('Type of Game');
     this.gui.add(this.scene, "dificultyParser", ['Random', 'Impossible']).name('Difuculty');
     this.gui.add(this.scene, "undo");

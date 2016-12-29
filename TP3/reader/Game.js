@@ -7,8 +7,6 @@ function Game(scene) {
     this.State = 0;
     this.SelectedObj = null;
     this.wallsPlaced = 0;
-    this.player1Vitories = 0;
-    this.player2Vitories = 0;
     this.player1WallsLeft = 16;
     this.player2WallsLeft = 16;
     this.board = [
@@ -558,9 +556,9 @@ Game.prototype.changeState = function(ind) {
 Game.prototype.hasGameEnded = function(ind) {
     if ((this.board[6][6] == 'e' && this.board[6][14] == 'e') || (this.board[20][6] == 'r' && this.board[20][14] == 'r')) {
         if (this.turn == 1)
-            this.player1Vitories++;
+            this.scene.player1Vitories++;
         else
-            this.player2Vitories++;
+            this.scene.player2Vitories++;
         return true;
     } else return false;
 }

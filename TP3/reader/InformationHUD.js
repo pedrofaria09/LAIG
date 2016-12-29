@@ -38,7 +38,7 @@ Hud.prototype.constructor = Hud;
 Hud.prototype.display = function(array) {
 
     this.scene.pushMatrix();
-    this.scene.translate(0, 2.2, -15);
+    this.scene.translate(-2, -2.2, -15);
     this.scene.pushMatrix();
     this.scene.scale(1.5, 1, 1);
     this.BackgroundAppearance.apply();
