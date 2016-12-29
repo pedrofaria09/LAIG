@@ -8,8 +8,14 @@ function XMLscene(app) {
     this.pecas = new Array();
     this.walls = new Array();
     this.dificulty = null;
-    this.typeOfGameParser=null;
-    this.dificultyParser=null;
+    this.typeOfGameParser = null;
+    this.dificultyParser = null;
+    this.player1Name = '';
+    this.player2Name = '';
+    this.player1Vitories = 0;
+    this.player2Vitories = 0;
+    this.tempoJogado = null;
+    this.auxiliarTempo = null;
     this.componentesObjetos = new Array();
     var myGraph = new MySceneGraph('sceneone.xml', this);
 }
@@ -20,20 +26,20 @@ XMLscene.prototype.constructor = XMLscene;
 
 
 XMLscene.prototype.playMovie = function() {
-  if(this.game!=null && this.game.State==4){
-    this.game.movieIndex=0;
-    this.game.resetBoard();
-    for(var i=0;i<this.pecas.length;i++){
-      this.pecas[i].reset();
+    if (this.game != null && this.game.State == 4) {
+        this.game.movieIndex = 0;
+        this.game.resetBoard();
+        for (var i = 0; i < this.pecas.length; i++) {
+            this.pecas[i].reset();
+        }
+        for (var i = 0; i < this.walls.length; i++) {
+            this.walls[i].reset();
+        }
+        var scene = this;
+        this.game.movieTime = setInterval(function() {
+            scene.game.showMovie(scene.game);
+        }, 2000);
     }
-    for(var i=0;i<this.walls.length;i++){
-      this.walls[i].reset();
-    }
-    var scene=this;
-  this.game.movieTime= setInterval(  function(){scene.game.showMovie(scene.game);}, 2000);
-
-  }
-
 }
 
 XMLscene.prototype.undo = function() {
@@ -41,18 +47,20 @@ XMLscene.prototype.undo = function() {
 }
 
 XMLscene.prototype.startGame = function() {
-  if(this.typeOfGameParser=="Human vs Human" || (this.typeOfGameParser!=null && this.typeOfGameParser!="Human vs Human" && this.dificultyParser!=null)){
-    this.dificulty=this.dificultyParser;
-    this.typeOfGame=this.typeOfGameParser;
-    this.game = new Game(this);
-    for(var i=0;i<this.pecas.length;i++){
-      this.pecas[i].reset();
-    }
-    for(var i=0;i<this.walls.length;i++){
-      this.walls[i].reset();
-    }
-  }else alert('Os campos devem estar devidamente preenchidos');
-
+    if (this.player1Name != "" && this.player2Name != "" && (this.player1Name != this.player2Name) && (this.typeOfGameParser == "Human vs Human" || (this.typeOfGameParser != null && this.typeOfGameParser != "Human vs Human" && this.dificultyParser != null))) {
+        this.dificulty = this.dificultyParser;
+        this.typeOfGame = this.typeOfGameParser;
+        this.game = new Game(this);
+        this.hud = new Hud(this);
+        for (var i = 0; i < this.pecas.length; i++) {
+            this.pecas[i].reset();
+        }
+        for (var i = 0; i < this.walls.length; i++) {
+            this.walls[i].reset();
+        }
+    } else if (this.player1Name == this.player2Name)
+        alert('Os nomes nao podem ser iguais');
+    else alert('Os campos devem estar devidamente preenchidos');
 }
 
 XMLscene.prototype.changeScene = function() {
@@ -92,8 +100,6 @@ XMLscene.prototype.init = function(application) {
     this.materialIndice = 0;
     this.materialsComponents = new Array();
 
-
-    this.hud = new Hud(this);
     this.pickmeId = 1;
 };
 
@@ -227,6 +233,16 @@ XMLscene.prototype.update = function(t) {
         }
     }
 
+    if (this.game != null) {
+        if (this.auxiliarTempo == null) {
+            this.tempoJogado = 0;
+            this.auxiliarTempo = t;
+        } else {
+            this.tempoJogado = t - this.auxiliarTempo;
+        }
+
+    }
+
 }
 
 XMLscene.prototype.updateMaterials = function() {
@@ -246,12 +262,12 @@ XMLscene.prototype.logPicking = function() {
             for (var i = 0; i < this.pickResults.length; i++) {
                 var obj = this.pickResults[i][0];
                 if (obj) {
-                    if(this.game!=null){
-                      var customId = this.pickResults[i][1];
-                      if (customId > 154 && (this.game.SelectedWall == null && this.game.SelectedPeca == 0))
-                          this.game.SelectedObj = obj;
-                      this.game.stateMachine(customId);
-                      console.log("Picked object: " + obj + ", with pick id " + customId);
+                    if (this.game != null) {
+                        var customId = this.pickResults[i][1];
+                        if (customId > 154 && (this.game.SelectedWall == null && this.game.SelectedPeca == 0))
+                            this.game.SelectedObj = obj;
+                        this.game.stateMachine(customId);
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
                     }
 
                 }
@@ -300,9 +316,9 @@ XMLscene.prototype.display = function() {
     if (this.graph.loadedOk) {
         this.updateCamera(null);
         this.pickmeId = 1;
-      //  if (this.game.SelectedPick != 0) {
-          //  this.paintSelected();
-    //    }
+        //  if (this.game.SelectedPick != 0) {
+        //  this.paintSelected();
+        //    }
         this.updateLights();
 
         this.graph.axis.display();
@@ -343,18 +359,22 @@ XMLscene.prototype.updateVisibilityObjects = function() {
 }
 
 XMLscene.prototype.updateHUD = function() {
-    if(this.game!=null){
-      var timePlayed = "Time:_" + parseInt(this.time);
+    if (this.game != null) {
+        var timePlayed = "Time:_" + parseInt(this.tempoJogado);
 
-      var player1 = "Player_1";
-      var player1Pieces = "-Walls:_" + this.game.player1WallsLeft;
-      var player1Vitories = "-Score:_" + this.game.player1Vitories;
+        var player1 = this.player1Name.toString();
+        if (this.player1Name == '')
+            player1 = "Player_1";
+        var player1Pieces = "-Walls:_" + this.game.player1WallsLeft;
+        var player1Vitories = "-Score:_" + this.player1Vitories;
 
-      var player2 = "Player_2";
-      var player2Pieces = "-Walls:_" + this.game.player2WallsLeft;
-      var player2Vitories = "-Score:_" + this.game.player2Vitories;
+        var player2 = this.player2Name.toString();
+        if (this.player2Name == '')
+            player2 = "Player_2";
+        var player2Pieces = "-Walls:_" + this.game.player2WallsLeft;
+        var player2Vitories = "-Score:_" + this.player2Vitories;
 
-      this.hud.display([timePlayed, "", player1, player1Pieces, player1Vitories, "", player2, player2Pieces, player2Vitories]);
+        this.hud.display([timePlayed, "", player1, player1Pieces, player1Vitories, "", player2, player2Pieces, player2Vitories]);
     }
 
 }
