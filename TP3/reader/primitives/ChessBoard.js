@@ -21,7 +21,7 @@ function ChessBoard(scene, id, du, dv, texture,colors) {
     this.color2=colors[1];
     this.color3=colors[2];
     this.color4=colors[3];
-    this.rectangle= new Plane(scene, null, 1,1, du, dv);
+    this.rectangle= new Plane(scene, null, 1,1, 5*du, 5*dv);
 
 };
 

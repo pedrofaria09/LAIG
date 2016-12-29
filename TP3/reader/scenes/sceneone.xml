@@ -25,18 +25,18 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="Boavista" near="0.1" far="500" angle="0.4">
-            <from x="0" y="100" z="200"/>
-            <to x="2" y="0" z="0"/>
+            <from x="-60" y="60" z="-14"/>
+            <to x="15" y="0" z="-15"/>
         </perspective>
 
-        <perspective id="segundaVista" near="0.1" far="500" angle="0.4">
-            <from x="40" y="40" z="40"/>
-            <to x="20" y="20" z="0"/>
+        <perspective id="segundaVista" near="1" far="500" angle="0.4">
+            <from x="11" y="60" z="60"/>
+            <to x="10" y="0" z="-20"/>
         </perspective>
 
         <perspective id="terceiraVista" near="0.1" far="500" angle="0.4">
-            <from x="-40" y="30" z="0"/>
-            <to x="10" y="0" z="5"/>
+            <from x="11" y="60" z="-80"/>
+            <to x="10" y="0" z="0"/>
         </perspective>
 
     </views>
