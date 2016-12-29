@@ -9,6 +9,8 @@ function Game(scene) {
     this.wallsPlaced = 0;
     this.player1WallsLeft = 16;
     this.player2WallsLeft = 16;
+    this.scene.auxiliarTempo = null;
+    this.scene.tempoJogado = 0;
     this.board = [
         ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
         ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
@@ -41,7 +43,7 @@ function Game(scene) {
 
     this.stack = new Array();
 
-    this.movieIndex=0;
+    this.movieIndex = 0;
 
 }
 
@@ -55,54 +57,54 @@ Game.prototype.stateMachine = function(pick) {
 }
 
 Game.prototype.showMovie = function(myGame) {
-  if(myGame.movieIndex<myGame.stack.length){
-    var array=myGame.stack[this.movieIndex];
-    if(array[0] instanceof Peca){
-      myGame.changePosPeca(array[2][1], array[2][0],array[0]);
-      var pos = myGame.coordsToPosition([array[1][1], array[1][0]]);
-      if (array[0].pecaId < 3)
-          myGame.changePawnPos(pos, [array[2][0], array[2][1]], 'r');
-      else myGame.changePawnPos(pos, [ array[2][0], array[2][1]], 'e');
-    }else if(array[0] instanceof Wall){
-      myGame.changePosPeca(array[2][0], array[2][1],array[0]);
+    if (myGame.movieIndex < myGame.stack.length) {
+        var array = myGame.stack[this.movieIndex];
+        if (array[0] instanceof Peca) {
+            myGame.changePosPeca(array[2][1], array[2][0], array[0]);
+            var pos = myGame.coordsToPosition([array[1][1], array[1][0]]);
+            if (array[0].pecaId < 3)
+                myGame.changePawnPos(pos, [array[2][0], array[2][1]], 'r');
+            else myGame.changePawnPos(pos, [array[2][0], array[2][1]], 'e');
+        } else if (array[0] instanceof Wall) {
+            myGame.changePosPeca(array[2][0], array[2][1], array[0]);
+        }
+        myGame.movieIndex++;
+    } else {
+        clearInterval(myGame.movieTime);
     }
-    myGame.movieIndex++;
-  }else{
-    clearInterval(myGame.movieTime);
-  }
 
 }
 
 Game.prototype.resetBoard = function() {
-  this.board = [
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'r', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'r', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'e', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'e', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
-      ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-      ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c']
-  ];
+    this.board = [
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'r', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'r', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'e', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'e', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c']
+    ];
 }
 
 Game.prototype.stateMachineHumanVsCPU = function(pick) {
@@ -497,6 +499,8 @@ Game.prototype.changeTurn = function() {
     if (this.turn == 1)
         this.turn = 2;
     else this.turn = 1;
+    this.scene.auxiliarTempo = null;
+    this.scene.tempoJogado = 0;
 }
 
 Game.prototype.boardToString = function() {
@@ -554,6 +558,16 @@ Game.prototype.changeState = function(ind) {
 }
 
 Game.prototype.hasGameEnded = function(ind) {
+    if (this.scene.tempoJogado >= 60) {
+        this.changeState(4);
+        if (this.turn == 1)
+            this.scene.player2Vitories++;
+        else
+            this.scene.player1Vitories++;
+        this.scene.auxiliarTempo = null;
+        this.scene.tempoJogado = 0;
+        return true;
+    }
     if ((this.board[6][6] == 'e' && this.board[6][14] == 'e') || (this.board[20][6] == 'r' && this.board[20][14] == 'r')) {
         if (this.turn == 1)
             this.scene.player1Vitories++;

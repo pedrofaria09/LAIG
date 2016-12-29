@@ -233,14 +233,14 @@ XMLscene.prototype.update = function(t) {
         }
     }
 
-    if (this.game != null) {
+    if (this.game != null && this.game.State != 4) {
         if (this.auxiliarTempo == null) {
             this.tempoJogado = 0;
             this.auxiliarTempo = t;
         } else {
             this.tempoJogado = t - this.auxiliarTempo;
         }
-
+        this.game.hasGameEnded();
     }
 
 }
@@ -365,12 +365,18 @@ XMLscene.prototype.updateHUD = function() {
         var player1 = this.player1Name.toString();
         if (this.player1Name == '')
             player1 = "Player_1";
+        if (this.game.turn == 1) {
+            player1 += "_-TURN";
+        }
         var player1Pieces = "-Walls:_" + this.game.player1WallsLeft;
         var player1Vitories = "-Score:_" + this.player1Vitories;
 
         var player2 = this.player2Name.toString();
         if (this.player2Name == '')
             player2 = "Player_2";
+        if (this.game.turn == 2) {
+            player2 += "_-TURN";
+        }
         var player2Pieces = "-Walls:_" + this.game.player2WallsLeft;
         var player2Vitories = "-Score:_" + this.player2Vitories;
 
