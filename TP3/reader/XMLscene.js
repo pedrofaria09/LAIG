@@ -282,12 +282,16 @@ XMLscene.prototype.paintSelected = function() {
         var ret = new Rectangle(this, null, Math.floor(this.game.SelectedPick / 14) / 11, (this.game.SelectedPick % 14 - 1) / 14, (Math.floor(this.game.SelectedPick / 14) + 1) / 11, (this.game.SelectedPick % 14) / 14);
     else var ret = new Rectangle(this, null, Math.floor((this.game.SelectedPick - 1) / 14) / 11, ((this.game.SelectedPick - 1) % 14) / 14, (Math.floor(this.game.SelectedPick / 14)) / 11, ((this.game.SelectedPick - 1) % 14 + 1) / 14);
     var material = new Material(this, null, null);
+    material.setDiffuse(1,1,0);
     this.pushMatrix();
-    this.translate(0, 0, 0.05);
-    this.scale(20, 20, 1);
-    material.apply();
-    ret.display();
+      this.rotate(-90*Math.PI/180,1,0,0);
+      this.translate(0, 0, 0.05);
+      this.scale(20, 20, 1);
+
+      material.apply();
+        ret.display();
     this.popMatrix();
+    console.log('yolo');
 }
 
 XMLscene.prototype.display = function() {
@@ -316,9 +320,9 @@ XMLscene.prototype.display = function() {
     if (this.graph.loadedOk) {
         this.updateCamera(null);
         this.pickmeId = 1;
-        //  if (this.game.SelectedPick != 0) {
-        //  this.paintSelected();
-        //    }
+          if (this.game!=null && this.game.SelectedPick != 0) {
+          this.paintSelected();
+            }
         this.updateLights();
 
         this.graph.axis.display();

@@ -43,14 +43,6 @@ var material= new Material(this.scene,null,null);
     }
 }
 
-ChessBoard.prototype.paintSelected = function() {
-  if(this.scene.SelectedPick!=154)
-    var ret = new Rectangle(this.scene,null,Math.floor(this.scene.SelectedPick/this.dv)/this.du,(this.scene.SelectedPick%this.dv-1)/this.dv,(Math.floor(this.scene.SelectedPick/this.dv)+1)/this.du,(this.scene.SelectedPick%this.dv)/this.dv);
-  else  var ret = new Rectangle(this.scene,null,Math.floor((this.scene.SelectedPick-1)/this.dv)/this.du,((this.scene.SelectedPick-1)%this.dv)/this.dv,(Math.floor(this.scene.SelectedPick/this.dv))/this.du,((this.scene.SelectedPick-1)%this.dv+1)/this.dv);
-  var material= new Material(this.scene,null,null);
-  material.apply();
-  ret.display();
-}
 
 
 ChessBoard.prototype.display = function() {
@@ -61,11 +53,5 @@ this.material.apply();
     if(this.scene.pickMode)
       this.pickingBoard();
 
-      this.scene.pushMatrix();
-        this.scene.translate(0,0,-0.001);
-        if(this.scene.SelectedPick!=0){
-          this.paintSelected();
-        }
-      this.scene.popMatrix();
   this.scene.popMatrix();
 }
