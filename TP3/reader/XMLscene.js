@@ -10,8 +10,8 @@ function XMLscene(app) {
     this.dificulty = null;
     this.typeOfGameParser = null;
     this.dificultyParser = null;
-    this.player1Name = '';
-    this.player2Name = '';
+    this.player1Name = 'Player1';
+    this.player2Name = 'Player2';
     this.player1Vitories = 0;
     this.player2Vitories = 0;
     this.tempoJogado = null;
@@ -57,6 +57,9 @@ XMLscene.prototype.startGame = function() {
         }
         for (var i = 0; i < this.walls.length; i++) {
             this.walls[i].reset();
+        }
+        if(this.typeOfGame=="CPU vs CPU"){
+          this.game.stateMachine(null);
         }
     } else if (this.player1Name == this.player2Name)
         alert('Os nomes nao podem ser iguais');

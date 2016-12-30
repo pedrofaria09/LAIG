@@ -120,6 +120,7 @@ Game.prototype.stateMachineHumanVsCPU = function(pick) {
 
 Game.prototype.stateMachineCPU = function() {
     var xmlscene = this;
+        console.log(this.State);
     switch (this.State) {
         case 0:
             if (this.scene.dificulty == "Random") {
@@ -129,7 +130,10 @@ Game.prototype.stateMachineCPU = function() {
                     if (xmlscene.hasGameEnded())
                         xmlscene.changeState(4);
                     else if (!arraysEqual([0, 0], xmlscene.findNumberWalls()))
-                        xmlscene.changeState(1);
+                        {
+                          xmlscene.changeState(1);
+                          xmlscene.stateMachine(null);
+                        }
                     else {
                         xmlscene.changeTurn();
                     }
@@ -140,11 +144,15 @@ Game.prototype.stateMachineCPU = function() {
                     xmlscene.whoMoved(newBoard);
                     if (xmlscene.hasGameEnded())
                         xmlscene.changeState(4);
-                    else if (!arraysEqual([0, 0], xmlscene.findNumberWalls()))
-                        xmlscene.changeState(1);
+                    else if (!arraysEqual([0, 0], xmlscene.findNumberWalls())){
+                      xmlscene.changeState(1);
+                      xmlscene.stateMachine(null);
+                    }
                     else {
                         xmlscene.changeTurn();
                     }
+
+
                 });
             }
             break;
@@ -461,15 +469,16 @@ Game.prototype.stateMachineHuman = function(pick) {
                                 xmlscene.changePosPeca(posY + 0.4, posX - 0.6);
                             }
                             xmlscene.changeState(0);
-                            xmlscene.changeTurn();
                             xmlscene.SelectedWall.place();
                             xmlscene.SelectedWall = null;
                             xmlscene.SelectedObj = null;
                             if (choice == 2)
                                 xmlscene.placeWall([posX, posY], 'w');
                             else xmlscene.placeWall([posX, posY], 'q');
+                            xmlscene.changeTurn();
+                            xmlscene.wallsPlaced++;
                         }
-                        xmlscene.wallsPlaced++;
+
                         xmlscene.SelectedPick = 0;
                         xmlscene.updateNumberOfPecies();
                     });
@@ -501,6 +510,9 @@ Game.prototype.changeTurn = function() {
     else this.turn = 1;
     this.scene.auxiliarTempo = null;
     this.scene.tempoJogado = 0;
+    if((this.scene.typeOfGame=="Human vs CPU" && this.turn==2) || this.scene.typeOfGame=="CPU vs CPU"){
+      this.stateMachine(null);
+    }
 }
 
 Game.prototype.boardToString = function() {
