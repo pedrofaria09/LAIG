@@ -18,6 +18,7 @@ function XMLscene(app) {
     this.auxiliarTempo = null;
     this.componentesObjetos = new Array();
     var myGraph = new MySceneGraph('sceneone.xml', this);
+	this.interface=null;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -141,7 +142,9 @@ XMLscene.prototype.onGraphLoaded = function() {
             this.walls[i].placed = this.walls[i - 32].placed;
             this.walls[i].component.animations = this.walls[i - 32].component.animations;
         }
+		this.walls.splice(0,32);
     }
+	
     this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
     this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
@@ -158,33 +161,17 @@ XMLscene.prototype.onGraphLoaded = function() {
         this.ative = this.graph.lightsList[(j - 1)].activated;
         this["luz" + j] = this.ative;
     }
-
-    var myInterface = new MyInterface();
-    this.app.setInterface(myInterface);
-    myInterface.setActiveCamera(this.camera);
-
-
-};
+	if(this.interface==null){
+		this.interface = new MyInterface();
+		this.app.setInterface(this.interface);
+		this.interface.setActiveCamera(this.camera);
+	}
+ };
 
 XMLscene.prototype.initiateMaterials = function(i) {
 
     for (var i = 0; i < this.graph.componentsList.length; i++) {
         this.materialsComponents[this.graph.componentsList[i].id] = 0;
-    }
-}
-
-XMLscene.prototype.pickingBoard = function(i) {
-    var material = new Material(this, null, null);
-    for (var i = 0; i < 11; i++) {
-        for (var j = 0; j < 14; j++) {
-            var ret = new Rectangle(this, null, i / 11, j / 14, (i + 1) / 11, (j + 1) / 14);
-            if (this.pickMode) {
-                this.registerForPick(this.pickmeId, ret);
-                this.pickmeId++;
-            }
-            material.apply();
-            ret.display();
-        }
     }
 }
 
@@ -294,14 +281,12 @@ XMLscene.prototype.paintSelected = function() {
       material.apply();
         ret.display();
     this.popMatrix();
-    console.log('yolo');
 }
 
 XMLscene.prototype.display = function() {
     // ---- BEGIN Background, camera and axis setup
 
-    this.logPicking();
-    this.clearPickRegistration();
+    
 
     // Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -320,6 +305,9 @@ XMLscene.prototype.display = function() {
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
+	this.logPicking();
+    this.clearPickRegistration();
+	
     if (this.graph.loadedOk) {
         this.updateCamera(null);
         this.pickmeId = 1;
@@ -464,31 +452,31 @@ XMLscene.prototype.getRootPos = function(nodeName) {
 
 XMLscene.prototype.callAnimations = function(animations, time) {
     var counter = 0;
-    for (i = 0; i < animations.length; i++) {
+    for (var i = 0; i < animations.length; i++) {
         counter += animations[i].span;
         if (counter > time) {
             if (i != 0)
                 var timer = time - this.countTimer(animations, i);
             else var timer = time;
-            timer
             this.multMatrix(animations[i].callMatrix(timer));
             break;
         } else {
             this.multMatrix(animations[i].callMatrix(time));
         }
+		
     }
 }
 
 XMLscene.prototype.countTimer = function(animations, num) {
     var counter = 0;
-    for (i = 0; i < num; i++) {
+    for (var i = 0; i < num; i++) {
         counter += animations[i].span;
     }
     return counter;
 }
 
 XMLscene.prototype.updateLights = function() {
-    for (i = 1; i <= this.nrLuzes; i++) {
+    for (var i = 1; i <= this.nrLuzes; i++) {
         if (this[("luz" + i)]) {
 
             this.lights[i - 1].setVisible(true);

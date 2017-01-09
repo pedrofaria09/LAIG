@@ -120,7 +120,6 @@ Game.prototype.stateMachineHumanVsCPU = function(pick) {
 
 Game.prototype.stateMachineCPU = function() {
     var xmlscene = this;
-        console.log(this.State);
     switch (this.State) {
         case 0:
             if (this.scene.dificulty == "Random") {
@@ -384,6 +383,7 @@ Game.prototype.undo = function() {
 }
 
 Game.prototype.stateMachineHuman = function(pick) {
+	console.log(this.SelectedObj);
     var xmlscene = this;
     switch (this.State) {
         case 0:
@@ -442,6 +442,7 @@ Game.prototype.stateMachineHuman = function(pick) {
         case 3:
             if (pick < 155) {
                 if (!this.SelectedWall.placed) {
+					console.log('yololololo');
                     if (pick % 14 != 0)
                         var posX = 15 - pick % 14;
                     else var posX = 1;
@@ -453,6 +454,7 @@ Game.prototype.stateMachineHuman = function(pick) {
                     else choice = 1;
                     this.sendMessage('/placeWall./' + this.turn + './' + this.boardToString() + './' + choice + './[' + posX + ',' + posY + ']', function(data) {
                         if (data.currentTarget.responseText == "ok") {
+							console.log(xmlscene.SelectedObj);
                             if (choice == 2) {
                                 xmlscene.stack.push([xmlscene.SelectedObj.childrenPrimitives[0],
                                     [xmlscene.SelectedObj.childrenPrimitives[0].x, xmlscene.SelectedObj.childrenPrimitives[0].y],
@@ -550,8 +552,6 @@ Game.prototype.changePawnPos = function(PosI, PosF, Char) {
 
 Game.prototype.placeWall = function(Pos, Char, Char2) {
     charToPlace = Char2 || Char;
-    console.log(Pos);
-    console.log(charToPlace);
     if (Char == 'q') {
         this.board[2 * Pos[0] - 2][2 * Pos[1] - 1] = charToPlace;
         this.board[2 * Pos[0]][2 * Pos[1] - 1] = charToPlace;
